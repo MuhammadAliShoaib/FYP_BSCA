@@ -1,0 +1,45 @@
+body{
+  background-color: #E1ECF7;
+}
+
+.header1 {
+  font-weight: 700;
+  font-size: 3.5rem;
+  line-height: 1;
+  color: #1D66AB;
+  font-family: "Montserrat", sans-serif;
+}
+
+.header2 {
+  font-weight: 700;
+  font-size: 3.5rem;
+  line-height: 1.375;
+  color: #2380D6;
+  font-family: "Montserrat", sans-serif;
+}
+
+.header3 {
+  font-weight: 500;
+  font-size: 1.125rem;
+  line-height: 1.375;
+  font-family: '"Montserrat", sans-serif',
+}
+
+.mainRows{
+  display: flex;
+  justify-content: center;
+  margin: 10px;  
+}
+
+.mainInputDiv{
+  margin-top: 10px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+@media screen and (max-width:767px) {
+  .line{
+      display: none;
+  }
+}
