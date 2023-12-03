@@ -53,7 +53,7 @@ export default function TimeLine() {
           </div>
         </TimelineOppositeContent>
         <TimelineSeparator>
-          <TimelineDot />
+          <TimelineDot/>
           <TimelineConnector />
         </TimelineSeparator>
         <TimelineContent>
