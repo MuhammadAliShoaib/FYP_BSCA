@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
 import "./polyfills";
@@ -42,7 +43,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
-        <App />
+        <Router>
+          <App />
+        </Router>
       </RainbowKitProvider>
     </WagmiConfig>
   </React.StrictMode>
