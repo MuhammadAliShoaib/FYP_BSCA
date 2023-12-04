@@ -19,6 +19,9 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import { Container, Grid } from '@mui/material';
+import Header from '../components/Header';
+import QueryStatsIcon from '@mui/icons-material/QueryStats';
 
 const drawerWidth = 240;
 
@@ -124,7 +127,7 @@ export default function Dashboard() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Products', 'Batches', 'Create Batch', 'Track Batch'].map((text, index) => (
+                    {['Home', 'Products', 'Batches', 'Create Batch', 'Track Batch'].map((text, index) => (
                         <ListItem key={text} disablePadding sx={{ display: 'block', color: 'white' }}>
                             <ListItemButton
                                 sx={{
@@ -151,18 +154,11 @@ export default function Dashboard() {
 
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1 }}>
-                <Box sx={{ backgroundColor: "white", padding: '20px', display: 'flex', justifyContent: 'end' }}>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <div style={{ width: '30px', height: '30px', borderRadius: '15px', border: '1px solid black', marginRight: '10px' }}>
-
-                        </div>
-                        Muhammad Ali
-                    </div>
-                </Box>
+                <Header title='Dashboard' />
                 {/* <DrawerHeader /> */}
 
                 <Box sx={{ padding: '25px' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div className="">
                             <h1>Dashboard</h1>
                         </div>
@@ -171,8 +167,85 @@ export default function Dashboard() {
                             <div className="" style={{ marginRight: '10px' }}>{time}</div>
                             <div className="">{day + month}</div>
                         </div>
-                    </Box>
-                    <Typography paragraph>
+                    </Box> */}
+                    <Container>
+                        <Grid container style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Grid item md={3} className='flexCenter' >
+                                <div className='messagesDiv'>
+                                    <p
+                                        style={{
+                                            fontFamily: "Poppins",
+                                            fontWeight: 600,
+                                            fontSize: 50,
+                                            margin: 0
+                                        }}
+                                    >
+                                        4
+                                    </p>
+                                    <div>New messages</div>
+                                </div>
+                            </Grid>
+                            <Grid item md={3} className='flexCenter' >
+                                <div className='messagesDiv'>
+                                    <p
+                                        style={{
+                                            fontFamily: "Poppins",
+                                            fontWeight: 600,
+                                            fontSize: 50,
+                                            margin: 0
+                                        }}
+                                    >
+                                        4
+                                    </p>
+                                    <div>New messages</div>
+                                </div>
+                            </Grid>
+                            <Grid item md={3} className='flexCenter' >
+                                <div className='messagesDiv'>
+                                    <p
+                                        style={{
+                                            fontFamily: "Poppins",
+                                            fontWeight: 600,
+                                            fontSize: 50,
+                                            margin: 0
+                                        }}
+                                    >
+                                        4
+                                    </p>
+                                    <div>New messages</div>
+                                </div>
+                            </Grid>
+                            <Grid item md={3} className='flexCenter' >
+                                <div className='messagesDiv'>
+                                    <p
+                                        style={{
+                                            fontFamily: "Poppins",
+                                            fontWeight: 600,
+                                            fontSize: 50,
+                                            margin: 0
+                                        }}
+                                    >
+                                        4
+                                    </p>
+                                    <div>New messages</div>
+                                </div>
+                            </Grid>
+                        </Grid>
+                    </Container>
+
+                    <Container style={{ marginTop: '20px' }} >
+                        <div style={{overflow: 'auto', maxHeight: '300px'}}>
+                            <Grid container>
+                                <Grid item md={12} style={{ backgroundColor: 'white', padding: '10px 15px 10px 15px',overflow:"hidden",minWidth:'500px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center' }} >
+                                        <QueryStatsIcon style={{ marginRight: '10px' }} />
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis repellendus molestias tempora quis omnis consequuntur facere at autem doloremque. Sequi neque libero odio adipisci expedita nostrum ducimus cum quo minima.</p>
+                                    </div>
+                                </Grid>
+                            </Grid>
+                        </div>
+                    </Container>
+                    {/* <Typography paragraph>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
                         tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
                         enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
@@ -198,7 +271,7 @@ export default function Dashboard() {
                         tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
                         eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
                         posuere sollicitudin aliquam ultrices sagittis orci a.
-                    </Typography>
+                    </Typography> */}
                 </Box>
             </Box>
         </Box>

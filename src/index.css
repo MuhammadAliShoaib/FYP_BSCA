@@ -1,6 +1,12 @@
-body{
+body {
   background-color: #E1ECF7;
   margin: 0;
+}
+
+
+.flexCenter{
+  display: flex;
+  justify-content: center;
 }
 
 .header1 {
@@ -26,21 +32,34 @@ body{
   font-family: '"Montserrat", sans-serif',
 }
 
-.mainRows{
+.mainRows {
   display: flex;
   justify-content: center;
-  margin: 10px;  
+  margin: 10px;
 }
 
-.mainInputDiv{
+.mainInputDiv {
   margin-top: 10px;
   background-color: white;
   padding: 10px;
   border-radius: 5px;
 }
 
+.messagesDiv {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 20px 0px 20px 0px;
+  max-width: 150px;
+  min-width: 150px;
+  margin: 10px 5px 10px 5px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+
 @media screen and (max-width:767px) {
-  .line{
-      display: none;
+  .line {
+    display: none;
   }
 }
