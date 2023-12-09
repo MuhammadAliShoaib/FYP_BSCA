@@ -2,6 +2,7 @@ import { useAccount } from "wagmi";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object({
@@ -12,6 +13,7 @@ const validationSchema = Yup.object({
 
 const Signup = () => {
   const { address } = useAccount();
+  const navigate = useNavigate();
 
   const initialValues = {
     name: "",
@@ -21,6 +23,7 @@ const Signup = () => {
 
   const onSubmit = async (values: any) => {
     try {
+      console.log('hello')
       const response = await Axios.post("/api/signup/actor", {
         name: values.name,
         address: values.address,
@@ -29,6 +32,7 @@ const Signup = () => {
 
       const data = await response.data;
       console.log(data);
+      navigate(`/${values.role}`)
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -60,6 +64,7 @@ const Signup = () => {
 
         <button type="submit">Submit</button>
         <p>{address}</p>
+        
       </Form>
     </Formik>
   );

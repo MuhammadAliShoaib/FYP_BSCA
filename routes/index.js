@@ -5,11 +5,11 @@ import { db } from "../models/index.js";
 router.post("/signup/actor", async (req, res) => {
   const { name, address, role } = req.body;
 
-  // console.log({
-  //   name,
-  //   address,
-  //   role,
-  // });
+  console.log({
+    name,
+    address,
+    role,
+  });
 
   try {
     const user = await db.User.findOne({ address: address });

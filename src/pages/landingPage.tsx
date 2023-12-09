@@ -16,7 +16,7 @@ export default function LandingPage() {
   const { disconnect } = useDisconnect();
 
   const handler = (): void => {
-    if (isConnected) navigate("/signup");
+    navigate("/signup");
   };
 
   const loginHandler = async () => {
@@ -37,11 +37,11 @@ export default function LandingPage() {
     }
   };
 
-  useEffect(() => {
-    if (isConnected) {
-      loginHandler();
-    }
-  }, [isConnected]);
+  // useEffect(() => {
+  //   if (isConnected) {
+  //     loginHandler();
+  //   }
+  // }, [isConnected]);
 
   return (
     <div>
@@ -55,7 +55,8 @@ export default function LandingPage() {
         }}
       </WalletButton.Custom>
       <button onClick={handler}>Signup</button>
-      <button onClick={() => disconnect()}>Disconnect</button>
+
+      {isConnected && <button onClick={() => disconnect()}>Disconnect</button>}
       {isConnected ? <p>{address}</p> : null}
       <div className="mainRows">
         <div className="">

@@ -4,7 +4,7 @@ import { User } from "./User.js";
 
 (async () => {
   mongoose.connect(
-    `mongodb+srv://Umair:${process.env.VITE_DB_PASS}@cluster0.c6tj13p.mongodb.net/practice_fyp?retryWrites=true&w=majority`
+    `mongodb://127.0.0.1:27017/fyp`
   );
 })();
 
