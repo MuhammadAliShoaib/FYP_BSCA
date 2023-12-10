@@ -42,7 +42,7 @@ router.get("/login", async (req, res) => {
   // console.log(address);
   try {
     const user = await db.User.findOne({ address: address });
-    console.log(user);
+    // console.log(user);
 
     if (user) {
       res.status(200).json(user);

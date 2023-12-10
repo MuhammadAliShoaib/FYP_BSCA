@@ -1,5 +1,8 @@
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import Dashboard from "./dashboard";
+import Form from "./form";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -18,9 +21,6 @@ import MailIcon from "@mui/icons-material/Mail";
 import { Container, Grid } from "@mui/material";
 import Header from "../../components/Header";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import Form from "./form";
-import Dashboard from "./dashboard";
 
 const drawerWidth = 240;
 
@@ -99,17 +99,16 @@ export default function MainLayout() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
 
-
   const [screens, setScreens] = useState([
     {
-      Name: 'Dashboard',
-      route: 'dashboard'
+      Name: "Dashboard",
+      route: "",
     },
     {
-      Name: 'Form',
-      route: 'form'
-    }
-  ])
+      Name: "Form",
+      route: "form",
+    },
+  ]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -155,42 +154,43 @@ export default function MainLayout() {
         </DrawerHeader>
         <Divider />
         <List>
-          {screens.map(
-            (text, index) => (
-              <ListItem
-                key={index}
-                disablePadding
-                sx={{ display: "block", color: "white" }}
+          {screens.map((text, index) => (
+            <ListItem
+              key={index}
+              disablePadding
+              sx={{ display: "block", color: "white" }}
+            >
+              <ListItemButton
+                onClick={() => navigate(text.route)}
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
               >
-                <ListItemButton
-                onClick={()=>navigate(text.route)}
+                <ListItemIcon
                   sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color: "white",
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                      color: "white",
-                    }}
-                  >
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text.Name} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              </ListItem>
-            )
-          )}
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText
+                  primary={text.Name}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
         </List>
         <Divider />
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1 }}>
         <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/form" element={<Form />} />
         </Routes>
       </Box>
