@@ -1,78 +1,16 @@
-import { useEffect } from "react";
-import { WalletButton } from "@rainbow-me/rainbowkit";
-import { useAccount, useDisconnect } from "wagmi";
-import { useNavigate } from "react-router-dom";
-import Axios from "axios";
-import { User } from "../types/types";
 import Image1 from "../assets/Bus.png";
 import Image2 from "../assets/Register.png";
 import SearchIcon from "@mui/icons-material/Search";
 import Work from "../components/Work";
 import TimeLine from "../components/Timeline";
+import Navbar from "../components/Navbar";
+
 
 export default function LandingPage() {
-  const navigate = useNavigate();
-  const { address, isConnected } = useAccount();
-  const { disconnect } = useDisconnect();
-
-  const handler = (connect: () => void): void => {
-    connect();
-    navigate("/signup");
-  };
-
-  const loginHandler = async () => {
-    try {
-      const res: User = (
-        await Axios.get(`/api/login`, { params: { address: address } })
-      ).data;
-      // console.log("Response... ", res);
-
-      if (!res) {
-        disconnect();
-        throw new Error(`HTTP error! Status: ${500}`);
-      } else {
-        navigate(`/${res.role}`);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (isConnected) {
-      loginHandler();
-    }
-  }, [isConnected]);
 
   return (
     <div>
-      <WalletButton.Custom wallet="metamask">
-        {({ ready, connect }) => {
-          return (
-            <button type="button" disabled={!ready} onClick={connect}>
-              Connect Metamask
-            </button>
-          );
-        }}
-      </WalletButton.Custom>
-      <WalletButton.Custom wallet="metamask">
-        {({ ready, connect }) => {
-          return (
-            <button
-              type="button"
-              disabled={!ready}
-              onClick={() => {
-                handler(connect);
-              }}
-            >
-              Sign-Up
-            </button>
-          );
-        }}
-      </WalletButton.Custom>
-
-      {isConnected && <button onClick={() => disconnect()}>Disconnect</button>}
-      {/* {isConnected ? <p>{address}</p> : null} */}
+      <Navbar/>
       <div className="mainRows">
         <div className="">
           <span className="header1"> The Future of Pharma </span>
