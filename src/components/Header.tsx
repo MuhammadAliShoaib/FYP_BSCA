@@ -24,9 +24,9 @@ export default function Header({ title }: Props) {
                     </p>
                 </div>
             </Box>
-            <Button onClick={() => disconnect()} href="#" size='medium' variant="contained" sx={{ my: 1, mx: 1.5 }}>
+            {/* <Button onClick={() => disconnect()} href="#" size='medium' variant="contained" sx={{ my: 1, mx: 1.5 }}>
                 Disconnect
-            </Button>
+            </Button> */}
             {/* <div style={{ display: 'flex', alignItems: 'center' }}>
                         <div style={{ width: '30px', height: '30px', borderRadius: '15px', border: '1px solid black', marginRight: '10px' }}>
 

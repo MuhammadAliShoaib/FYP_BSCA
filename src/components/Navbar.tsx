@@ -45,7 +45,7 @@ export default function Navbar() {
     return (
         <AppBar
             position="static"
-            color="default"
+            style={{ boxShadow: "rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px" }}
             elevation={0}
             sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
         >
@@ -56,7 +56,7 @@ export default function Navbar() {
                 <WalletButton.Custom wallet="metamask">
                     {({ ready, connect }) => {
                         return (
-                            <Button href="#" disabled={!ready} onClick={connect} variant="contained" sx={{ my: 1, mx: 1.5 }}>
+                            <Button href="#" disabled={!ready} style={{backgroundColor:'white',color:'black'}} onClick={connect} variant="contained" sx={{ my: 1, mx: 1.5 }} >
                                 Connect Metamask
                             </Button>
                         );
@@ -65,7 +65,7 @@ export default function Navbar() {
                 <WalletButton.Custom wallet="metamask">
                     {({ ready, connect }) => {
                         return (
-                            <Button href="#" disabled={!ready} onClick={() => {
+                            <Button href="#" disabled={!ready} style={{backgroundColor:'white',color:'black'}} onClick={() => {
                                 handler(connect);
                             }} variant="contained" sx={{ my: 1, mx: 1.5 }}>
                                 Signup
@@ -73,9 +73,9 @@ export default function Navbar() {
                         );
                     }}
                 </WalletButton.Custom>
-                {isConnected && <Button onClick={() => disconnect()} href="#" variant="contained" sx={{ my: 1, mx: 1.5 }}>
+                {/* {!isConnected && <Button style={{backgroundColor:'white',color:'black'}} onClick={() => disconnect()} href="#" variant="contained" sx={{ my: 1, mx: 1.5 }}>
                     Disconnect
-                </Button>}
+                </Button>} */}
             </Toolbar>
         </AppBar>
     )
