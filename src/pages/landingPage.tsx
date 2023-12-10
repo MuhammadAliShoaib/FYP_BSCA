@@ -15,7 +15,8 @@ export default function LandingPage() {
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
 
-  const handler = (): void => {
+  const handler = (connect: () => void): void => {
+    connect();
     navigate("/signup");
   };
 
@@ -37,11 +38,11 @@ export default function LandingPage() {
     }
   };
 
-  // useEffect(() => {
-  //   if (isConnected) {
-  //     loginHandler();
-  //   }
-  // }, [isConnected]);
+  useEffect(() => {
+    if (isConnected) {
+      loginHandler();
+    }
+  }, [isConnected]);
 
   return (
     <div>
@@ -54,10 +55,24 @@ export default function LandingPage() {
           );
         }}
       </WalletButton.Custom>
-      <button onClick={handler}>Signup</button>
+      <WalletButton.Custom wallet="metamask">
+        {({ ready, connect }) => {
+          return (
+            <button
+              type="button"
+              disabled={!ready}
+              onClick={() => {
+                handler(connect);
+              }}
+            >
+              Sign-Up
+            </button>
+          );
+        }}
+      </WalletButton.Custom>
 
       {isConnected && <button onClick={() => disconnect()}>Disconnect</button>}
-      {isConnected ? <p>{address}</p> : null}
+      {/* {isConnected ? <p>{address}</p> : null} */}
       <div className="mainRows">
         <div className="">
           <span className="header1"> The Future of Pharma </span>

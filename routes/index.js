@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import { db } from "../models/index.js";
 
-router.post("/signup/actor", async (req, res) => {
+router.post("/signup/user", async (req, res) => {
   const { name, address, role } = req.body;
 
   console.log({

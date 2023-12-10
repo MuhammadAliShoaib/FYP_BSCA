@@ -1,11 +1,8 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/landingPage";
-import Signup from "./pages/signup";
 import Dashboard from "./pages/dashboard";
 import SignUpForm from "./pages/signupForm";
-// import Manufacturer from "./pages/manufacturer";
-// import Distributor from "./pages/distributor";
 
 function App() {
   return (
