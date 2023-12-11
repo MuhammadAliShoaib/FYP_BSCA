@@ -2,7 +2,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import Dashboard from "./dashboard";
-import Form from "./form";
+import ProductForm from "./manufactForms/productForm";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -105,8 +105,8 @@ export default function MainLayout() {
       route: "",
     },
     {
-      Name: "Form",
-      route: "form",
+      Name: "Add Product",
+      route: "addproduct",
     },
   ]);
 
@@ -191,7 +191,7 @@ export default function MainLayout() {
       <Box component="main" sx={{ flexGrow: 1 }}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/form" element={<Form />} />
+          <Route path="/addproduct" element={<ProductForm />} />
         </Routes>
       </Box>
     </Box>
