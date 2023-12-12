@@ -9,6 +9,7 @@ import {
   ListItemText,
   ListItemAvatar,
   Avatar,
+  Grid,
 } from "@mui/material";
 import { LocalHospital } from "@mui/icons-material";
 
@@ -139,6 +140,60 @@ export default function ProductForm() {
           </Box>
         </Container>
       </Box>
+      <Box sx={{ padding: "25px" }}>
+        <Container style={{ marginTop: '20px', }}>
+          <Grid container>
+            <Grid item md={3}></Grid>
+
+            <Grid item md={6} style={{ backgroundColor: 'white', boxShadow: " rgba(0, 0, 0, 0.24) 0px 3px 8px", paddingTop: '5px', paddingBottom: '10px' }}>
+              <Grid item xs={12}>
+                <h1 style={{ paddingLeft: "15px", textAlign: 'center' }}>Add Product</h1>
+              </Grid>
+              <Grid container style={{ textAlign: 'center' }}>
+                <Grid item xs={12} md={6} style={{ marginTop: '10px' }}>
+                  <TextField
+                    required
+                    id="name"
+                    name="name"
+                    label="Name"
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item xs={12} md={6} style={{ marginTop: '10px' }}>
+                  <TextField
+                    required
+                    // fullWidth
+                    id="symbol"
+                    name="symbol"
+                    label="Symbol"
+                    variant="outlined"
+                  />
+                </Grid>
+              </Grid>
+              <Grid container style={{ textAlign: 'center' }}>
+                <Grid item md={3}></Grid>
+                <Grid item xs={12} md={6} style={{ marginTop: '10px' }}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="formula"
+                    name="formula"
+                    label="Formula"
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={3}>
+
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item md={3}>
+
+            </Grid>
+          </Grid>
+
+        </Container>
+      </Box>
     </>
   );
 }
@@ -149,7 +204,7 @@ export default function ProductForm() {
             spacing={15}
             style={{
               display: "flex",
-
+ 
               marginTop: "35px",
               // alignItems: "center",
             }}
@@ -179,7 +234,7 @@ export default function ProductForm() {
             spacing={15}
             style={{
               display: "flex",
-
+ 
               marginTop: "35px",
             }}
           >

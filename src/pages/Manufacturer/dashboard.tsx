@@ -1,10 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Header from '../../components/Header'
 import { Box, Container, Grid } from '@mui/material'
 
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
 
 export default function Dashboard() {
+
+    const [notify, setNotify] = useState([
+        {
+            date: "04/10/2023",
+            notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+        },
+        {
+            date: "04/10/2023",
+            notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+        },
+        {
+            date: "04/10/2023",
+            notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+        },
+        {
+            date: "04/10/2023",
+            notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+        },
+        {
+            date: "04/10/2023",
+            notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+        }, {
+            date: "04/10/2023",
+            notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+        }
+    ])
     return (
         <>
 
@@ -22,101 +48,60 @@ export default function Dashboard() {
                         </div>
                     </Box> */}
                 <Container>
-                    <Grid
-                        container
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                    >
-                        <Grid item md={3} className="flexCenter">
-                            <div className="messagesDiv">
-                                <p
-                                    style={{
-                                        fontFamily: "Poppins",
-                                        fontWeight: 600,
-                                        fontSize: 50,
-                                        margin: 0,
-                                    }}
-                                >
-                                    4
-                                </p>
-                                <div>New messages</div>
-                            </div>
-                        </Grid>
-                        <Grid item md={3} className="flexCenter">
-                            <div className="messagesDiv">
-                                <p
-                                    style={{
-                                        fontFamily: "Poppins",
-                                        fontWeight: 600,
-                                        fontSize: 50,
-                                        margin: 0,
-                                    }}
-                                >
-                                    4
-                                </p>
-                                <div>New messages</div>
-                            </div>
-                        </Grid>
-                        <Grid item md={3} className="flexCenter">
-                            <div className="messagesDiv">
-                                <p
-                                    style={{
-                                        fontFamily: "Poppins",
-                                        fontWeight: 600,
-                                        fontSize: 50,
-                                        margin: 0,
-                                    }}
-                                >
-                                    4
-                                </p>
-                                <div>New messages</div>
-                            </div>
-                        </Grid>
-                        <Grid item md={3} className="flexCenter">
-                            <div className="messagesDiv">
-                                <p
-                                    style={{
-                                        fontFamily: "Poppins",
-                                        fontWeight: 600,
-                                        fontSize: 50,
-                                        margin: 0,
-                                    }}
-                                >
-                                    4
-                                </p>
-                                <div>New messages</div>
-                            </div>
-                        </Grid>
+                    <Grid container spacing={3}>
+                        {[1, 2, 3, 4].map((item) => (
+                            <Grid item xs={12} md={3} key={item} className="flexCenter">
+                                <div className="messagesDiv">
+                                    <p
+                                        style={{
+                                            fontFamily: 'Poppins',
+                                            fontWeight: 600,
+                                            fontSize: 50,
+                                            margin: 0,
+                                        }}
+                                    >
+                                        4
+                                    </p>
+                                    <div>New messages</div>
+                                </div>
+                            </Grid>
+                        ))}
                     </Grid>
                 </Container>
 
-                <Container style={{ marginTop: "20px" }}>
-                    <div >
-                        <Grid container>
-                            <Grid
-                                item
-                                md={12}
-                                style={{
-                                    backgroundColor: "white",
-                                    padding: "10px 15px 10px 15px",
-                                }}
-                            >
-                                <div style={{ display: "flex", alignItems: "center" }}>
-                                    <QueryStatsIcon style={{ marginRight: "10px" }} />
-                                    <p>
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                        Veritatis repellendus molestias tempora quis omnis
-                                        consequuntur facere at autem doloremque. Sequi neque
-                                        libero odio adipisci expedita nostrum ducimus cum quo
-                                        minima.
-                                    </p>
-                                </div>
+                <Container style={{ marginTop: '20px', }}>
+                    <Grid container>
+                        <Grid item xs={12} style={{ backgroundColor: 'white', boxShadow: " rgba(0, 0, 0, 0.24) 0px 3px 8px", paddingTop: '5px', paddingBottom: '10px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '25px' }}>
+                                <QueryStatsIcon style={{ marginRight: '10px' }} />
+                                <p>Your latest activity across all projects</p>
+                            </div>
+
+
+                            <Grid container style={{ backgroundColor: '#E1ECF7', paddingLeft: '15px' }}>
+                                <Grid item xs={6} md={2}>
+                                    <p style={{ paddingLeft: '10px' }}>Date</p>
+                                </Grid>
+                                <Grid item xs={6} md={10}>
+                                    <p>Activities</p>
+                                </Grid>
+                            </Grid>
+
+
+                            <Grid container style={{ paddingLeft: '15px', paddingRight: '15px' }}>
+                                {notify.map((data, index) => (
+                                    <React.Fragment key={index}>
+                                        <Grid item xs={6} md={2} style={{ borderBottom: '1px solid #ccc' }}>
+                                            <p style={{ paddingLeft: '10px' }}>{data.date}</p>
+                                        </Grid>
+                                        <Grid item xs={6} md={10} style={{ borderBottom: '1px solid #ccc' }}>
+                                            <p>{data.notification}</p>
+                                        </Grid>
+                                    </React.Fragment>
+                                ))}
                             </Grid>
                         </Grid>
-                    </div>
+                    </Grid>
                 </Container>
             </Box>
         </>
