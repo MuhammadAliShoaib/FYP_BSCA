@@ -16,8 +16,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import MedicationLiquidIcon from "@mui/icons-material/MedicationLiquid";
 import { Container, Grid } from "@mui/material";
 import Header from "../../components/Header";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
@@ -105,7 +105,7 @@ export default function MainLayout() {
       route: "",
     },
     {
-      Name: "Add Product",
+      Name: "Products",
       route: "addproduct",
     },
   ]);
@@ -176,7 +176,11 @@ export default function MainLayout() {
                     color: "white",
                   }}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {index % 2 === 0 ? (
+                    <DashboardIcon />
+                  ) : (
+                    <MedicationLiquidIcon />
+                  )}
                 </ListItemIcon>
                 <ListItemText
                   primary={text.Name}

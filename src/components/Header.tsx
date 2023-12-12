@@ -29,7 +29,7 @@ export default function Header({ title }: Props) {
             style={{
               fontFamily: "Poppins",
               fontWeight: 600,
-              fontSize: 20,
+              fontSize: 25,
             }}
           >
             {title}
