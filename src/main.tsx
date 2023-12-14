@@ -28,7 +28,7 @@ const { chains, publicClient } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "My RainbowKit App",
+  appName: "FYP-BSCA",
   projectId: import.meta.env.VITE_PROJECT_ID,
   chains,
 });

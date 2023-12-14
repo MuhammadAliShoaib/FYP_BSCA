@@ -21,6 +21,7 @@ import MedicationLiquidIcon from "@mui/icons-material/MedicationLiquid";
 import { Container, Grid } from "@mui/material";
 import Header from "../../components/Header";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
+import BatchForm from "./manufactForms/createBatchForm";
 
 const drawerWidth = 240;
 
@@ -103,6 +104,10 @@ export default function MainLayout() {
     {
       Name: "Dashboard",
       route: "",
+    },
+    {
+      Name: "Create Batch",
+      route: "createbatch",
     },
     {
       Name: "Products",
@@ -196,6 +201,7 @@ export default function MainLayout() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/addproduct" element={<ProductForm />} />
+          <Route path="/createbatch" element={<BatchForm />} />
         </Routes>
       </Box>
     </Box>
