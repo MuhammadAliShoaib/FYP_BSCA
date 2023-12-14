@@ -106,12 +106,12 @@ export default function MainLayout() {
       route: "",
     },
     {
-      Name: "Create Batch",
-      route: "createbatch",
-    },
-    {
       Name: "Products",
       route: "addproduct",
+    },
+    {
+      Name: "Create Batch",
+      route: "createbatch",
     },
   ]);
 
