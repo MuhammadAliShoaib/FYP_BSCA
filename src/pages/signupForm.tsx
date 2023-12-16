@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { MenuItem } from "@mui/material";
 
 export default function SignUpForm() {
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
 
   const navigate = useNavigate();
   const [backgroundImage, setBackgroundImage] = useState(
