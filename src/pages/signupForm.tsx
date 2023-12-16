@@ -16,7 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { MenuItem } from "@mui/material";
 
 export default function SignUpForm() {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
+
   const navigate = useNavigate();
   const [backgroundImage, setBackgroundImage] = useState(
     "url(https://source.unsplash.com/random?wallpapers)"

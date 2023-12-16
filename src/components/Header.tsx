@@ -1,9 +1,9 @@
 import Box from "@mui/material/Box";
 import { useDisconnect } from "wagmi";
 import { Badge, Button, IconButton } from "@mui/material";
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { createTheme } from '@mui/material/styles';
-import { blue } from '@mui/material/colors';
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { createTheme } from "@mui/material/styles";
+import { blue } from "@mui/material/colors";
 
 type Props = {
   title: string;
@@ -13,7 +13,7 @@ const theme = createTheme({
   palette: {
     primary: blue,
     secondary: {
-      main: '#2380D6',
+      main: "#2380D6",
     },
   },
 });
@@ -26,7 +26,7 @@ export default function Header({ title }: Props) {
         padding: "0px 20px 0px 20px",
         display: "flex",
         justifyContent: "space-between",
-        alignItems:'center',
+        alignItems: "center",
         boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
       }}
     >
@@ -50,10 +50,9 @@ export default function Header({ title }: Props) {
         </div>
       </Box>
       <div>
-
         <Button
           onClick={() => disconnect()}
-          href="#"
+          href=""
           size="medium"
           variant="contained"
           sx={{ my: 1, mx: 1.5 }}
