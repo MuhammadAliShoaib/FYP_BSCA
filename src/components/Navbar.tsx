@@ -35,11 +35,12 @@ export default function Navbar() {
   };
 
   useEffect(() => {
+    if (isConnected && flag) {
+      setFlag(false);
+      navigate("/signup");
+    }
     if (isConnected && !flag) {
       loginHandler();
-    }
-    if (isConnected && flag) {
-      navigate("/signup");
     }
   }, [isConnected]);
 
@@ -91,9 +92,17 @@ export default function Navbar() {
             );
           }}
         </WalletButton.Custom>
-        {/* {!isConnected && <Button style={{backgroundColor:'white',color:'black'}} onClick={() => disconnect()} href="#" variant="contained" sx={{ my: 1, mx: 1.5 }}>
-                    Disconnect
-                </Button>} */}
+        {isConnected && (
+          <Button
+            style={{ backgroundColor: "white", color: "black" }}
+            onClick={() => disconnect()}
+            href="#"
+            variant="contained"
+            sx={{ my: 1, mx: 1.5 }}
+          >
+            Disconnect
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   );
