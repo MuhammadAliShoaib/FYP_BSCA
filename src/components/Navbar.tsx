@@ -5,34 +5,50 @@ import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccount, useDisconnect } from "wagmi";
+import { useAppDispatch, useAppSelector } from "../config/redux/hooks";
+import { userlogin } from "../config/redux/features/Auth/authReducer";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
   const [flag, setFlag] = useState(false);
+
+  const { auth, isError, isLoading, isSuccess } = useAppSelector((state) => state.auth)
+  const dispatch = useAppDispatch()
+
   const handler = (connect: () => void): void => {
     connect();
     setFlag(true);
   };
 
   const loginHandler = async () => {
-    try {
-      const res: User = (
-        await Axios.get(`/api/login`, { params: { address: address } })
-      ).data;
-      // console.log("Response... ", res);
+    // try {
+    //   const res: User = (
+    //     await Axios.get(`/api/login`, { params: { address: address } })
+    //   ).data;
+    //   // console.log("Response... ", res);
 
-      if (!res) {
-        disconnect();
-        throw new Error(`HTTP error! Status: ${500}`);
-      } else {
-        navigate(`/${res.role}`);
+    //   if (!res) {
+    //     disconnect();
+    //     throw new Error(`HTTP error! Status: ${500}`);
+    //   } else {
+    //     dispatch(userlogin({ address: address }))
+    //     navigate(`/${res.role}`);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
+    try {
+      dispatch(userlogin({ address: address }))
+      if (!isLoading && isSuccess) {
+        navigate(`/${auth.role}`);
       }
     } catch (error) {
       console.log(error);
-    }
-  };
+    };
+  }
 
   useEffect(() => {
     if (isConnected && flag) {

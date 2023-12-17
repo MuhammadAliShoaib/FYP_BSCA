@@ -18,6 +18,8 @@ import {
 } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
+import { Provider } from "react-redux";
+import { store } from "./config/redux/store.tsx";
 
 const { chains, publicClient } = configureChains(
   [mainnet, polygon, optimism, arbitrum, base, zora, sepolia],
@@ -44,7 +46,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
         <Router>
-          <App />
+          <Provider store={store}>
+            <App />
+          </Provider>
         </Router>
       </RainbowKitProvider>
     </WagmiConfig>
