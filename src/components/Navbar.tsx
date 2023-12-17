@@ -14,8 +14,8 @@ export default function Navbar() {
   const { disconnect } = useDisconnect();
   const [flag, setFlag] = useState(false);
 
-  const { auth, isError, isLoading, isSuccess } = useAppSelector((state) => state.auth)
-  const dispatch = useAppDispatch()
+  // const { auth, isError, isLoading, isSuccess } = useAppSelector((state) => state.auth)
+  // const dispatch = useAppDispatch();
 
   const handler = (connect: () => void): void => {
     connect();
@@ -23,32 +23,32 @@ export default function Navbar() {
   };
 
   const loginHandler = async () => {
-    // try {
-    //   const res: User = (
-    //     await Axios.get(`/api/login`, { params: { address: address } })
-    //   ).data;
-    //   // console.log("Response... ", res);
-
-    //   if (!res) {
-    //     disconnect();
-    //     throw new Error(`HTTP error! Status: ${500}`);
-    //   } else {
-    //     dispatch(userlogin({ address: address }))
-    //     navigate(`/${res.role}`);
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
-
     try {
-      dispatch(userlogin({ address: address }))
-      if (!isLoading && isSuccess) {
-        navigate(`/${auth.role}`);
+      const res: User = (
+        await Axios.get(`/api/login`, { params: { address: address } })
+      ).data;
+      // console.log("Response... ", res);
+
+      if (!res) {
+        disconnect();
+        throw new Error(`HTTP error! Status: ${500}`);
+      } else {
+        // dispatch(userlogin({ address: address }));
+        navigate(`/${res.role}`);
       }
     } catch (error) {
       console.log(error);
-    };
-  }
+    }
+
+    // try {
+    //   dispatch(userlogin({ address: address }))
+    //   if (!isLoading && isSuccess) {
+    //     navigate(`/${auth.role}`);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // };
+  };
 
   useEffect(() => {
     if (isConnected && flag) {
@@ -112,7 +112,7 @@ export default function Navbar() {
           <Button
             style={{ backgroundColor: "white", color: "black" }}
             onClick={() => disconnect()}
-            href="#"
+            href=""
             variant="contained"
             sx={{ my: 1, mx: 1.5 }}
           >
