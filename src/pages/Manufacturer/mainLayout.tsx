@@ -18,10 +18,13 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import MedicationLiquidIcon from "@mui/icons-material/MedicationLiquid";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import { Container, Grid } from "@mui/material";
 import Header from "../../components/Header";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import BatchForm from "./manufactForms/createBatchForm";
+import DispatchForm from "./manufactForms/dispatchForm";
 
 const drawerWidth = 240;
 
@@ -104,14 +107,22 @@ export default function MainLayout() {
     {
       Name: "Dashboard",
       route: "",
+      icon: <DashboardIcon />,
     },
     {
       Name: "Products",
       route: "addproduct",
+      icon: <MedicationLiquidIcon />,
     },
     {
       Name: "Create Batch",
       route: "createbatch",
+      icon: <AddBoxIcon />,
+    },
+    {
+      Name: "Dispatch Batch",
+      route: "dispatch",
+      icon: <LocalShippingIcon />,
     },
   ]);
 
@@ -181,11 +192,12 @@ export default function MainLayout() {
                     color: "white",
                   }}
                 >
-                  {index % 2 === 0 ? (
+                  {/* {index % 2 === 0 ? (
                     <DashboardIcon />
                   ) : (
                     <MedicationLiquidIcon />
-                  )}
+                  )} */}
+                  {text.icon}
                 </ListItemIcon>
                 <ListItemText
                   primary={text.Name}
@@ -202,6 +214,7 @@ export default function MainLayout() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/addproduct" element={<ProductForm />} />
           <Route path="/createbatch" element={<BatchForm />} />
+          <Route path="/dispatch" element={<DispatchForm />} />
         </Routes>
       </Box>
     </Box>

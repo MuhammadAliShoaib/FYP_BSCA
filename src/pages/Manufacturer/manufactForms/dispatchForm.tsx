@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Header from "../../../components/Header";
 import {
   Box,
@@ -15,10 +16,37 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalHospital } from "@mui/icons-material";
 
-export default function BatchForm() {
+export default function DispatchForm() {
+  const [inputs, setInputs] = useState([
+    {
+      type: "number",
+      fullWidth: "fullwidth",
+      name: "distributor",
+      name1: "quantity",
+      label: "Distributor",
+      label1: "Quantity",
+      variant: "outlined",
+    },
+  ]);
+
+  const handleChange = () => {
+    setInputs((prevState) => [
+      ...prevState,
+      {
+        type: "number",
+        fullWidth: "fullwidth",
+        name: "distributor",
+        name1: "quantity",
+        label: "Distributor",
+        label1: "Quantity",
+        variant: "outlined",
+      },
+    ]);
+  };
+
   return (
     <>
-      <Header title="Batch" />
+      <Header title="Dispatch" />
       <Box
         mt={10}
         display={"flex"}
@@ -45,7 +73,7 @@ export default function BatchForm() {
         >
           <Box width={"100%"}>
             <Box width={"100%"} ml={2}>
-              <h1 style={{ paddingLeft: "15px" }}>Create Batch</h1>
+              <h1 style={{ paddingLeft: "15px" }}>Dispatch Batch</h1>
             </Box>
             <Box
               display={"flex"}
@@ -72,47 +100,50 @@ export default function BatchForm() {
                 <TextField
                   required
                   fullWidth
-                  name="quantity"
-                  label="Quantity"
-                  variant="outlined"
-                />
-              </Box>
-              {/* <Box width={"48%"}>
-                <TextField
-                  required
-                  fullWidth
                   select
-                  name="distributor"
-                  label="Distributor"
+                  name="batch"
+                  label="Select Batch"
                   variant="outlined"
                 >
-                  <MenuItem value="distro">
-                    <option label="Distro" />
+                  <MenuItem value="batchId">
+                    <option label="Batch ID" />
                   </MenuItem>
                 </TextField>
-              </Box> */}
+              </Box>
             </Box>
-            <Box
-              display={"flex"}
-              alignItems={"center"}
-              justifyContent={"space-evenly"}
-              mt={5}
-            >
-              <Box width={"48%"} display={"flex"}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Manufacturing date"
-                    format="DD/MM/YYYY"
-                    disablePast
+            {inputs.map((input, index) => (
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                justifyContent={"space-evenly"}
+                mt={5}
+              >
+                <Box width={"48%"}>
+                  <TextField
+                    required
+                    fullWidth
+                    select
+                    name={input.name}
+                    label={input.label}
+                    variant="outlined"
+                  >
+                    <MenuItem value="distro">
+                      <option label="Distro" />
+                    </MenuItem>
+                  </TextField>
+                </Box>
+                <Box width={"48%"}>
+                  <TextField
+                    required
+                    type="number"
+                    fullWidth
+                    name={input.name1}
+                    label={input.label1}
+                    variant="outlined"
                   />
-                </LocalizationProvider>
+                </Box>
               </Box>
-              <Box width={"48%"} display={"flex"}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker label="Expiry" format="DD/MM/YYYY" disablePast />
-                </LocalizationProvider>
-              </Box>
-            </Box>
+            ))}
             <Box>
               <Box
                 display={"flex"}
@@ -120,7 +151,20 @@ export default function BatchForm() {
                 justifyContent={"space-evenly"}
                 mt={5}
               >
-                <Box width={"48%"}></Box>
+                <Box width={"48%"}>
+                  <Button
+                    // type="submit"
+                    variant="contained"
+                    onClick={handleChange}
+                    sx={{
+                      // width: "%",
+                      paddingTop: "10px",
+                      paddingBottom: "10px",
+                    }}
+                  >
+                    Add Distributor
+                  </Button>
+                </Box>
                 <Box
                   width={"48%"}
                   display={"flex"}
@@ -143,37 +187,6 @@ export default function BatchForm() {
             </Box>
           </Box>
         </Container>
-
-        {/* <Container
-          style={{
-            marginTop: "10px",
-            minWidth: "95%",
-          }}
-        >
-          <Box width={"95%"}>
-            <h1
-              style={{
-                paddingLeft: "15px",
-                textDecorationLine: "underline",
-                textUnderlinePosition: "under",
-              }}
-            >
-              List of Products
-            </h1>
-          </Box>
-          <Box width={"50%"} ml={"15px"} bgcolor={"white"}>
-            <List dense>
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar>
-                    <LocalHospital />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Panadol" secondary="Parcetomol" />
-              </ListItem>
-            </List>
-          </Box>
-        </Container> */}
       </Box>
     </>
   );
