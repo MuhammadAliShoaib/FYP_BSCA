@@ -24,31 +24,23 @@ export default function Navbar() {
 
   const loginHandler = async () => {
     try {
-      const res: User = (
-        await Axios.get(`/api/login`, { params: { address: address } })
-      ).data;
-      // console.log("Response... ", res);
-
-      if (!res) {
-        disconnect();
-        throw new Error(`HTTP error! Status: ${500}`);
-      } else {
-        // dispatch(userlogin({ address: address }));
-        navigate(`/${res.role}`);
-      }
+      dispatch(userlogin(address));
     } catch (error) {
       console.log(error);
     }
+  }
 
-    // try {
-    //   dispatch(userlogin({ address: address }))
-    //   if (!isLoading && isSuccess) {
-    //     navigate(`/${auth.role}`);
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // };
-  };
+  useEffect(() => {
+    // if (isLoading) {
+    //   return;
+    // }
+  
+    if (isSuccess) {
+      navigate(`/${auth.role}`);
+    } else if (isError) {
+      console.error("Login failed");
+    }
+  }, [isLoading, isSuccess, isError]);
 
   useEffect(() => {
     if (isConnected && flag) {
