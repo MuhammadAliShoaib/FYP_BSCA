@@ -37,11 +37,12 @@ router.post("/signup/user", async (req, res) => {
   }
 });
 
-router.get("/login", async (req, res) => {
-  const { address } = req.query;
+router.post("/login", async (req, res) => {
+  // const { address } = req.body;
+  // console.log(req.body)
   // console.log(address);
   try {
-    const user = await db.User.findOne({ address: address });
+    const user = await db.User.findOne({ address: req.body.address });
     // console.log(user);
 
     if (user) {

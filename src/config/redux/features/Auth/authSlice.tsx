@@ -39,6 +39,7 @@ export const authSlice = createSlice({
                 state.isError = false
                 state.isSuccess = true
                 state.auth = action.payload
+                console.log("success")
             })
             .addCase(userlogin.rejected, (state, action: PayloadAction<any>) => {
                 toast.error(action.payload.data.non_field_errors[0], {

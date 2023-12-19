@@ -4,6 +4,8 @@ import { Badge, Button, IconButton } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { createTheme } from "@mui/material/styles";
 import { blue } from "@mui/material/colors";
+import { useAppDispatch } from "../config/redux/hooks";
+import { clearData } from "../config/redux/features/Auth/authSlice";
 
 type Props = {
   title: string;
@@ -20,6 +22,14 @@ const theme = createTheme({
 
 export default function Header({ title }: Props) {
   const { disconnect } = useDisconnect();
+  const dispatch = useAppDispatch();
+
+
+  let handleDisconnect = ()=>{
+    disconnect();
+    dispatch(clearData());
+  }
+
   return (
     <Box
       sx={{
@@ -51,7 +61,7 @@ export default function Header({ title }: Props) {
       </Box>
       <div>
         <Button
-          onClick={() => disconnect()}
+          onClick={handleDisconnect}
           href=""
           size="medium"
           variant="contained"

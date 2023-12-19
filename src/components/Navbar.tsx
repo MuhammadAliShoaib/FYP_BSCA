@@ -41,14 +41,23 @@ export default function Navbar() {
     // }
 
     try {
-      dispatch(userlogin({ address: address }))
-      if (!isLoading && isSuccess) {
-        navigate(`/${auth.role}`);
-      }
+      dispatch(userlogin(address));
     } catch (error) {
       console.log(error);
-    };
+    }
   }
+
+  useEffect(() => {
+    // if (isLoading) {
+    //   return;
+    // }
+  
+    if (isSuccess) {
+      navigate(`/${auth.role}`);
+    } else if (isError) {
+      console.error("Login failed");
+    }
+  }, [isLoading, isSuccess, isError]);
 
   useEffect(() => {
     if (isConnected && flag) {
@@ -112,7 +121,7 @@ export default function Navbar() {
           <Button
             style={{ backgroundColor: "white", color: "black" }}
             onClick={() => disconnect()}
-            href="#"
+            href=""
             variant="contained"
             sx={{ my: 1, mx: 1.5 }}
           >
