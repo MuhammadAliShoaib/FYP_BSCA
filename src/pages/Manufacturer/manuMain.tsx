@@ -97,7 +97,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MainLayout() {
+export default function ManufacturerMain() {
   const navigate = useNavigate();
   const { isConnected } = useAccount();
   const theme = useTheme();

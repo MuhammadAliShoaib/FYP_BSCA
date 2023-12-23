@@ -5,7 +5,6 @@ export const userlogin = createAsyncThunk(
     "auth/userlogin",
     async (data: any, thunkAPI) => {
         try {
-            // console.log(data)
             let response = await axios.post(`/api/login`, { address: data })
             console.log(response.data)
             if (response) {
