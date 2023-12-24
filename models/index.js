@@ -5,8 +5,8 @@ import { Product } from "./Product.js";
 
 (async () => {
   mongoose.connect(
-    // `mongodb://127.0.0.1:27017/fyp?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.0`
-    `mongodb://127.0.0.1:27017/fypsheet`
+    `mongodb://127.0.0.1:27017/fyp?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.0`
+    // `mongodb://127.0.0.1:27017/fypsheet`
   );
 })();
 
