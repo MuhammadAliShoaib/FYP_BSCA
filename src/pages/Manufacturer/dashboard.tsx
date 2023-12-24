@@ -3,6 +3,7 @@ import Header from '../../components/Header'
 import { Box, Container, Grid } from '@mui/material'
 
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
+import NotificationTable from '../../components/NotificationTable';
 
 export default function Dashboard() {
 
@@ -68,6 +69,14 @@ export default function Dashboard() {
                         ))}
                     </Grid>
                 </Container>
+                {/* <Container style={{ marginTop: '10px', }}>
+                    <Grid container>
+                        <Grid item md={12}>
+                                <NotificationTable/>
+                        </Grid>
+                    </Grid>
+                </Container> */}
+
 
                 <Container style={{ marginTop: '20px', }}>
                     <Grid container>

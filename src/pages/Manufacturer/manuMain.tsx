@@ -25,6 +25,7 @@ import Header from "../../components/Header";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import BatchForm from "./manufactForms/createBatchForm";
 import DispatchForm from "./manufactForms/dispatchForm";
+import Batches from "./batches";
 
 const drawerWidth = 240;
 
@@ -124,6 +125,11 @@ export default function ManufacturerMain() {
       route: "dispatch",
       icon: <LocalShippingIcon />,
     },
+    {
+      Name: "Batches",
+      route: "batches",
+      icon: <LocalShippingIcon />,
+    },
   ]);
 
   const handleDrawerOpen = () => {
@@ -215,6 +221,7 @@ export default function ManufacturerMain() {
           <Route path="/addproduct" element={<ProductForm />} />
           <Route path="/createbatch" element={<BatchForm />} />
           <Route path="/dispatch" element={<DispatchForm />} />
+          <Route path="/batches" element={<Batches/>} />
         </Routes>
       </Box>
     </Box>

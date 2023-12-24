@@ -19,6 +19,7 @@ import MedicationLiquidIcon from "@mui/icons-material/MedicationLiquid";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import Dashboard from "./dashboard";
+import Batches from "./batches";
 
 const drawerWidth = 240;
 
@@ -118,6 +119,11 @@ export default function DistributorMain() {
       route: "dispatch",
       icon: <LocalShippingIcon />,
     },
+    {
+      Name: "Batches",
+      route: "batches",
+      icon: <LocalShippingIcon />,
+    },
   ]);
 
   const handleDrawerOpen = () => {
@@ -206,6 +212,8 @@ export default function DistributorMain() {
       <Box component="main" sx={{ flexGrow: 1 }}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          
+          <Route path="/batches" element={<Batches/>} />
         </Routes>
       </Box>
     </Box>
