@@ -14,13 +14,9 @@ export default function Navbar() {
   const { disconnect } = useDisconnect();
   const [flag, setFlag] = useState(false);
 
-<<<<<<< HEAD
   const { auth, isError, isLoading, isSuccess } = useAppSelector(
     (state) => state.auth
   );
-=======
-  const { auth, isError, isLoading, isSuccess } = useAppSelector((state) => state.auth)
->>>>>>> 1390489844463c860bdc8c18bad0dab5f1d1c4ab
   const dispatch = useAppDispatch();
 
   const handler = (connect: () => void): void => {
