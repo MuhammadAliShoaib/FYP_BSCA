@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import "dotenv/config.js";
 import { User } from "./User.js";
+import { Product } from "./Product.js";
 
 (async () => {
   mongoose.connect(
@@ -11,4 +12,5 @@ import { User } from "./User.js";
 
 export const db = {
   User,
+  Product,
 };

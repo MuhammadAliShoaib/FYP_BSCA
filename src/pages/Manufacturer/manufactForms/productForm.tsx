@@ -12,8 +12,43 @@ import {
   Grid,
 } from "@mui/material";
 import { LocalHospital } from "@mui/icons-material";
+import axios from "axios";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 export default function ProductForm() {
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      symbol: "",
+      formula: "",
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required("Name is required"),
+      symbol: Yup.string().required("Symbol is required"),
+      formula: Yup.string().required("Formula is required"),
+    }),
+    onSubmit: async (values) => {
+      console.log(values.name);
+      try {
+        console.log("hello");
+        const response = await axios.post("/api/addproduct", {
+          name: values.name,
+          symbol: values.symbol,
+          formula: values.formula,
+        });
+
+        if (!response) {
+          throw new Error("Something Went Wrong!");
+        }
+        const data = await response.data;
+        console.log(data);
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
+    },
+  });
+
   return (
     <>
       <Header title="Products" />
@@ -42,34 +77,7 @@ export default function ProductForm() {
             <Box width={"100%"} ml={2}>
               <h1 style={{ paddingLeft: "15px" }}>Add Product</h1>
             </Box>
-            <Box
-              display={"flex"}
-              alignItems={"center"}
-              justifyContent={"space-evenly"}
-              mt={5}
-            >
-              <Box width={"48%"}>
-                <TextField
-                  required
-                  fullWidth
-                  id="name"
-                  name="name"
-                  label="Name"
-                  variant="outlined"
-                />
-              </Box>
-              <Box width={"48%"}>
-                <TextField
-                  required
-                  fullWidth
-                  id="symbol"
-                  name="symbol"
-                  label="Symbol"
-                  variant="outlined"
-                />
-              </Box>
-            </Box>
-            <Box>
+            <form onSubmit={formik.handleSubmit}>
               <Box
                 display={"flex"}
                 alignItems={"center"}
@@ -80,32 +88,67 @@ export default function ProductForm() {
                   <TextField
                     required
                     fullWidth
-                    id="formula"
-                    name="formula"
-                    label="Formula"
+                    id="name"
+                    name="name"
+                    label="Name"
                     variant="outlined"
+                    onChange={formik.handleChange}
+                    value={formik.values.name}
                   />
                 </Box>
-                <Box
-                  width={"48%"}
-                  display={"flex"}
-                  alignItems={"center"}
-                  justifyContent={"right"}
-                >
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{
-                      width: "15%",
-                      paddingTop: "10px",
-                      paddingBottom: "10px",
-                    }}
-                  >
-                    Add
-                  </Button>
+                <Box width={"48%"}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="symbol"
+                    name="symbol"
+                    label="Symbol"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    value={formik.values.symbol}
+                  />
                 </Box>
               </Box>
-            </Box>
+              <Box>
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"space-evenly"}
+                  mt={5}
+                >
+                  <Box width={"48%"}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="formula"
+                      name="formula"
+                      label="Formula"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      value={formik.values.formula}
+                    />
+                  </Box>
+                  <Box
+                    width={"48%"}
+                    display={"flex"}
+                    alignItems={"center"}
+                    justifyContent={"right"}
+                  >
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{
+                        width: "15%",
+                        paddingTop: "10px",
+                        paddingBottom: "10px",
+                      }}
+                    >
+                      Add
+                    </Button>
+                  </Box>
+                </Box>
+              </Box>
+            </form>
           </Box>
         </Container>
 

@@ -14,8 +14,10 @@ export default function Navbar() {
   const { disconnect } = useDisconnect();
   const [flag, setFlag] = useState(false);
 
-  // const { auth, isError, isLoading, isSuccess } = useAppSelector((state) => state.auth)
-  // const dispatch = useAppDispatch();
+  const { auth, isError, isLoading, isSuccess } = useAppSelector(
+    (state) => state.auth
+  );
+  const dispatch = useAppDispatch();
 
   const handler = (connect: () => void): void => {
     connect();
@@ -28,13 +30,13 @@ export default function Navbar() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     // if (isLoading) {
     //   return;
     // }
-  
+
     if (isSuccess) {
       navigate(`/${auth.role}`);
     } else if (isError) {
