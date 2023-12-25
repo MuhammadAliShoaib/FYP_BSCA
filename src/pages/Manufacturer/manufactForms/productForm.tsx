@@ -15,13 +15,17 @@ import { LocalHospital } from "@mui/icons-material";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useAccount } from "wagmi";
 
 export default function ProductForm() {
+  const { address } = useAccount();
+
   const formik = useFormik({
     initialValues: {
       name: "",
       symbol: "",
       formula: "",
+      manufacturer: address,
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
@@ -29,13 +33,12 @@ export default function ProductForm() {
       formula: Yup.string().required("Formula is required"),
     }),
     onSubmit: async (values) => {
-      console.log(values.name);
       try {
-        console.log("hello");
         const response = await axios.post("/api/addproduct", {
           name: values.name,
           symbol: values.symbol,
           formula: values.formula,
+          manufacturer: values.manufacturer,
         });
 
         if (!response) {

@@ -5,6 +5,7 @@ const schemaProduct = Schema({
   name: String,
   symbol: String,
   formula: String,
+  manufacturer: String,
 });
 
 export const Product = model("Product", schemaProduct);

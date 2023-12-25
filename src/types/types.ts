@@ -3,3 +3,10 @@ export type User = {
   address: string;
   role: string;
 }
+
+export type Medicine = {
+  name: string,
+  symbol: string,
+  formula: string,
+  manufacturer: string,
+}
