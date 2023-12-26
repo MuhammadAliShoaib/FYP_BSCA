@@ -24,6 +24,8 @@ import * as Yup from "yup";
 export default function BatchForm() {
   const { address } = useAccount();
   const [meds, setMeds] = useState<Medicine[]>([]);
+  const [mfgDate, setMfgDate] = useState("");
+  const [expDate, setExpDate] = useState("");
 
   const getMedicines = async () => {
     try {
@@ -52,8 +54,6 @@ export default function BatchForm() {
     initialValues: {
       name: "",
       quantity: 0,
-      mfg: Date,
-      exp: Date,
       manufacturer: address,
     },
     validationSchema: Yup.object({
@@ -61,12 +61,20 @@ export default function BatchForm() {
       quantity: Yup.number().required("Enter a Quantity"),
     }),
     onSubmit: async (values) => {
+      const symbol = meds.find((med) => med.name === values.name)?.symbol; // Use optional chaining for safety
+      const dateParts = mfgDate.split(" ").slice(1, 4);
+      const batchID = [
+        symbol?.toUpperCase(), // Capitalize the symbol
+        ...dateParts, // Spread the date parts into an array
+      ].join(""); // Join the elements without any separators
+
       try {
         const response = await axios.post("/api/createbatch", {
+          batchID: batchID,
           name: values.name,
           quantity: values.quantity,
-          mfg: values.mfg,
-          exp: values.exp,
+          mfg: mfgDate,
+          exp: expDate,
           manufacturer: values.manufacturer,
         });
 
@@ -176,8 +184,10 @@ export default function BatchForm() {
                     <DatePicker
                       label="Manufacturing date"
                       format="DD/MM/YYYY"
-                      onChange={formik.handleChange}
-                      value={formik.values.mfg}
+                      onChange={(date) =>
+                        setMfgDate(date?.toLocaleString() as string)
+                      }
+                      value={mfgDate}
                       disablePast
                     />
                   </LocalizationProvider>
@@ -187,8 +197,10 @@ export default function BatchForm() {
                     <DatePicker
                       label="Expiry"
                       format="DD/MM/YYYY"
-                      onChange={formik.handleChange}
-                      value={formik.values.exp}
+                      onChange={(date) =>
+                        setExpDate(date?.toLocaleString() as string)
+                      }
+                      value={expDate}
                       disablePast
                     />
                   </LocalizationProvider>

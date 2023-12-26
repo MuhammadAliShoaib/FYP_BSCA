@@ -93,9 +93,9 @@ router.get(`/manufacturer/meds`, async (req, res) => {
 });
 
 router.post("/createbatch", async (req, res) => {
-  const { name, quantity, mfg, exp, manufacturer } = req.body;
+  const { batchID, name, quantity, mfg, exp, manufacturer } = req.body;
   try {
-    console.log(mfg);
+    console.log(batchID);
     // Change from here... Gonna need to generate a batch ID
     // const product = await db.Batch.findOne({ name: req.body.name });
     // if (product) {
