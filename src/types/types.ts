@@ -10,3 +10,13 @@ export type Medicine = {
   formula: string,
   manufacturer: string,
 }
+
+export type Batch = {
+  batchId: string,
+  medicine: string,
+  totalSupply: number,
+  quantity: number,
+  mfg: Date,
+  exp: Date,
+  manufacturer: string,
+}

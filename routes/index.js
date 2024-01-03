@@ -106,12 +106,45 @@ router.post("/createbatch", async (req, res) => {
       await db.Batch.create({
         batchId,
         medicine,
+        totalSupply: quantity,
         quantity,
         mfg,
         exp,
         manufacturer,
       });
       res.status(200).json({ message: "Batch Created" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.get("/getbatch", async (req, res) => {
+  try {
+    const batches = await db.Batch.find({ manufacturer: req.query.address });
+    console.log(batches);
+
+    if (batches) {
+      res.status(200).json(batches);
+    } else {
+      res
+        .status(404)
+        .json({ message: "No batches found by this manufacturer" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.get("/getdistro", async (req, res) => {
+  try {
+    const user = await db.User.find({ role: "distributor" });
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ message: "No Distributors Found" });
     }
   } catch (error) {
     console.error(error);

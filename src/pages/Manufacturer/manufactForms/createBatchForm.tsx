@@ -34,7 +34,7 @@ export default function BatchForm() {
           params: { manufacturer: address },
         })
       ).data;
-      console.log(result);
+      // console.log(result);
 
       setMeds(result);
     } catch (error) {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../../components/Header";
 import {
   Box,
@@ -15,34 +15,65 @@ import {
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalHospital } from "@mui/icons-material";
+import axios from "axios";
+import { useAccount } from "wagmi";
+import { Batch, User } from "../../../types/types.ts";
 
 export default function DispatchForm() {
-  const [inputs, setInputs] = useState([
-    {
-      type: "number",
-      fullWidth: "fullwidth",
-      name: "distributor",
-      name1: "quantity",
-      label: "Distributor",
-      label1: "Quantity",
-      variant: "outlined",
-    },
-  ]);
+  const { address } = useAccount();
+  const [batches, setBatches] = useState<Batch[]>([]);
+  const [distributors, setDistributors] = useState<User[]>([]);
 
-  const handleChange = () => {
-    setInputs((prevState) => [
-      ...prevState,
-      {
-        type: "number",
-        fullWidth: "fullwidth",
-        name: "distributor",
-        name1: "quantity",
-        label: "Distributor",
-        label1: "Quantity",
-        variant: "outlined",
-      },
-    ]);
+  // const [inputs, setInputs] = useState([
+  //   {
+  //     type: "number",
+  //     fullWidth: "fullwidth",
+  //     name: "distributor",
+  //     name1: "quantity",
+  //     label: "Distributor",
+  //     label1: "Quantity",
+  //     variant: "outlined",
+  //   },
+  // ]);
+
+  // const handleChange = () => {
+  //   setInputs((prevState) => [
+  //     ...prevState,
+  //     {
+  //       type: "number",
+  //       fullWidth: "fullwidth",
+  //       name: "distributor",
+  //       name1: "quantity",
+  //       label: "Distributor",
+  //       label1: "Quantity",
+  //       variant: "outlined",
+  //     },
+  //   ]);
+  // };
+
+  const getBatches = async () => {
+    try {
+      const res = (await axios.get("/api/getbatch", { params: { address } }))
+        .data;
+      setBatches(res);
+    } catch (error) {
+      console.log(error, "Response Error");
+    }
   };
+
+  const getDistros = async () => {
+    try {
+      const res = (await axios.get("/api/getdistro")).data;
+      setDistributors(res);
+    } catch (error) {
+      console.log(error, "Response Error");
+    }
+  };
+
+  useEffect(() => {
+    getBatches();
+    getDistros();
+  }, []);
 
   return (
     <>
@@ -91,9 +122,11 @@ export default function DispatchForm() {
                   defaultValue={""}
                   variant="outlined"
                 >
-                  <MenuItem value="panadol">
-                    <option label="Panadol" />
-                  </MenuItem>
+                  {batches.map((batch) => (
+                    <MenuItem value={batch.medicine} key={batch.batchId}>
+                      <option label={batch.medicine} />
+                    </MenuItem>
+                  ))}
                 </TextField>
               </Box>
               <Box width={"48%"}>
@@ -105,45 +138,47 @@ export default function DispatchForm() {
                   label="Select Batch"
                   variant="outlined"
                 >
-                  <MenuItem value="batchId">
-                    <option label="Batch ID" />
-                  </MenuItem>
+                  {batches.map((batch) => (
+                    <MenuItem value={batch.batchId} key={batch.batchId}>
+                      <option label={batch.batchId} />
+                    </MenuItem>
+                  ))}
                 </TextField>
               </Box>
             </Box>
-            {inputs.map((input, index) => (
-              <Box
-                display={"flex"}
-                alignItems={"center"}
-                justifyContent={"space-evenly"}
-                mt={5}
-              >
-                <Box width={"48%"}>
-                  <TextField
-                    required
-                    fullWidth
-                    select
-                    name={input.name}
-                    label={input.label}
-                    variant="outlined"
-                  >
-                    <MenuItem value="distro">
-                      <option label="Distro" />
+            <Box
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"space-evenly"}
+              mt={5}
+            >
+              <Box width={"48%"}>
+                <TextField
+                  required
+                  fullWidth
+                  select
+                  name="distributor"
+                  label="Distributor"
+                  variant="outlined"
+                >
+                  {distributors.map((distro) => (
+                    <MenuItem value={distro.address}>
+                      <option label={distro.name} />
                     </MenuItem>
-                  </TextField>
-                </Box>
-                <Box width={"48%"}>
-                  <TextField
-                    required
-                    type="number"
-                    fullWidth
-                    name={input.name1}
-                    label={input.label1}
-                    variant="outlined"
-                  />
-                </Box>
+                  ))}
+                </TextField>
               </Box>
-            ))}
+              <Box width={"48%"}>
+                <TextField
+                  required
+                  type="number"
+                  fullWidth
+                  name="dispatchQuantity"
+                  label="Quantity"
+                  variant="outlined"
+                />
+              </Box>
+            </Box>
             <Box>
               <Box
                 display={"flex"}
@@ -151,7 +186,7 @@ export default function DispatchForm() {
                 justifyContent={"space-evenly"}
                 mt={5}
               >
-                <Box width={"48%"}>
+                {/* <Box width={"48%"}>
                   <Button
                     // type="submit"
                     variant="contained"
@@ -164,11 +199,11 @@ export default function DispatchForm() {
                   >
                     Add Distributor
                   </Button>
-                </Box>
+                </Box> */}
                 <Box
-                  width={"48%"}
+                  width={"97%"}
                   display={"flex"}
-                  alignItems={"center"}
+                  alignItems={"end"}
                   justifyContent={"right"}
                 >
                   <Button
