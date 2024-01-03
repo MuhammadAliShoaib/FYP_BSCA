@@ -93,23 +93,26 @@ router.get(`/manufacturer/meds`, async (req, res) => {
 });
 
 router.post("/createbatch", async (req, res) => {
-  const { batchID, name, quantity, mfg, exp, manufacturer } = req.body;
+  const { batchId, medicine, quantity, mfg, exp, manufacturer } = req.body;
   try {
-    console.log(batchID);
-    // Change from here... Gonna need to generate a batch ID
-    // const product = await db.Batch.findOne({ name: req.body.name });
-    // if (product) {
-    //   res.status(401).json({ message: "Product Already Exists" });
-    // } else {
-    //   await db.Product.create({
-    //     name,
-    //     quantity,
-    //     mfg,
-    //     exp,
-    //     manufacturer,
-    //   });
-    //   res.status(200).json({ message: "Product Added" });
-    // }
+    console.log(batchId);
+    console.log(medicine);
+    console.log(mfg);
+
+    const batch = await db.Batch.findOne({ batchId: req.body.batchId });
+    if (batch) {
+      res.status(401).json({ message: "Batch was being duplicated" });
+    } else {
+      await db.Batch.create({
+        batchId,
+        medicine,
+        quantity,
+        mfg,
+        exp,
+        manufacturer,
+      });
+      res.status(200).json({ message: "Batch Created" });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });

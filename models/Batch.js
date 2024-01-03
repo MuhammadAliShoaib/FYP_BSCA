@@ -3,7 +3,7 @@ const { Schema, model } = mongoose;
 
 const schemaBatch = Schema({
   batchId: String,
-  name: String,
+  medicine: String,
   quantity: Number,
   mfg: Date,
   exp: Date,

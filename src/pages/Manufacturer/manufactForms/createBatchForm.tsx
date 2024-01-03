@@ -52,26 +52,23 @@ export default function BatchForm() {
 
   const formik = useFormik({
     initialValues: {
-      name: "",
+      medicine: "",
       quantity: 0,
       manufacturer: address,
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Name is required"),
+      medicine: Yup.string().required("Name is required"),
       quantity: Yup.number().required("Enter a Quantity"),
     }),
     onSubmit: async (values) => {
-      const symbol = meds.find((med) => med.name === values.name)?.symbol; // Use optional chaining for safety
-      const dateParts = mfgDate.split(" ").slice(1, 4);
-      const batchID = [
-        symbol?.toUpperCase(), // Capitalize the symbol
-        ...dateParts, // Spread the date parts into an array
-      ].join(""); // Join the elements without any separators
+      const unix = +new Date();
+      const symbol = meds.find((med) => med.name === values.medicine)?.symbol;
+      const batchId = [symbol?.toUpperCase(), unix].join("-");
 
       try {
         const response = await axios.post("/api/createbatch", {
-          batchID: batchID,
-          name: values.name,
+          batchId: batchId,
+          medicine: values.medicine,
           quantity: values.quantity,
           mfg: mfgDate,
           exp: expDate,
@@ -98,7 +95,6 @@ export default function BatchForm() {
         flexDirection={"column"}
         alignItems={"center"}
         justifyContent={"center"}
-        // minHeight={"90vh"}
         sx={{ flexGrow: 1 }}
       >
         <Container
@@ -132,11 +128,11 @@ export default function BatchForm() {
                     required
                     fullWidth
                     select
-                    name="name"
+                    name="medicine"
                     label="Select Medicine"
                     defaultValue={""}
                     onChange={formik.handleChange}
-                    value={formik.values.name}
+                    value={formik.values.medicine}
                     variant="outlined"
                   >
                     {Array.isArray(meds) &&
@@ -158,20 +154,6 @@ export default function BatchForm() {
                     variant="outlined"
                   />
                 </Box>
-                {/* <Box width={"48%"}>
-                <TextField
-                required
-                fullWidth
-                select
-                name="distributor"
-                label="Distributor"
-                variant="outlined"
-                >
-                <MenuItem value="distro">
-                <option label="Distro" />
-                </MenuItem>
-                </TextField>
-              </Box> */}
               </Box>
               <Box
                 display={"flex"}
@@ -237,37 +219,6 @@ export default function BatchForm() {
             </form>
           </Box>
         </Container>
-
-        {/* <Container
-          style={{
-            marginTop: "10px",
-            minWidth: "95%",
-          }}
-        >
-          <Box width={"95%"}>
-            <h1
-              style={{
-                paddingLeft: "15px",
-                textDecorationLine: "underline",
-                textUnderlinePosition: "under",
-              }}
-            >
-              List of Products
-            </h1>
-          </Box>
-          <Box width={"50%"} ml={"15px"} bgcolor={"white"}>
-            <List dense>
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar>
-                    <LocalHospital />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Panadol" secondary="Parcetomol" />
-              </ListItem>
-            </List>
-          </Box>
-        </Container> */}
       </Box>
     </>
   );
