@@ -69,16 +69,9 @@ export default function Dashboard() {
                         ))}
                     </Grid>
                 </Container>
-                {/* <Container style={{ marginTop: '10px', }}>
-                    <Grid container>
-                        <Grid item md={12}>
-                                <NotificationTable/>
-                        </Grid>
-                    </Grid>
-                </Container> */}
 
 
-                <Container style={{ marginTop: '20px', }}>
+                {/* <Container style={{ marginTop: '20px', marginBottom: '20px' }}>
                     <Grid container>
                         <Grid item xs={12} style={{ backgroundColor: 'white', boxShadow: " rgba(0, 0, 0, 0.24) 0px 3px 8px", paddingTop: '5px', paddingBottom: '10px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '25px' }}>
@@ -111,7 +104,16 @@ export default function Dashboard() {
                             </Grid>
                         </Grid>
                     </Grid>
+                </Container> */}
+
+                <Container style={{ marginTop: '20px', marginBottom: '20px' }}>
+                    <Grid container>
+                        <Grid item xs={12} style={{ paddingTop: '5px', paddingBottom: '10px' }}>
+                            <NotificationTable />
+                        </Grid>
+                    </Grid>
                 </Container>
+
             </Box>
         </>
     )

@@ -18,6 +18,7 @@ import { LocalHospital } from "@mui/icons-material";
 import axios from "axios";
 import { useAccount } from "wagmi";
 import { Batch, User } from "../../../types/types.ts";
+import { socket } from "../../../socket.ts";
 
 export default function DispatchForm() {
   const { address } = useAccount();
@@ -69,6 +70,13 @@ export default function DispatchForm() {
       console.log(error, "Response Error");
     }
   };
+
+  const handleClick = () => {
+    socket.emit("sendNotification", {
+      senderName: "Muhammad Ali",
+      receiverName: "0xdb95bB2236a7621151ff47C9723101f6DeCFeeC4"
+    });
+  }
 
   useEffect(() => {
     getBatches();
@@ -209,6 +217,7 @@ export default function DispatchForm() {
                   <Button
                     type="submit"
                     variant="contained"
+                    onClick={handleClick}
                     sx={{
                       width: "15%",
                       paddingTop: "10px",
