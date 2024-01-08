@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Header from "../../../components/Header";
 import {
   Box,
@@ -17,13 +17,21 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalHospital } from "@mui/icons-material";
 import axios from "axios";
 import { useAccount } from "wagmi";
-import { Batch, User } from "../../../types/types.ts";
+import { Batch, User, Dispatch } from "../../../types/types.ts";
 import { socket } from "../../../socket.ts";
 
 export default function DispatchForm() {
   const { address } = useAccount();
   const [batches, setBatches] = useState<Batch[]>([]);
+  const [medicine, setMedicine] = useState("");
   const [distributors, setDistributors] = useState<User[]>([]);
+  const [dispatch, setDispatch] = useState<Dispatch>({
+    batchId: "",
+    distributor: {
+      distributorAddress: "",
+      distributedAmount: 0,
+    },
+  });
 
   // const [inputs, setInputs] = useState([
   //   {
@@ -74,9 +82,19 @@ export default function DispatchForm() {
   const handleClick = () => {
     socket.emit("sendNotification", {
       senderName: "Muhammad Ali",
-      receiverName: "0xdb95bB2236a7621151ff47C9723101f6DeCFeeC4"
+      receiverName: "0xdb95bB2236a7621151ff47C9723101f6DeCFeeC4",
     });
-  }
+  };
+
+  // const handleBatchId = (event: ChangeEvent<HTMLInputElement>) => {
+  //   setDispatch(())
+  // }
+
+  const handleDispatch = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // const res = await axios.post("/api/dispatch", {});
+    console.log(dispatch);
+  };
 
   useEffect(() => {
     getBatches();
@@ -114,87 +132,118 @@ export default function DispatchForm() {
             <Box width={"100%"} ml={2}>
               <h1 style={{ paddingLeft: "15px" }}>Dispatch Batch</h1>
             </Box>
-            <Box
-              display={"flex"}
-              alignItems={"center"}
-              justifyContent={"space-evenly"}
-              mt={5}
-            >
-              <Box width={"48%"}>
-                <TextField
-                  required
-                  fullWidth
-                  select
-                  name="medicines"
-                  label="Select Medicine"
-                  defaultValue={""}
-                  variant="outlined"
-                >
-                  {batches.map((batch) => (
-                    <MenuItem value={batch.medicine} key={batch.batchId}>
-                      <option label={batch.medicine} />
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Box>
-              <Box width={"48%"}>
-                <TextField
-                  required
-                  fullWidth
-                  select
-                  name="batch"
-                  label="Select Batch"
-                  variant="outlined"
-                >
-                  {batches.map((batch) => (
-                    <MenuItem value={batch.batchId} key={batch.batchId}>
-                      <option label={batch.batchId} />
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Box>
-            </Box>
-            <Box
-              display={"flex"}
-              alignItems={"center"}
-              justifyContent={"space-evenly"}
-              mt={5}
-            >
-              <Box width={"48%"}>
-                <TextField
-                  required
-                  fullWidth
-                  select
-                  name="distributor"
-                  label="Distributor"
-                  variant="outlined"
-                >
-                  {distributors.map((distro) => (
-                    <MenuItem value={distro.address}>
-                      <option label={distro.name} />
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Box>
-              <Box width={"48%"}>
-                <TextField
-                  required
-                  type="number"
-                  fullWidth
-                  name="dispatchQuantity"
-                  label="Quantity"
-                  variant="outlined"
-                />
-              </Box>
-            </Box>
-            <Box>
+            <form onSubmit={(event) => handleDispatch(event)}>
               <Box
                 display={"flex"}
                 alignItems={"center"}
                 justifyContent={"space-evenly"}
                 mt={5}
               >
-                {/* <Box width={"48%"}>
+                <Box width={"48%"}>
+                  <TextField
+                    required
+                    fullWidth
+                    select
+                    name="medicines"
+                    label="Select Medicine"
+                    onChange={(event) => setMedicine(event.target.value)}
+                    defaultValue={""}
+                    variant="outlined"
+                  >
+                    {batches.map((batch) => (
+                      <MenuItem value={batch.medicine} key={batch.batchId}>
+                        <option label={batch.medicine} />
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Box>
+                <Box width={"48%"}>
+                  <TextField
+                    required
+                    fullWidth
+                    select
+                    name="batch"
+                    label="Select Batch"
+                    onChange={(event) =>
+                      setDispatch((prevState) => ({
+                        ...prevState,
+                        batchId: event.target.value,
+                      }))
+                    }
+                    variant="outlined"
+                  >
+                    {medicine !== "" &&
+                      batches
+                        .filter((batch) => batch.medicine === medicine)
+                        .map((batch) => (
+                          <MenuItem value={batch.batchId} key={batch.batchId}>
+                            <option label={batch.batchId} />
+                          </MenuItem>
+                        ))}
+                  </TextField>
+                </Box>
+              </Box>
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                justifyContent={"space-evenly"}
+                mt={5}
+              >
+                <Box width={"48%"}>
+                  <TextField
+                    required
+                    fullWidth
+                    select
+                    name="distributor"
+                    label="Distributor"
+                    onChange={(event) =>
+                      setDispatch((prevState) => ({
+                        ...prevState,
+                        distributor: {
+                          distributorAddress: event.target.value,
+                          distributedAmount:
+                            prevState.distributor.distributedAmount,
+                        },
+                      }))
+                    }
+                    variant="outlined"
+                  >
+                    {distributors.map((distro) => (
+                      <MenuItem value={distro.address}>
+                        <option label={distro.name} />
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Box>
+                <Box width={"48%"}>
+                  <TextField
+                    required
+                    type="number"
+                    fullWidth
+                    name="dispatchQuantity"
+                    label="Quantity"
+                    onChange={(event) => {
+                      setDispatch((prevState) => ({
+                        ...prevState,
+                        distributor: {
+                          distributorAddress:
+                            prevState.distributor.distributorAddress,
+                          distributedAmount: Number(event.target.value),
+                        },
+                      }));
+                    }}
+                    variant="outlined"
+                  />
+                </Box>
+              </Box>
+              <Box>
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"space-evenly"}
+                  mt={5}
+                >
+                  {/* <Box width={"48%"}>
                   <Button
                     // type="submit"
                     variant="contained"
@@ -208,27 +257,28 @@ export default function DispatchForm() {
                     Add Distributor
                   </Button>
                 </Box> */}
-                <Box
-                  width={"97%"}
-                  display={"flex"}
-                  alignItems={"end"}
-                  justifyContent={"right"}
-                >
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    onClick={handleClick}
-                    sx={{
-                      width: "15%",
-                      paddingTop: "10px",
-                      paddingBottom: "10px",
-                    }}
+                  <Box
+                    width={"97%"}
+                    display={"flex"}
+                    alignItems={"end"}
+                    justifyContent={"right"}
                   >
-                    Create
-                  </Button>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      onClick={handleClick}
+                      sx={{
+                        width: "15%",
+                        paddingTop: "10px",
+                        paddingBottom: "10px",
+                      }}
+                    >
+                      Dispatch
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
+            </form>
           </Box>
         </Container>
       </Box>

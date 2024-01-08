@@ -20,3 +20,11 @@ export type Batch = {
   exp: Date,
   manufacturer: string,
 }
+
+export type Dispatch = {
+  batchId: string,
+  distributor: {
+    distributorAddress: string,
+    distributedAmount: number
+  }
+}
