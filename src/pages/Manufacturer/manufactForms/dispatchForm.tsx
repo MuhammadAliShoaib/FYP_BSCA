@@ -74,7 +74,7 @@ export default function DispatchForm() {
   const handleClick = () => {
     socket.emit("sendNotification", {
       senderName: "Muhammad Ali",
-      receiverName: "0xdb95bB2236a7621151ff47C9723101f6DeCFeeC4"
+      receiverAddress: "0xdb95bB2236a7621151ff47C9723101f6DeCFeeC4"
     });
   }
 

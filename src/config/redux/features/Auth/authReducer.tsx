@@ -6,7 +6,7 @@ export const userlogin = createAsyncThunk(
     async (data: any, thunkAPI) => {
         try {
             let response = await axios.post(`/api/login`, { address: data })
-            console.log(response.data)
+            // console.log(response.data)
             if (response) {
                 toast.success("Login has been successful!", {
                     position: "bottom-right",

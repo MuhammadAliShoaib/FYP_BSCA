@@ -6,8 +6,6 @@ import { useEffect } from "react";
 import { socket } from "./socket";
 
 
-let start = true
-
 function App() {
   useEffect(() => { // Update with your server URL
 

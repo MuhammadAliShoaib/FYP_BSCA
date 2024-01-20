@@ -10,11 +10,25 @@ import * as http from "http";
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, { cors: { origin: '*' } });
 
-let users = []
+let users = [];
 
-const getUser = (address) => {
-  return users.find((user) => user.address === address);
-};
+const getUsersSocket = (members) => {
+  const usersSockets = users.filter(user => JSON.stringify(members?._id || members)?.includes(user.userId))
+  return usersSockets.map(user => { return user.socketId });
+}
+
+const addUser = (userId, socketId) => {
+  !users.some((user) => user.userId === userId) && users.push({ userId, socketId });
+}
+
+// io.use((socket, next) => {
+// const token = socket.handshake.headers.cookie.split("=")[1]
+// const user = jwt.verify(token, process.env.JWT_KEY)
+// if (!user.id) return next(new Error("Invalid User"))
+// addUser(user.id, socket.id);
+// socket.userId = user.id
+//     next();
+// })
 
 io.on("connection", (socket) => {
   console.log("New client connected " + socket.id);
@@ -26,13 +40,14 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendNotification", ({ senderName, receiverAddress }) => {
+    console.log(receiverAddress)
     const receiver = getUser(receiverAddress);
     console.log(receiver)
     const msg = `Notification sended by ${senderName}`
-    // io.to(receiver.socketId).emit("getNotification", {
-    //   senderName,
-    //   msg,
-    // });
+    io.to(receiver.socketId).emit("getNotification", {
+      senderName,
+      msg,
+    });
   });
 });
 

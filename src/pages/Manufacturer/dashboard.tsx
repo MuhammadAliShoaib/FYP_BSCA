@@ -1,37 +1,54 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header'
 import { Box, Container, Grid } from '@mui/material'
 
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import NotificationTable from '../../components/NotificationTable';
+import { useAppSelector } from '../../config/redux/hooks';
+import { socket } from '../../socket';
+
+
+let start = true;
 
 export default function Dashboard() {
 
-    const [notify, setNotify] = useState([
-        {
-            date: "04/10/2023",
-            notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
-        },
-        {
-            date: "04/10/2023",
-            notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
-        },
-        {
-            date: "04/10/2023",
-            notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
-        },
-        {
-            date: "04/10/2023",
-            notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
-        },
-        {
-            date: "04/10/2023",
-            notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
-        }, {
-            date: "04/10/2023",
-            notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+    const {auth} = useAppSelector(
+        (state) => state.auth
+    );
+
+    useEffect(()=>{
+        if(start && auth.role=="distributor"){
+            console.log("hello")
+            socket.emit("newUser","0xdb95bB2236a7621151ff47C9723101f6DeCFeeC4")
+            start=false;
         }
-    ])
+    },[])
+
+    // const [notify, setNotify] = useState([
+    //     {
+    //         date: "04/10/2023",
+    //         notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+    //     },
+    //     {
+    //         date: "04/10/2023",
+    //         notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+    //     },
+    //     {
+    //         date: "04/10/2023",
+    //         notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+    //     },
+    //     {
+    //         date: "04/10/2023",
+    //         notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+    //     },
+    //     {
+    //         date: "04/10/2023",
+    //         notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+    //     }, {
+    //         date: "04/10/2023",
+    //         notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+    //     }
+    // ])
     return (
         <>
 
