@@ -34,15 +34,15 @@ io.on("connection", (socket) => {
   console.log("New client connected " + socket.id);
 
   socket.on("newUser", (address) => {
-    console.log("user added")
+    // console.log("user added")
     users.push({ address: address, socketId: socket.id })
-    console.log(users)
+    // console.log(users)
   });
 
   socket.on("sendNotification", ({ senderName, receiverAddress }) => {
-    console.log(receiverAddress)
+    // console.log(receiverAddress)
     const receiver = getUser(receiverAddress);
-    console.log(receiver)
+    // console.log(receiver)
     const msg = `Notification sended by ${senderName}`
     io.to(receiver.socketId).emit("getNotification", {
       senderName,

@@ -9,6 +9,8 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import { socket } from '../socket';
+import axios from 'axios';
+import { useAppSelector } from '../config/redux/hooks';
 
 interface Column {
   id: 'date' | 'notification';
@@ -24,37 +26,40 @@ const columns: readonly Column[] = [
 
 const rows = [
   {
-    id: 1,
+    _id: 1,
     date: "04/10/2023",
     notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
   },
   {
-    id: 2,
+    _id: 2,
     date: "05/10/2023",
     notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
   },
   {
-    id: 3,
+    _id: 3,
     date: "06/10/2023",
     notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
   },
   {
-    id: 4,
+    _id: 4,
     date: "07/10/2023",
     notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
   },
   {
-    id: 5,
+    _id: 5,
     date: "08/10/2023",
     notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
   }, {
-    id: 6,
+    _id: 6,
     date: "09/10/2023",
     notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
   }
 ]
 
 export default function NotificationTable() {
+
+  const { auth } = useAppSelector((state) => state.auth);
+
   const [notification, setNotification] = React.useState(rows);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -70,13 +75,30 @@ export default function NotificationTable() {
     setPage(0);
   };
 
+  // React.useEffect(() => {
+  //   socket.on("getNotification", (data) => {
+  //     setNotification((prev) => [...prev, {
+  //       _id: Math.floor(Math.random()), date: "04/10/2024", notification: data
+  //     }]);
+  //   });
+  // }, [socket, notification]);
+
   React.useEffect(() => {
-    socket.on("getNotification", (data) => {
-      setNotification((prev) => [...prev, {
-        id: Math.floor(Math.random()), date: "04/10/2024", notification: data
-      }]);
-    });
-  }, [socket,notification]);
+
+    async function getNotification() {
+      try {
+        const res = (
+          await axios.get(`/api/getNotification/${auth.address}`)
+        ).data;
+        setNotification([...notification, ...res])
+        console.log("notifications :" + JSON.stringify(res))
+      } catch (error) {
+        console.log(error, "Response Error");
+      }
+    }
+
+    getNotification();
+  }, [])
 
   return (
     // <Paper
@@ -148,6 +170,6 @@ export default function NotificationTable() {
     //     onRowsPerPageChange={handleChangeRowsPerPage}
     //   />
     // </Paper>
-    <pre>{JSON.stringify(notification,null,4)}</pre>
+    <pre>{JSON.stringify(notification, null, 4)}</pre>
   );
 }

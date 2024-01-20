@@ -19,8 +19,13 @@ import axios from "axios";
 import { useAccount } from "wagmi";
 import { Batch, User, Dispatch } from "../../../types/types.ts";
 import { socket } from "../../../socket.ts";
+import { useAppSelector } from "../../../config/redux/hooks.tsx";
 
 export default function DispatchForm() {
+
+    const { auth } = useAppSelector((state) => state.auth);
+
+
     const { address } = useAccount();
     const [batches, setBatches] = useState<Batch[]>([]);
     const [medicine, setMedicine] = useState("");
@@ -53,11 +58,27 @@ export default function DispatchForm() {
         }
     };
 
-    const handleClick = () => {
-        socket.emit("sendNotification", {
-            senderName: "Muhammad Ali",
-            receiverName: dispatch.distributor.distributorAddress,
-        });
+    const handleClick = async () => {
+        if (dispatch.distributor.distributorAddress.length == 0) {
+            return;
+        }
+        try {
+            // socket.emit("sendNotification", {
+            //     senderName: "Muhammad Ali",
+            //     receiverName: dispatch.distributor.distributorAddress,
+            // });
+            const res = (
+                await axios.post("/api/notification", {
+                    senderAddress: auth.address,
+                    receiverAddress: dispatch.distributor.distributorAddress,
+                    notification : "Notification incoming",
+                    date : new Date()
+                })
+            ).data;
+
+        } catch (error) {
+            console.log(error, "Response Error");
+        }
     };
 
     const handleDispatch = async (event: FormEvent<HTMLFormElement>) => {

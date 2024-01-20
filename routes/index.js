@@ -209,4 +209,30 @@ router.post("/dispatch", async (req, res) => {
     }
 });
 
+
+router.post("/notification", async (req, res) => {
+    const { senderAddress, receiverAddress, notification,date } = req.body;
+    try {
+        await db.Notification.create({ senderAddress, receiverAddress, notification,date });
+        res.status(200).json({ message: "Notification Created" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+})
+
+
+router.get("/getNotification/:address", async (req, res) => {
+    // console.log(req.params)
+    try {
+        const result = await db.Notification.find({ receiverAddress: req.params.address }).select({_id:1,notification:1,date:1});
+        // console.log(result)
+        // console.log({id:result._id,date:result.date,notification:result.message})
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+})
+
 export default router;

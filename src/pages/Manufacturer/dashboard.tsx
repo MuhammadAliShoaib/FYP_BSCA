@@ -12,17 +12,17 @@ let start = true;
 
 export default function Dashboard() {
 
-    const {auth} = useAppSelector(
-        (state) => state.auth
-    );
+    // const { auth } = useAppSelector(
+    //     (state) => state.auth
+    // );
 
-    useEffect(()=>{
-        if(start && auth.role=="distributor"){
+    useEffect(() => {
+        if (start) {
             console.log("hello")
-            socket.emit("newUser","0xdb95bB2236a7621151ff47C9723101f6DeCFeeC4")
-            start=false;
+            socket.emit("newUser", "0xdb95bB2236a7621151ff47C9723101f6DeCFeeC4")
+            start = false;
         }
-    },[])
+    }, [])
 
     // const [notify, setNotify] = useState([
     //     {

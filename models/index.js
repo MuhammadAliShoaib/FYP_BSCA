@@ -4,6 +4,7 @@ import { User } from "./User.js";
 import { Product } from "./Product.js";
 import { Batch } from "./Batch.js";
 import { Dispatch } from "./Dispatch.js";
+import { Notification } from "./Notification.js";
 
 
 const pass = process.env.VITE_DB_PASS;
@@ -21,4 +22,5 @@ export const db = {
   Product,
   Batch,
   Dispatch,
+  Notification
 };

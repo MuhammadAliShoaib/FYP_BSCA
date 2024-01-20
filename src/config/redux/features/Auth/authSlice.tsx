@@ -5,14 +5,14 @@ import type { RootState } from '../../store'
 import { toast } from 'react-toastify'
 
 interface AuthState {
-    auth: { name: string, role: string },
+    auth: { name: string, role: string,address:string },
     isLoading: boolean,
     isSuccess: boolean,
     isError: boolean,
 }
 
 const initialState: AuthState = {
-    auth: { name: "", role: "" },
+    auth: { name: "", role: "",address:"" },
     isLoading: false,
     isSuccess: false,
     isError: false,
@@ -24,7 +24,7 @@ export const authSlice = createSlice({
     reducers: {
         clearState: () => initialState,
         clearData: state => {
-            state.auth = { name: "", role: "" }
+            state.auth = { name: "", role: "",address:"" }
         }
     },
     extraReducers: (builder) => {
