@@ -18,18 +18,19 @@ import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { Medicine } from "../../../types/types";
+import { useAppSelector } from "../../../config/redux/hooks";
 
 export default function ProductForm() {
     const { address } = useAccount();
     const [meds, setMeds] = useState<Medicine[]>([]);
     const [flag, setFlag] = useState(false);
 
+    const {auth} = useAppSelector((state)=>state.auth)
+
     const getMedicines = async () => {
         try {
             const result = (
-                await axios.get(`/api/manufacturer/meds`, {
-                    params: { manufacturer: address },
-                })
+                await axios.get(`/api/manufacturer/meds`,{params:{manufacturer:address}})
             ).data;
             setMeds(result);
         } catch (error) {

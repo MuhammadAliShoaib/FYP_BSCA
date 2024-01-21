@@ -48,7 +48,7 @@ export default function LandingPage() {
         </Grid>
 
         <Grid container spacing={3}>
-          <Grid item xs={12}>
+          <Grid item xs={12} style={{justifyContent:'center',alignItems:'center',display:'flex'}}>
             <span className="header2" style={{ fontSize: "2.5rem" }}>
               How Does it work?
             </span>
@@ -78,7 +78,7 @@ export default function LandingPage() {
         </Grid>
 
         <Grid container spacing={3}>
-          <Grid item xs={12}>
+          <Grid item xs={12} style={{justifyContent:'center',alignItems:'center',display:'flex',marginTop:30}}>
             <span className="header2" style={{ fontSize: "2.5rem" }}>
               Main Features
             </span>

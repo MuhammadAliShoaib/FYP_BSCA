@@ -25,7 +25,7 @@ export default function DispatchForm() {
     const getBatches = async () => {
         try {
             const res = (
-                await axios.get("/api/getbatch", { params: { address } })
+                await axios.get(`/api/getbatch`, { params: { manufacturer: address } })
             ).data;
             setBatches(res);
         } catch (error) {

@@ -24,6 +24,8 @@ const columns: readonly Column[] = [
   { id: 'notification', label: 'Activities', minWidth: '100%' },
 ];
 
+
+
 const rows = [
   {
     _id: 1,

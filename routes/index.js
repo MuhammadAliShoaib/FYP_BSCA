@@ -82,8 +82,9 @@ router.post("/addproduct", async (req, res) => {
 });
 
 router.get(`/manufacturer/meds`, async (req, res) => {
+    // console.log("Address : " + req.params.address)
     try {
-        const meds = await db.Product.find({ address: req.query.address });
+        const meds = await db.Product.find({ manufacturer: req.query.manufacturer });
         console.log(meds);
         if (meds.length > 0) {
             res.status(200).json(meds);
@@ -129,7 +130,7 @@ router.post("/createbatch", async (req, res) => {
 router.get("/getbatch", async (req, res) => {
     try {
         const batches = await db.Batch.find({
-            manufacturer: req.query.address,
+            manufacturer: req.query.manufacturer,
         });
         console.log(batches);
 
