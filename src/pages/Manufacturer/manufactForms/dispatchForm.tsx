@@ -1,24 +1,9 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Header from "../../../components/Header";
-import {
-    Box,
-    Button,
-    Container,
-    TextField,
-    List,
-    ListItem,
-    ListItemText,
-    ListItemAvatar,
-    Avatar,
-    MenuItem,
-} from "@mui/material";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalHospital } from "@mui/icons-material";
+import { Box, Button, Container, TextField, MenuItem } from "@mui/material";
 import axios from "axios";
 import { useAccount } from "wagmi";
 import { Batch, User, Dispatch } from "../../../types/types.ts";
-import { socket } from "../../../socket.ts";
 import { useAppSelector } from "../../../config/redux/hooks.tsx";
 import { toast } from "react-toastify";
 
@@ -62,15 +47,11 @@ export default function DispatchForm() {
             return;
         }
         try {
-            // socket.emit("sendNotification", {
-            //     senderName: "Muhammad Ali",
-            //     receiverName: dispatch.distributor.distributorAddress,
-            // });
             const res = (
                 await axios.post("/api/notification", {
                     senderAddress: auth.address,
                     receiverAddress: dispatch.distributor.distributorAddress,
-                    notification: "Notification incoming",
+                    notification: "Dispatch on the way",
                     date: new Date(),
                 })
             ).data;
@@ -81,11 +62,11 @@ export default function DispatchForm() {
 
     const handleDispatch = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const res = await axios.post("/api/dispatch", { dispatch });
-        if (!res) {
+        const response = await axios.post("/api/dispatch", { dispatch });
+        if (!response) {
             throw new Error("Dispatch Failed");
         }
-        toast.success("Dispatch Successful!", {
+        toast.success(`${response.data.message}`, {
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -111,7 +92,6 @@ export default function DispatchForm() {
                 flexDirection={"column"}
                 alignItems={"center"}
                 justifyContent={"center"}
-                // minHeight={"90vh"}
                 sx={{ flexGrow: 1 }}
             >
                 <Container

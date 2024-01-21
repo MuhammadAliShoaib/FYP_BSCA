@@ -1,20 +1,8 @@
 import { useEffect, useState } from "react";
 import Header from "../../../components/Header";
-import {
-    Box,
-    Button,
-    Container,
-    TextField,
-    List,
-    ListItem,
-    ListItemText,
-    ListItemAvatar,
-    Avatar,
-    MenuItem,
-} from "@mui/material";
+import { Box, Button, Container, TextField, MenuItem } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalHospital } from "@mui/icons-material";
 import axios from "axios";
 import { useAccount } from "wagmi";
 import { Medicine } from "../../../types/types";
@@ -35,17 +23,11 @@ export default function BatchForm() {
                     params: { manufacturer: address },
                 })
             ).data;
-            // console.log(result);
-
             setMeds(result);
         } catch (error) {
             console.log(error);
         }
     };
-
-    function capitalizeFirstLetter(string: string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
 
     useEffect(() => {
         getMedicines();
@@ -81,7 +63,7 @@ export default function BatchForm() {
                 if (!response) {
                     throw new Error("Something Went Wrong!");
                 }
-                toast.success("Batch Created!", {
+                toast.success(`${response.data.message}`, {
                     position: "bottom-right",
                     autoClose: 5000,
                     hideProgressBar: false,

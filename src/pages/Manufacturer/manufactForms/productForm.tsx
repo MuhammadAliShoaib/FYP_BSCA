@@ -9,7 +9,6 @@ import {
     ListItemText,
     ListItemAvatar,
     Avatar,
-    Grid,
 } from "@mui/material";
 import { LocalHospital } from "@mui/icons-material";
 import axios from "axios";
@@ -17,9 +16,31 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { Medicine } from "../../../types/types";
 
 export default function ProductForm() {
     const { address } = useAccount();
+    const [meds, setMeds] = useState<Medicine[]>([]);
+    const [flag, setFlag] = useState(false);
+
+    const getMedicines = async () => {
+        try {
+            const result = (
+                await axios.get(`/api/manufacturer/meds`, {
+                    params: { manufacturer: address },
+                })
+            ).data;
+            setMeds(result);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        getMedicines();
+        setFlag(false);
+    }, [flag]);
 
     const formik = useFormik({
         initialValues: {
@@ -56,6 +77,7 @@ export default function ProductForm() {
                     progress: undefined,
                     theme: "light",
                 });
+                setFlag(true);
                 console.log(data);
             } catch (error) {
                 console.error("Error submitting form:", error);
@@ -71,7 +93,6 @@ export default function ProductForm() {
                 display={"flex"}
                 flexDirection={"column"}
                 alignItems={"center"}
-                // justifyContent={"center"}
                 minHeight={"90vh"}
                 sx={{ flexGrow: 1 }}
             >
@@ -169,8 +190,17 @@ export default function ProductForm() {
 
                 <Container
                     style={{
-                        marginTop: "10px",
-                        minWidth: "95%",
+                        minWidth: "50%",
+                        minHeight: "22vh",
+                        display: "flex",
+                        flexDirection: "column",
+                        // backgroundColor: "white",
+                        // borderTop: "2px solid black",
+                        borderBottomLeftRadius: "5px",
+                        borderBottomRightRadius: "5px",
+
+                        paddingBottom: "15px",
+                        marginTop: "50px",
                     }}
                 >
                     <Box width={"95%"}>
@@ -184,162 +214,39 @@ export default function ProductForm() {
                             List of Products
                         </h1>
                     </Box>
-                    <Box width={"50%"} ml={"15px"} bgcolor={"white"}>
+                    <Box width={"100%"}>
                         <List dense>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <LocalHospital />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary="Panadol"
-                                    secondary="Parcetomol"
-                                />
-                            </ListItem>
+                            {meds.map((medicine) => (
+                                <Box
+                                    display={"flex"}
+                                    flexDirection={"column"}
+                                    margin={"10px"}
+                                    padding={"0"}
+                                    alignItems={"center"}
+                                    borderBottom={"1px solid black"}
+                                    bgcolor={"white"}
+                                    borderRadius={"3px"}
+                                    // boxShadow={
+                                    //     "rgba(0, 0, 0, 0.24) 0px 1px 3px"
+                                    // }
+                                >
+                                    <ListItem>
+                                        <ListItemAvatar>
+                                            <Avatar>
+                                                <LocalHospital />
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={medicine.name}
+                                            secondary={medicine.symbol}
+                                        />
+                                    </ListItem>
+                                </Box>
+                            ))}
                         </List>
                     </Box>
                 </Container>
             </Box>
-            <Box sx={{ padding: "25px" }}>
-                <Container style={{ marginTop: "20px" }}>
-                    <Grid container>
-                        <Grid item md={3}></Grid>
-
-                        <Grid
-                            item
-                            md={6}
-                            style={{
-                                backgroundColor: "white",
-                                boxShadow: " rgba(0, 0, 0, 0.24) 0px 3px 8px",
-                                paddingTop: "5px",
-                                paddingBottom: "10px",
-                            }}
-                        >
-                            <Grid item xs={12}>
-                                <h1
-                                    style={{
-                                        paddingLeft: "15px",
-                                        textAlign: "center",
-                                    }}
-                                >
-                                    Add Product
-                                </h1>
-                            </Grid>
-                            <Grid container style={{ textAlign: "center" }}>
-                                <Grid
-                                    item
-                                    xs={12}
-                                    md={6}
-                                    style={{ marginTop: "10px" }}
-                                >
-                                    <TextField
-                                        required
-                                        id="name"
-                                        name="name"
-                                        label="Name"
-                                        variant="outlined"
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={12}
-                                    md={6}
-                                    style={{ marginTop: "10px" }}
-                                >
-                                    <TextField
-                                        required
-                                        // fullWidth
-                                        id="symbol"
-                                        name="symbol"
-                                        label="Symbol"
-                                        variant="outlined"
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container style={{ textAlign: "center" }}>
-                                <Grid item md={3}></Grid>
-                                <Grid
-                                    item
-                                    xs={12}
-                                    md={6}
-                                    style={{ marginTop: "10px" }}
-                                >
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        id="formula"
-                                        name="formula"
-                                        label="Formula"
-                                        variant="outlined"
-                                    />
-                                </Grid>
-                                <Grid item md={3}></Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item md={3}></Grid>
-                    </Grid>
-                </Container>
-            </Box>
         </>
     );
-}
-
-{
-    /* <Grid
-            container
-            spacing={15}
-            style={{
-              display: "flex",
- 
-              marginTop: "35px",
-              // alignItems: "center",
-            }}
-          >
-            <Grid item xs={4} md={8}>
-              <TextField
-                required
-                fullWidth
-                id="name"
-                name="name"
-                label="Name"
-                variant="outlined"
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="symbol"
-                name="symbol"
-                label="Symbol"
-                variant="outlined"
-              />
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            spacing={15}
-            style={{
-              display: "flex",
- 
-              marginTop: "35px",
-            }}
-          >
-            <Grid item xs={4} md={8}>
-              <TextField
-                required
-                fullWidth
-                id="formula"
-                name="formula"
-                label="Formula"
-                variant="outlined"
-              />
-              <TextField
-                margin="normal"
-                fullWidth
-                label="submit"
-                variant="outlined"
-              />
-            </Grid>
-          </Grid> */
 }

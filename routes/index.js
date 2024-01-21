@@ -89,7 +89,7 @@ router.get(`/manufacturer/meds`, async (req, res) => {
             res.status(200).json(meds);
         } else {
             res.status(404).json({
-                message: "Medicines by manufacturer not found.",
+                message: "Medicine by manufacturer not found.",
             });
         }
     } catch (error) {
@@ -180,11 +180,11 @@ router.post("/dispatch", async (req, res) => {
 
                     await batch.save();
                     await existingDispatch.save();
-                    console.log("Distributor array updated:", existingDispatch);
                 } else {
                     batch.quantity -= dispatch.distributor.distributedAmount;
                     const newDispatch = await db.Dispatch.create({
                         batchId: dispatch.batchId,
+                        status: "Dispatched",
                         distributor: [
                             {
                                 distributedAmount:
@@ -197,39 +197,44 @@ router.post("/dispatch", async (req, res) => {
                         transactions: [],
                     });
                     await batch.save();
-                    console.log("New dispatch record created:", newDispatch);
                 }
 
-                res.status(200).json("Dispatch processed successfully");
-            } else res.status(400).json("Batch quantity exceeded");
-        } else res.status(400).json("Batch does not exists");
+                res.status(200).json({ message: "Dispatch successful!" });
+            } else
+                res.status(400).json({ message: "Batch quantity exceeded!" });
+        } else res.status(400).json({ message: "Batch does not exists." });
     } catch (error) {
         console.log(error);
         res.status(500).send("Internal Server Error");
     }
 });
 
-
 router.post("/notification", async (req, res) => {
-    const { senderAddress, receiverAddress, notification,date } = req.body;
+    const { senderAddress, receiverAddress, notification, date } = req.body;
     try {
-        await db.Notification.create({ senderAddress, receiverAddress, notification,date });
+        await db.Notification.create({
+            senderAddress,
+            receiverAddress,
+            notification,
+            date,
+        });
         res.status(200).json({ message: "Notification Created" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal Server Error" });
     }
-})
-
+});
 
 router.get("/getNotification/:address", async (req, res) => {
     try {
-        const result = await db.Notification.find({ receiverAddress: req.params.address }).select({_id:1,notification:1,date:1});
+        const result = await db.Notification.find({
+            receiverAddress: req.params.address,
+        }).select({ _id: 1, notification: 1, date: 1 });
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal Server Error" });
     }
-})
+});
 
 export default router;
