@@ -20,11 +20,10 @@ import { useAccount } from "wagmi";
 import { Batch, User, Dispatch } from "../../../types/types.ts";
 import { socket } from "../../../socket.ts";
 import { useAppSelector } from "../../../config/redux/hooks.tsx";
+import { toast } from "react-toastify";
 
 export default function DispatchForm() {
-
     const { auth } = useAppSelector((state) => state.auth);
-
 
     const { address } = useAccount();
     const [batches, setBatches] = useState<Batch[]>([]);
@@ -71,11 +70,10 @@ export default function DispatchForm() {
                 await axios.post("/api/notification", {
                     senderAddress: auth.address,
                     receiverAddress: dispatch.distributor.distributorAddress,
-                    notification : "Notification incoming",
-                    date : new Date()
+                    notification: "Notification incoming",
+                    date: new Date(),
                 })
             ).data;
-
         } catch (error) {
             console.log(error, "Response Error");
         }
@@ -84,7 +82,19 @@ export default function DispatchForm() {
     const handleDispatch = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const res = await axios.post("/api/dispatch", { dispatch });
-        // console.log(res);
+        if (!res) {
+            throw new Error("Dispatch Failed");
+        }
+        toast.success("Dispatch Successful!", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
     };
 
     useEffect(() => {
@@ -111,7 +121,7 @@ export default function DispatchForm() {
                         display: "flex",
                         alignItems: "center",
                         paddingTop: "35px",
-                        paddingBottom: "35px",
+                        paddingBottom: "45px",
                         backgroundColor: "white",
                         borderTop: "2px solid black",
                         borderBottomLeftRadius: "5px",
