@@ -223,11 +223,8 @@ router.post("/notification", async (req, res) => {
 
 
 router.get("/getNotification/:address", async (req, res) => {
-    // console.log(req.params)
     try {
         const result = await db.Notification.find({ receiverAddress: req.params.address }).select({_id:1,notification:1,date:1});
-        // console.log(result)
-        // console.log({id:result._id,date:result.date,notification:result.message})
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
