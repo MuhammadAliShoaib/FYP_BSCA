@@ -17,9 +17,11 @@ import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import MedicationLiquidIcon from "@mui/icons-material/MedicationLiquid";
 import Batches from "./batches";
-import DispatchForm from "../Manufacturer/manufactForms/dispatchForm";
-import Dashboard from "../Manufacturer/dashboard";
+import DispatchForm from "./distroForms/dispatchForm";
+import AddPharmaForm from "./distroForms/addPharmaForm";
+import Dashboard from "./dashboard";
 
 const drawerWidth = 240;
 
@@ -104,11 +106,11 @@ export default function DistributorMain() {
             route: "",
             icon: <DashboardIcon />,
         },
-        // {
-        //   Name: "Products",
-        //   route: "addproduct",
-        //   icon: <MedicationLiquidIcon />,
-        // },
+        {
+            Name: "Add Pharmacy",
+            route: "pharma",
+            icon: <MedicationLiquidIcon />,
+        },
         // {
         //   Name: "Create Batch",
         //   route: "createbatch",
@@ -218,6 +220,7 @@ export default function DistributorMain() {
             <Box component="main" sx={{ flexGrow: 1 }}>
                 <Routes>
                     <Route path="/" element={<Dashboard />} />
+                    <Route path="/pharma" element={<AddPharmaForm />} />
                     <Route path="/dispatch" element={<DispatchForm />} />
                     <Route path="/batches" element={<Batches />} />
                 </Routes>
