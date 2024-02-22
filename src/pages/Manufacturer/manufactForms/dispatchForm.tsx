@@ -2,15 +2,12 @@ import { FormEvent, useEffect, useState } from "react";
 import Header from "../../../components/Header";
 import { Box, Button, Container, TextField, MenuItem } from "@mui/material";
 import axios from "axios";
-import { useAccount } from "wagmi";
 import { Batch, User, Dispatch } from "../../../types/types.ts";
 import { useAppSelector } from "../../../config/redux/hooks.tsx";
 import { toast } from "react-toastify";
 
 export default function DispatchForm() {
     const { auth } = useAppSelector((state) => state.auth);
-
-    const { address } = useAccount();
     const [batches, setBatches] = useState<Batch[]>([]);
     const [medicine, setMedicine] = useState("");
     const [distributors, setDistributors] = useState<User[]>([]);
@@ -25,7 +22,7 @@ export default function DispatchForm() {
     const getBatches = async () => {
         try {
             const res = (
-                await axios.get(`/api/getbatch`, { params: { manufacturer: address } })
+                await axios.get(`/api/getbatch`, { params: { manufacturer: auth.address } })
             ).data;
             setBatches(res);
         } catch (error) {

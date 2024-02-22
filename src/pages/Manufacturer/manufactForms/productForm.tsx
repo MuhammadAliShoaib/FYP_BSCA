@@ -14,23 +14,20 @@ import { LocalHospital } from "@mui/icons-material";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { Medicine } from "../../../types/types";
 import { useAppSelector } from "../../../config/redux/hooks";
 
 export default function ProductForm() {
-    const { address } = useAccount();
+    const {auth} = useAppSelector((state)=>state.auth)
     const [meds, setMeds] = useState<Medicine[]>([]);
     const [flag, setFlag] = useState(false);
-
-    const {auth} = useAppSelector((state)=>state.auth)
 
     const getMedicines = async () => {
         try {
             const result = (
-                await axios.get(`/api/manufacturer/meds`,{params:{manufacturer:address}})
+                await axios.get(`/api/manufacturer/meds`,{ params: { manufacturer: auth.address }})
             ).data;
             setMeds(result);
         } catch (error) {
@@ -48,7 +45,7 @@ export default function ProductForm() {
             name: "",
             symbol: "",
             formula: "",
-            manufacturer: address,
+            manufacturer: auth.address,
         },
         validationSchema: Yup.object({
             name: Yup.string().required("Name is required"),

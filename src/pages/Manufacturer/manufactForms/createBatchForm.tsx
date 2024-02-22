@@ -4,14 +4,14 @@ import { Box, Button, Container, TextField, MenuItem } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import axios from "axios";
-import { useAccount } from "wagmi";
 import { Medicine } from "../../../types/types";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import { useAppSelector } from "../../../config/redux/hooks";
 
 export default function BatchForm() {
-    const { address } = useAccount();
+    const { auth } = useAppSelector((state) => state.auth)
     const [meds, setMeds] = useState<Medicine[]>([]);
     const [mfgDate, setMfgDate] = useState("");
     const [expDate, setExpDate] = useState("");
@@ -20,7 +20,7 @@ export default function BatchForm() {
         try {
             const result = (
                 await axios.get(`/api/manufacturer/meds`, {
-                    params: { manufacturer: address },
+                    params: { manufacturer: auth.address },
                 })
             ).data;
             setMeds(result);
@@ -37,7 +37,7 @@ export default function BatchForm() {
         initialValues: {
             medicine: "",
             quantity: 0,
-            manufacturer: address,
+            manufacturer: auth.address,
         },
         validationSchema: Yup.object({
             medicine: Yup.string().required("Name is required"),
