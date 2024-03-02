@@ -33,31 +33,28 @@ export default function Hero() {
       >
         <Stack spacing={2} useFlexGap sx={{ width: { xs: '100%', sm: '70%' } }}>
           <Typography
-            component="h1"
             variant="h1"
             sx={{
               display: 'flex',
               flexDirection: { xs: 'column', md: 'row' },
-              alignSelf: 'center',
-              textAlign: 'center',
+              // alignSelf: 'center',
+              // textAlign: 'center',
             }}
           >
-            Our latest&nbsp;
+            The Future of &nbsp;
             <Typography
-              component="span"
               variant="h1"
               sx={{
                 color: (theme) =>
                   theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
               }}
             >
-              products
+              Pharma
             </Typography>
           </Typography>
           <Typography variant="body1" textAlign="center" color="text.secondary">
-            Explore our cutting-edge dashboard, delivering high-quality solutions
-            tailored to your needs. <br />
-            Elevate your experience with top-tier features and services.
+            Revolutionizing the Pharma Industry&apos;s Supply Chain Management with  Blockchain <br />Technology
+            to ensure Transparency, Accountability, Efficiency <br />   in the Track and Traceability of Medicines.
           </Typography>
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
@@ -69,26 +66,19 @@ export default function Hero() {
             <TextField
               id="outlined-basic"
               hiddenLabel
-              size="small"
+              size='medium'
               variant="outlined"
-              aria-label="Enter your email address"
-              placeholder="Your email address"
+              aria-label="Input Batch Id"
+              placeholder="Input Batch Id"
               inputProps={{
                 autocomplete: 'off',
-                ariaLabel: 'Enter your email address',
+                ariaLabel: 'Input Batch Id',
               }}
             />
             <Button variant="contained" color="primary">
-              Start now
+              Search
             </Button>
           </Stack>
-          <Typography variant="caption" textAlign="center" sx={{ opacity: 0.8 }}>
-            By clicking &quot;Start now&quot; you agree to our&nbsp;
-            <Link href="#" color="primary">
-              Terms & Conditions
-            </Link>
-            .
-          </Typography>
         </Stack>
         <Box
           id="image"

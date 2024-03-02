@@ -11,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
+import Navbar from './Navbar copy';
 
 const logoStyle = {
   width: '140px',
@@ -94,7 +95,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 style={logoStyle}
                 alt="logo of sitemark"
               />
-              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              {/* <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <MenuItem
                   onClick={() => scrollToSection('features')}
                   sx={{ py: '6px', px: '12px' }}
@@ -135,7 +136,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                     FAQ
                   </Typography>
                 </MenuItem>
-              </Box>
+              </Box> */}
             </Box>
             <Box
               sx={{
@@ -145,26 +146,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               }}
             >
               <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-              <Button
-                color="primary"
-                variant="text"
-                size="small"
-                component="a"
-                href="/material-ui/getting-started/templates/sign-in/"
-                target="_blank"
-              >
-                Sign in
-              </Button>
-              <Button
-                color="primary"
-                variant="contained"
-                size="small"
-                component="a"
-                href="/material-ui/getting-started/templates/sign-up/"
-                target="_blank"
-              >
-                Sign up
-              </Button>
+              <Navbar/>
             </Box>
             <Box sx={{ display: { sm: '', md: 'none' } }}>
               <Button
@@ -230,7 +212,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                       target="_blank"
                       sx={{ width: '100%' }}
                     >
-                      Sign in
+                      Connect to MetaMask
                     </Button>
                   </MenuItem>
                 </Box>
