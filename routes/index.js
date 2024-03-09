@@ -99,6 +99,7 @@ router.get(`/manufacturer/meds`, async (req, res) => {
     }
 });
 
+// Creates a batch by Manufacturer
 router.post("/createbatch", async (req, res) => {
     const { batchId, medicine, quantity, mfg, exp, manufacturer } = req.body;
     try {
@@ -127,6 +128,7 @@ router.post("/createbatch", async (req, res) => {
     }
 });
 
+// Gets batches created by the Manufacturer
 router.get("/getbatch", async (req, res) => {
     try {
         const batches = await db.Batch.find({
@@ -147,6 +149,7 @@ router.get("/getbatch", async (req, res) => {
     }
 });
 
+// Gets all the Distributors
 router.get("/getdistro", async (req, res) => {
     try {
         const user = await db.User.find({ role: "distributor" });
@@ -161,6 +164,7 @@ router.get("/getdistro", async (req, res) => {
     }
 });
 
+// Dispatches a Batch from Manufacturer
 router.post("/dispatch", async (req, res) => {
     const { dispatch } = req.body;
     try {
@@ -206,10 +210,45 @@ router.post("/dispatch", async (req, res) => {
         } else res.status(400).json({ message: "Batch does not exists." });
     } catch (error) {
         console.log(error);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({message: "Internal Server Error"});
     }
 });
 
+// Gets batches dispatched to Distributor to create order for Pharmacy
+router.get("/getDispatches", async (req, res) => {
+    // console.log("Address: ", req.query.distributorAddress)
+    try {
+        const dispatches = await db.Dispatch.find({'distributor.distributorAddress':  req.query.distributorAddress})
+        // console.log('Dispatches', dispatches)
+        if (dispatches) {
+            res.status(200).json(dispatches);
+        } else {
+            res.status(404).json({
+                message: "No dispatches to distributors name",
+            });
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json("Internal Server Error")
+    }
+})
+
+// To get all the Pharmacies
+router.get('/getPharma', async (req, res) => {
+    try {
+        const pharma = await db.User.find({role: 'pharmacy'})
+        if(pharma) {
+            res.status(200).json(pharma)
+        } else {
+            res.status(404).json({message: "Pharmacies not found"})
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message: "Internal Server Error"})
+    }
+})
+
+// Handles Notifications
 router.post("/notification", async (req, res) => {
     const { senderAddress, receiverAddress, notification, date } = req.body;
     try {
