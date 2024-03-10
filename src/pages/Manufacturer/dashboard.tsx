@@ -54,7 +54,12 @@ export default function Dashboard() {
 
             <Header title="Dashboard" />
             {/* <DrawerHeader /> */}
-            <Box sx={{ padding: "25px" }}>
+            <Box sx={(theme) => ({
+                padding: "25px", bgcolor:
+                    theme.palette.mode === 'light'
+                        ? 'rgba(255, 255, 255, 0.4)'
+                        : 'rgba(0, 0, 0, 0.4)',
+            })}>
                 {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div className="">
                         <h1>Dashboard</h1>

@@ -219,7 +219,7 @@ export default function ManufacturerMain() {
                 </List>
                 <Divider />
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1 }}>
+            <Box component="main" sx={{ flexGrow: 1,bgcolor: 'background.default' }}>
                 <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/addproduct" element={<ProductForm />} />

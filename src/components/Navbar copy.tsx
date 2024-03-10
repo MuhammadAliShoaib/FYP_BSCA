@@ -1,4 +1,5 @@
-import { AppBar, Button, Toolbar, Typography } from "@mui/material";
+import { AppBar, Toolbar, Typography } from "@mui/material";
+import Button from '@mui/material/Button';
 import { User } from "../types/types";
 import { WalletButton } from "@rainbow-me/rainbowkit";
 import Axios from "axios";
@@ -80,6 +81,7 @@ export default function Navbar() {
               color="primary"
               variant="contained"
               size="small"
+
               href=""
               disabled={!ready}
               onClick={() => {
@@ -102,15 +104,7 @@ export default function Navbar() {
         >
           Disconnect
         </Button>
-        // <Button
-        //   style={{ backgroundColor: "white", color: "black" }}
-        //   onClick={() => disconnect()}
-        //   href=""
-        //   variant="contained"
-        //   sx={{ my: 1, mx: 1.5 }}
-        // >
-        //   Disconnect
-        // </Button>
+
       )}
     </>
   );

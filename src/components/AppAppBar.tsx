@@ -6,12 +6,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
 import Navbar from './Navbar copy';
+import { ThemeContext } from '../config/Context/themeProvider';
 
 const logoStyle = {
   width: '140px',
@@ -19,13 +19,9 @@ const logoStyle = {
   cursor: 'pointer',
 };
 
-interface AppAppBarProps {
-  mode: PaletteMode;
-  toggleColorMode: () => void;
-}
-
-function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
+function AppAppBar() {
   const [open, setOpen] = React.useState(false);
+  const ctx = React.useContext(ThemeContext)
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -145,7 +141,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 alignItems: 'center',
               }}
             >
-              <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
+              <ToggleColorMode mode={ctx.mode} toggleColorMode={ctx.toggleColorMode} />
               <Navbar/>
             </Box>
             <Box sx={{ display: { sm: '', md: 'none' } }}>
@@ -175,7 +171,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                       flexGrow: 1,
                     }}
                   >
-                    <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
+                    <ToggleColorMode mode={ctx.mode} toggleColorMode={ctx.toggleColorMode} />
                   </Box>
                   <MenuItem onClick={() => scrollToSection('features')}>
                     Features

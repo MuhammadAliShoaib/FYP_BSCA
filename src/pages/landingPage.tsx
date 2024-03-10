@@ -163,46 +163,22 @@ ToggleCustomTheme.propTypes = {
 
 export default function LandingPage() {
 
-
   const ctx = React.useContext(ThemeContext)
-
-  // const [mode, setMode] = React.useState('dark');
-  // const [showCustomTheme, setShowCustomTheme] = React.useState(true);
-  // const LPtheme = createTheme(getLPTheme(mode));
-
-  // const toggleColorMode = () => {
-  //   setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  // };
-
-  // const toggleCustomTheme = () => {
-  //   setShowCustomTheme((prev) => !prev);
-  // };
 
   return (
     <>
-      {/* <ThemeProvider theme={ctx.showCustomTheme ? ctx.LPtheme : defaultTheme}> */}
       <CssBaseline />
-      <AppAppBar mode={ctx.mode} toggleColorMode={ctx.toggleColorMode} />
+      <AppAppBar />
       <Hero />
       <Box sx={{ bgcolor: 'background.default' }}>
-        {/* <LogoCollection /> */}
         <Features />
         <Divider />
-        {/* <Testimonials /> */}
-        <Divider />
         <Highlights />
-        <Divider />
-        {/* <Pricing /> */}
         <Divider />
         <FAQ />
         <Divider />
         <Footer />
       </Box>
-      {/* <ToggleCustomTheme
-        showCustomTheme={showCustomTheme}
-        toggleCustomTheme={toggleCustomTheme}
-      /> */}
-      {/* </ThemeProvider > */}
     </>
   );
 }

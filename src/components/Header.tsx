@@ -2,30 +2,32 @@ import Box from "@mui/material/Box";
 import { useDisconnect } from "wagmi";
 import { Badge, Button, IconButton } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { createTheme } from "@mui/material/styles";
-import { blue } from "@mui/material/colors";
 import { useAppDispatch } from "../config/redux/hooks";
 import { clearData } from "../config/redux/features/Auth/authSlice";
+import ToggleColorMode from "./ToggleColorMode";
+import { ThemeContext } from "../config/Context/themeProvider";
+import { useContext } from "react";
 
 type Props = {
   title: string;
 };
 
-const theme = createTheme({
-  palette: {
-    primary: blue,
-    secondary: {
-      main: "#2380D6",
-    },
-  },
-});
+// const theme = createTheme({
+//   palette: {
+//     primary: blue,
+//     secondary: {
+//       main: "#2380D6",
+//     },
+//   },
+// });
 
 export default function Header({ title }: Props) {
   const { disconnect } = useDisconnect();
   const dispatch = useAppDispatch();
+  const ctx = useContext(ThemeContext)
 
 
-  let handleDisconnect = ()=>{
+  let handleDisconnect = () => {
     disconnect();
     dispatch(clearData());
   }
@@ -59,7 +61,7 @@ export default function Header({ title }: Props) {
           </p>
         </div>
       </Box>
-      <div>
+      <div style={{ display: 'flex', flexDirection: 'row',alignItems:'center' }}>
         <Button
           onClick={handleDisconnect}
           href=""
@@ -69,18 +71,13 @@ export default function Header({ title }: Props) {
         >
           Disconnect
         </Button>
+        <ToggleColorMode mode={ctx.mode} toggleColorMode={ctx.toggleColorMode} />
         <IconButton color="inherit">
           <Badge badgeContent={4} color="secondary">
             <NotificationsIcon />
           </Badge>
         </IconButton>
       </div>
-      {/* <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <div style={{ width: '30px', height: '30px', borderRadius: '15px', border: '1px solid black', marginRight: '10px' }}>
-
-                        </div>
-                        Muhammad Ali
-                    </div> */}
     </Box>
   );
 }
