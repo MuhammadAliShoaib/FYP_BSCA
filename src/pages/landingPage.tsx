@@ -115,10 +115,11 @@ import Testimonials from '../components/Testimonials';
 import FAQ from '../components/FAQ';
 import Footer from '../components/Footer';
 import getLPTheme from '../theme/getLPTheme';
+import { ThemeContext } from '../config/Context/themeProvider';
 
 const defaultTheme = createTheme({});
 
-function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }:any) {
+function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }: any) {
   return (
     <Box
       sx={{
@@ -161,22 +162,27 @@ ToggleCustomTheme.propTypes = {
 };
 
 export default function LandingPage() {
-  const [mode, setMode] = React.useState('dark');
-  const [showCustomTheme, setShowCustomTheme] = React.useState(true);
-  const LPtheme = createTheme(getLPTheme(mode));
 
-  const toggleColorMode = () => {
-    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
 
-  const toggleCustomTheme = () => {
-    setShowCustomTheme((prev) => !prev);
-  };
+  const ctx = React.useContext(ThemeContext)
+
+  // const [mode, setMode] = React.useState('dark');
+  // const [showCustomTheme, setShowCustomTheme] = React.useState(true);
+  // const LPtheme = createTheme(getLPTheme(mode));
+
+  // const toggleColorMode = () => {
+  //   setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  // };
+
+  // const toggleCustomTheme = () => {
+  //   setShowCustomTheme((prev) => !prev);
+  // };
 
   return (
-    <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
+    <>
+      {/* <ThemeProvider theme={ctx.showCustomTheme ? ctx.LPtheme : defaultTheme}> */}
       <CssBaseline />
-      <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+      <AppAppBar mode={ctx.mode} toggleColorMode={ctx.toggleColorMode} />
       <Hero />
       <Box sx={{ bgcolor: 'background.default' }}>
         {/* <LogoCollection /> */}
@@ -196,6 +202,7 @@ export default function LandingPage() {
         showCustomTheme={showCustomTheme}
         toggleCustomTheme={toggleCustomTheme}
       /> */}
-    </ThemeProvider>
+      {/* </ThemeProvider > */}
+    </>
   );
 }
