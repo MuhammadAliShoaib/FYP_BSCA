@@ -2,19 +2,21 @@ import { FormEvent, useEffect, useState } from "react";
 import Header from "../../../components/Header.tsx";
 import { Box, Button, Container, TextField, MenuItem } from "@mui/material";
 import axios from "axios";
-import { Batch, User, Dispatch } from "../../../types/types.ts";
+import { User, Dispatches } from "../../../types/types.ts";
 import { useAppSelector } from "../../../config/redux/hooks.tsx";
 import { toast } from "react-toastify";
 
 export default function PharmaOrder() {
     const { auth } = useAppSelector((state) => state.auth);
-    const [dispatches, setDipatches] = useState<Dispatch[]>([]);
+    const [dispatches, setDipatches] = useState<Dispatches[]>([]);
     const [pharmacies, setPharmacies] = useState<User[]>([]);
     const [updateDispatch, setUpdateDispatch] = useState({
+        distroAddress: auth.address,
         batchId: '',
-        pharmacyAddress: '',
+        pharmaName: '',
         quantity: 0
     });
+    const [availQty, setAvailQty] = useState(0)
 
     const getDispatches = async () => {
         try{
@@ -35,16 +37,24 @@ export default function PharmaOrder() {
         }
     }
 
-    useEffect(() => {
-        getDispatches()
-        getPharma()
-    }, [])
+    const handleQuantity = () => {
+        const selectedBatch = dispatches.filter((dispatch) => dispatch.batchId === updateDispatch.batchId)
+        for(const distro of selectedBatch[0].distributor) {
+            if(distro.distributorAddress === auth.address) {
+                setAvailQty(distro.distributedAmount - updateDispatch.quantity)
+            }
+        }
 
+    }
+
+    
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        // Handle Backend
-
-        toast.success(`OOLA`, {
+        const response = await axios.post('/api/updateDispatch', {updateDispatch});
+        if (!response) {
+            throw new Error("Dispatch Failed");
+        }
+        toast.success(`Helo`, {
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -56,6 +66,14 @@ export default function PharmaOrder() {
         });
     }
 
+    useEffect(() => {
+        getDispatches()
+        getPharma()
+        if(updateDispatch.batchId !== '') {
+            handleQuantity()
+        }
+    }, [updateDispatch])
+    
     return (
         <>
             <Header title="Pharmacy Order" />
@@ -102,7 +120,7 @@ export default function PharmaOrder() {
                                         select
                                         name="medicines"
                                         label="Select Medicine Batch"
-                                        defaultValue={""}
+                                        value={updateDispatch.batchId || ''}
                                         onChange={(event) => {
                                             setUpdateDispatch((prev) => ({
                                                 ...prev,
@@ -131,15 +149,16 @@ export default function PharmaOrder() {
                                         name="batch"
                                         label="Select Pharmacy"
                                         variant="outlined"
+                                        value={updateDispatch.pharmaName || ''}
                                         onChange={(event) => {
                                             setUpdateDispatch((prev) => ({
                                                 ...prev,
-                                                pharmacyAddress: event.target.value
+                                                pharmaName: event.target.value
                                             }))
                                         }}
                                     >
                                        {pharmacies.map((pharma) => (
-                                        <MenuItem value={pharma.address}
+                                        <MenuItem value={pharma.name}
                                         key={pharma.address}>
                                         <option label={pharma.name} />
                                         </MenuItem>
@@ -147,6 +166,7 @@ export default function PharmaOrder() {
                                     </TextField>
                                 </Box>
                             </Box>
+                            <p>{`Available Amount: ${availQty}`}</p>
                             <Box
                                 display={"flex"}
                                 alignItems={"center"}
@@ -154,7 +174,7 @@ export default function PharmaOrder() {
                                 mt={5}
                                 ml={2}
                             >
-                                <Box width={"48%"}>
+                                <Box width={"48.5%"}>
                                     <TextField
                                         required
                                         type="number"
@@ -162,6 +182,7 @@ export default function PharmaOrder() {
                                         name="dispatchQuantity"
                                         label="Quantity"
                                         variant="outlined"
+                                        sx={{height: 55}}
                                         onChange={(event) => {
                                             setUpdateDispatch((prev) => ({
                                                 ...prev,

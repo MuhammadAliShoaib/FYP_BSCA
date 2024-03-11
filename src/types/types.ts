@@ -28,3 +28,12 @@ export type Dispatch = {
     distributedAmount: number
   }
 }
+
+// Used in Distributor Pharmacy Order Form
+export type Dispatches = {
+  batchId: string,
+  distributor: [{
+    distributorAddress: string,
+    distributedAmount: number
+  }]
+}

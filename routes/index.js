@@ -248,6 +248,31 @@ router.get('/getPharma', async (req, res) => {
     }
 })
 
+// Distributor: Update Dispatch
+router.post('/updateDispatch', async (req, res) => {
+    const {updateDispatch} = req.body;
+    console.log( updateDispatch.batchId, "  ", updateDispatch.quantity)
+    try {
+        const dispatch = await db.Dispatch.findOne({batchId: updateDispatch.batchId})
+        dispatch.distributor.forEach((distro) => {
+            if(distro.distributorAddress === updateDispatch.distroAddress) {
+                distro.distributedAmount -= updateDispatch.quantity
+            }
+        })
+        dispatch.pharmacy.push({
+            pharmaName: updateDispatch.pharmaName,
+            deliveredAmount: updateDispatch.quantity,
+            medicineSold: 0,
+            pharmaTransactions: [],
+        },)
+        await dispatch.save()
+        res.status(200).json({message: "Dispatch Updates Successfully"})
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message: 'Internal Server Error'})
+    }
+})
+
 // Handles Notifications
 router.post("/notification", async (req, res) => {
     const { senderAddress, receiverAddress, notification, date } = req.body;
