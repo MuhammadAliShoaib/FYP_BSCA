@@ -297,6 +297,7 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
           },
         },
       },
+      //button theme
       MuiButton: {
         styleOverrides: {
           root: ({ theme, ownerState }) => ({

@@ -114,8 +114,6 @@ import Features from '../components/Features';
 import Testimonials from '../components/Testimonials';
 import FAQ from '../components/FAQ';
 import Footer from '../components/Footer';
-import getLPTheme from '../theme/getLPTheme';
-import { ThemeContext } from '../config/Context/themeProvider';
 
 const defaultTheme = createTheme({});
 
@@ -162,8 +160,6 @@ ToggleCustomTheme.propTypes = {
 };
 
 export default function LandingPage() {
-
-  const ctx = React.useContext(ThemeContext)
 
   return (
     <>

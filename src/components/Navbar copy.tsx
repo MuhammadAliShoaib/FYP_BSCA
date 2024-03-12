@@ -81,7 +81,6 @@ export default function Navbar() {
               color="primary"
               variant="contained"
               size="small"
-
               href=""
               disabled={!ready}
               onClick={() => {

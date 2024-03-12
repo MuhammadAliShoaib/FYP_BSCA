@@ -37,21 +37,49 @@ export default function Hero() {
             sx={{
               display: 'flex',
               flexDirection: { xs: 'column', md: 'row' },
-              // alignSelf: 'center',
-              // textAlign: 'center',
+              justifyContent: 'center', // Aligns items horizontally in the center
+              alignItems: 'center', // Aligns items vertically in the center
+              textAlign: 'center',
             }}
           >
-            The Future of &nbsp;
+            The Future of&nbsp;
+          </Typography>
+
+          <Typography
+            variant="h1"
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              justifyContent: 'center', // Aligns items horizontally in the center
+              alignItems: 'center', // Aligns items vertically in the center
+              textAlign: 'center',
+            }}
+          >
             <Typography
               variant="h1"
               sx={{
                 color: (theme) =>
                   theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
+                fontWeight: 'bold', // Highlighting style for "Pharma"
               }}
             >
               Pharma
             </Typography>
+            &nbsp;And&nbsp;
+            <Typography
+              variant="h1"
+              sx={{
+                color: (theme) =>
+                  theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
+                fontWeight: 'bold', // Highlighting style for "Traceability"
+              }}
+            >
+              Traceability
+            </Typography>
           </Typography>
+
+
+
           <Typography variant="body1" textAlign="center" color="text.secondary">
             Revolutionizing the Pharma Industry&apos;s Supply Chain Management with  Blockchain <br />Technology
             to ensure Transparency, Accountability, Efficiency <br />   in the Track and Traceability of Medicines.
