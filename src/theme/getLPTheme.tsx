@@ -298,72 +298,72 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
         },
       },
       //button theme
-      MuiButton: {
-        styleOverrides: {
-          root: ({ theme, ownerState }) => ({
-            boxSizing: 'border-box',
-            boxShadow: 'none',
-            borderRadius: '10px',
-            textTransform: 'none',
-            '&:active': {
-              transform: 'scale(0.98)',
-            },
-            ...(ownerState.size === 'small' && {
-              maxHeight: '32px',
-            }),
-            ...(ownerState.size === 'medium' && {
-              height: '40px',
-            }),
-            ...(ownerState.variant === 'contained' &&
-              ownerState.color === 'primary' && {
-                color: brand[50],
-                background: brand[500],
-                backgroundImage: `linear-gradient(to bottom, ${brand[400]}, ${brand[600]})`,
-                boxShadow: `inset 0 1px ${alpha(brand[300], 0.4)}`,
-                outline: `1px solid ${brand[700]}`,
-                '&:hover': {
-                  background: brand[400],
-                  backgroundImage: 'none',
-                  boxShadow: `0 0 0 1px  ${alpha(brand[300], 0.5)}`,
-                },
-              }),
-            ...(ownerState.variant === 'outlined' && {
-              backgroundColor: alpha(brand[300], 0.1),
-              borderColor: brand[300],
-              color: brand[500],
-              '&:hover': {
-                backgroundColor: alpha(brand[300], 0.3),
-                borderColor: brand[200],
-              },
-            }),
-            ...(ownerState.variant === 'text' && {
-              color: brand[500],
-              '&:hover': {
-                backgroundColor: alpha(brand[300], 0.3),
-                borderColor: brand[200],
-              },
-            }),
-            ...(theme.palette.mode === 'dark' && {
-              ...(ownerState.variant === 'outlined' && {
-                backgroundColor: alpha(brand[600], 0.1),
-                borderColor: brand[700],
-                color: brand[300],
-                '&:hover': {
-                  backgroundColor: alpha(brand[600], 0.3),
-                  borderColor: brand[700],
-                },
-              }),
-              ...(ownerState.variant === 'text' && {
-                color: brand[300],
-                '&:hover': {
-                  backgroundColor: alpha(brand[600], 0.3),
-                  borderColor: brand[700],
-                },
-              }),
-            }),
-          }),
-        },
-      },
+      // MuiButton: {
+      //   styleOverrides: {
+      //     root: ({ theme, ownerState }) => ({
+      //       boxSizing: 'border-box',
+      //       boxShadow: 'none',
+      //       borderRadius: '10px',
+      //       textTransform: 'none',
+      //       '&:active': {
+      //         transform: 'scale(0.98)',
+      //       },
+      //       ...(ownerState.size === 'small' && {
+      //         maxHeight: '32px',
+      //       }),
+      //       ...(ownerState.size === 'medium' && {
+      //         height: '40px',
+      //       }),
+      //       ...(ownerState.variant === 'contained' &&
+      //         ownerState.color === 'primary' && {
+      //           color: brand[50],
+      //           background: brand[500],
+      //           backgroundImage: `linear-gradient(to bottom, ${brand[400]}, ${brand[600]})`,
+      //           boxShadow: `inset 0 1px ${alpha(brand[300], 0.4)}`,
+      //           outline: `1px solid ${brand[700]}`,
+      //           '&:hover': {
+      //             background: brand[400],
+      //             backgroundImage: 'none',
+      //             boxShadow: `0 0 0 1px  ${alpha(brand[300], 0.5)}`,
+      //           },
+      //         }),
+      //       ...(ownerState.variant === 'outlined' && {
+      //         backgroundColor: alpha(brand[300], 0.1),
+      //         borderColor: brand[300],
+      //         color: brand[500],
+      //         '&:hover': {
+      //           backgroundColor: alpha(brand[300], 0.3),
+      //           borderColor: brand[200],
+      //         },
+      //       }),
+      //       ...(ownerState.variant === 'text' && {
+      //         color: brand[500],
+      //         '&:hover': {
+      //           backgroundColor: alpha(brand[300], 0.3),
+      //           borderColor: brand[200],
+      //         },
+      //       }),
+      //       ...(theme.palette.mode === 'dark' && {
+      //         ...(ownerState.variant === 'outlined' && {
+      //           backgroundColor: alpha(brand[600], 0.1),
+      //           borderColor: brand[700],
+      //           color: brand[300],
+      //           '&:hover': {
+      //             backgroundColor: alpha(brand[600], 0.3),
+      //             borderColor: brand[700],
+      //           },
+      //         }),
+      //         ...(ownerState.variant === 'text' && {
+      //           color: brand[300],
+      //           '&:hover': {
+      //             backgroundColor: alpha(brand[600], 0.3),
+      //             borderColor: brand[700],
+      //           },
+      //         }),
+      //       }),
+      //     }),
+      //   },
+      // },
       MuiCard: {
         styleOverrides: {
           root: ({ theme, ownerState }) => ({
@@ -609,12 +609,12 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
                 height: '100%',
                 borderRadius: '10px',
                 border: '1px solid',
-                borderColor: gray[600],
+                borderColor: gray[600], 
                 transition: 'border-color 120ms ease-in',
                 '& fieldset': {
                   border: 'none',
                   boxShadow: ' 0px 2px 4px rgba(0, 0, 0, 0.4)',
-                  background: `${alpha(gray[800], 0.4)}`,
+                  // background: `${alpha(gray[800], 0.4)}`,
                 },
                 '&:hover': {
                   borderColor: brand[300],

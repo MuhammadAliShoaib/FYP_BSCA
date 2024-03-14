@@ -149,9 +149,15 @@ export default function ManufacturerMain() {
             <Drawer
                 variant="permanent"
                 open={open}
-                PaperProps={{
-                    sx: { backgroundColor: "#141925" },
-                }}
+                // PaperProps={{
+                //     sx: { backgroundColor: "#141925" },
+                // }}
+                sx={(theme) => ({
+                    backgroundColor:
+                        theme.palette.mode === 'light'
+                            ? '#141925'
+                            : 'rgba(0, 0, 0, 0.4)',
+                })}
             >
                 <DrawerHeader>
                     {open ? (
@@ -219,7 +225,7 @@ export default function ManufacturerMain() {
                 </List>
                 <Divider />
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1,bgcolor: 'background.default' }}>
+            <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default', height: "100vh" }}>
                 <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/addproduct" element={<ProductForm />} />
