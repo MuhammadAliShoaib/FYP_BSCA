@@ -217,7 +217,7 @@ export default function DistributorMain() {
                 </List>
                 <Divider />
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1,bgcolor: 'background.default' }}>
+            <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default', height: "100vh" }}>
                 <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/pharmaOrder" element={<PharmaOrder />} />

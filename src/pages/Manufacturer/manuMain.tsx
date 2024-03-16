@@ -149,15 +149,15 @@ export default function ManufacturerMain() {
             <Drawer
                 variant="permanent"
                 open={open}
-                // PaperProps={{
-                //     sx: { backgroundColor: "#141925" },
-                // }}
-                sx={(theme) => ({
-                    backgroundColor:
-                        theme.palette.mode === 'light'
-                            ? '#141925'
-                            : 'rgba(0, 0, 0, 0.4)',
-                })}
+                PaperProps={{
+                    sx: { backgroundColor: "#141925" },
+                }}
+            // sx={(theme) => ({
+            //     backgroundColor:
+            //         theme.palette.mode === 'light'
+            //             ? '#141925'
+            //             : 'rgba(0, 0, 0, 0.4)',
+            // })}
             >
                 <DrawerHeader>
                     {open ? (

@@ -492,17 +492,17 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
           }),
         },
       },
-      MuiPaper: {
-        styleOverrides: {
-          root: ({ theme }) => ({
-            backgroundImage: 'none',
-            backgroundColor: gray[100],
-            ...(theme.palette.mode === 'dark' && {
-              backgroundColor: alpha(gray[900], 0.6),
-            }),
-          }),
-        },
-      },
+      // MuiPaper: {
+      //   styleOverrides: {
+      //     root: ({ theme }) => ({
+      //       backgroundImage: 'none',
+      //       backgroundColor: gray[100],
+      //       ...(theme.palette.mode === 'dark' && {
+      //         backgroundColor: alpha(gray[900], 0.6),
+      //       }),
+      //     }),
+      //   },
+      // },
       MuiSwitch: {
         styleOverrides: {
           root: ({ theme }) => ({

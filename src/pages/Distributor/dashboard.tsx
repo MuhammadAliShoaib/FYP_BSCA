@@ -24,12 +24,7 @@ export default function Dashboard() {
     return (
         <>
             <Header title="Dashboard" />
-            <Box sx={(theme) => ({
-                padding: "25px", bgcolor:
-                    theme.palette.mode === 'light'
-                        ? 'rgba(255, 255, 255, 0.4)'
-                        : 'rgba(0, 0, 0, 0.4)',
-            })}>
+            <Box>
                 <Container>
                     <Grid container spacing={3}>
                         {[1, 2, 3, 4].map((item) => (
