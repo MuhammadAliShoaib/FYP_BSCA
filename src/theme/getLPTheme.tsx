@@ -573,13 +573,13 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
               color: 'white',
             },
             '& .MuiInputBase-input': {
-              boxSizing: 'border-box',
+              // boxSizing: 'border-box',
               '&::placeholder': {
                 opacity: 0.7,
               },
             },
             '& .MuiOutlinedInput-root': {
-              boxSizing: 'border-box',
+              // boxSizing: 'border-box',
               minWidth: 280,
               minHeight: 40,
               height: '100%',
