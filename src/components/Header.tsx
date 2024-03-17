@@ -59,7 +59,7 @@ export default function Header({ title }: Props) {
               fontFamily: "Poppins",
               fontWeight: 600,
               fontSize: 25,
-              marginY: '20px',
+              marginY: '14px',
               color:
                 theme.palette.mode === 'light'
                   ? 'black'
