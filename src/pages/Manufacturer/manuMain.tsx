@@ -150,14 +150,8 @@ export default function ManufacturerMain() {
                 variant="permanent"
                 open={open}
                 PaperProps={{
-                    sx: { backgroundColor: "#141925" },
+                    sx: { background: "linear-gradient(127deg,#060B26, #082355)", opacity: 0.94 },
                 }}
-            // sx={(theme) => ({
-            //     backgroundColor:
-            //         theme.palette.mode === 'light'
-            //             ? '#141925'
-            //             : 'rgba(0, 0, 0, 0.4)',
-            // })}
             >
                 <DrawerHeader>
                     {open ? (
@@ -225,7 +219,15 @@ export default function ManufacturerMain() {
                 </List>
                 <Divider />
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default', height: "100vh" }}>
+            <Box component="main" sx={(theme) => ({
+                flexGrow: 1,
+                background:
+                    theme.palette.mode === 'light'
+                        ? 'white'
+                        : "radial-gradient(#082355,#060B26);",
+                height: '100vh',
+                opacity: 0.94
+            })}>
                 <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/addproduct" element={<ProductForm />} />

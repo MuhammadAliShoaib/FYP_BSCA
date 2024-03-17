@@ -53,18 +53,7 @@ export default function Dashboard() {
         <>
 
             <Header title="Dashboard" />
-            {/* <DrawerHeader /> */}
-            <Box>
-                {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div className="">
-                        <h1>Dashboard</h1>
-                        </div>
-                        <div className="" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div className=""><WbSunnyIcon /></div>
-                            <div className="" style={{ marginRight: '10px' }}>{time}</div>
-                            <div className="">{day + month}</div>
-                        </div>
-                    </Box> */}
+            <Box sx={{ paddingTop: '25px' }}>
                 <Container>
                     <Grid container spacing={3}>
                         {[1, 2, 3, 4].map((item) => (

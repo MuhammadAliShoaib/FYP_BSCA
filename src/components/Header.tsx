@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import { useDisconnect } from "wagmi";
-import { Badge, Button, IconButton } from "@mui/material";
+import { Badge, Button, IconButton, Typography } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useAppDispatch } from "../config/redux/hooks";
 import { clearData } from "../config/redux/features/Auth/authSlice";
@@ -34,13 +34,17 @@ export default function Header({ title }: Props) {
 
   return (
     <Box
-      sx={{
+      sx={(theme) => ({
         padding: "0px 20px 0px 20px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-      }}
+        background:
+          theme.palette.mode === 'light'
+            ? 'white'
+            : "linear-gradient(#060B26, #082355)",
+      })}
     >
       <Box
         sx={{
@@ -50,18 +54,23 @@ export default function Header({ title }: Props) {
         }}
       >
         <div className="">
-          <p
-            style={{
+          <Typography
+            sx={(theme) => ({
               fontFamily: "Poppins",
               fontWeight: 600,
               fontSize: 25,
-            }}
+              marginY: '20px',
+              color:
+                theme.palette.mode === 'light'
+                  ? 'black'
+                  : "white",
+            })}
           >
             {title}
-          </p>
+          </Typography>
         </div>
       </Box>
-      <div style={{ display: 'flex', flexDirection: 'row',alignItems:'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         <Button
           onClick={handleDisconnect}
           href=""
@@ -78,6 +87,6 @@ export default function Header({ title }: Props) {
           </Badge>
         </IconButton>
       </div>
-    </Box>
+    </Box >
   );
 }

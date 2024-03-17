@@ -24,7 +24,7 @@ export default function Dashboard() {
     return (
         <>
             <Header title="Dashboard" />
-            <Box>
+            <Box paddingTop={'25px'}>
                 <Container>
                     <Grid container spacing={3}>
                         {[1, 2, 3, 4].map((item) => (

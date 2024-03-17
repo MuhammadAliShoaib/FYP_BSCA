@@ -9,6 +9,7 @@ import {
     ListItemText,
     ListItemAvatar,
     Avatar,
+    Typography,
 } from "@mui/material";
 import { LocalHospital } from "@mui/icons-material";
 import axios from "axios";
@@ -20,14 +21,14 @@ import { Medicine } from "../../../types/types";
 import { useAppSelector } from "../../../config/redux/hooks";
 
 export default function ProductForm() {
-    const {auth} = useAppSelector((state)=>state.auth)
+    const { auth } = useAppSelector((state) => state.auth)
     const [meds, setMeds] = useState<Medicine[]>([]);
     const [flag, setFlag] = useState(false);
 
     const getMedicines = async () => {
         try {
             const result = (
-                await axios.get(`/api/manufacturer/meds`,{ params: { manufacturer: auth.address }})
+                await axios.get(`/api/manufacturer/meds`, { params: { manufacturer: auth.address } })
             ).data;
             setMeds(result);
         } catch (error) {
@@ -92,7 +93,7 @@ export default function ProductForm() {
                 flexDirection={"column"}
                 alignItems={"center"}
                 minHeight={"90vh"}
-                sx={{ flexGrow: 1 }}
+                sx={{ flexGrow: 1, padding: '25px' }}
             >
                 <Container
                     style={{
@@ -104,10 +105,10 @@ export default function ProductForm() {
                         borderBottomLeftRadius: "5px",
                         borderBottomRightRadius: "5px",
                         boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-                        paddingBottom: "15px",
+                        paddingBottom: "35  px",
                     }}
                 >
-                    <Box width={"100%"}>
+                    <Box width={"100%"} paddingBottom={'40px'}>
                         <Box width={"100%"} ml={2}>
                             <h1 style={{ paddingLeft: "15px" }}>Add Product</h1>
                         </Box>
@@ -202,15 +203,19 @@ export default function ProductForm() {
                     }}
                 >
                     <Box width={"95%"}>
-                        <h1
-                            style={{
+                        <Typography
+                            variant="h4"
+                            sx={(theme) => ({
                                 paddingLeft: "15px",
                                 textDecorationLine: "underline",
                                 textUnderlinePosition: "under",
-                            }}
-                        >
+                                color:
+                                    theme.palette.mode === 'light'
+                                        ? 'black'
+                                        : "white",
+                            })}>
                             List of Products
-                        </h1>
+                        </Typography>
                     </Box>
                     <Box width={"100%"}>
                         <List dense>
@@ -224,9 +229,9 @@ export default function ProductForm() {
                                     borderBottom={"1px solid black"}
                                     bgcolor={"white"}
                                     borderRadius={"3px"}
-                                    // boxShadow={
-                                    //     "rgba(0, 0, 0, 0.24) 0px 1px 3px"
-                                    // }
+                                // boxShadow={
+                                //     "rgba(0, 0, 0, 0.24) 0px 1px 3px"
+                                // }
                                 >
                                     <ListItem>
                                         <ListItemAvatar>

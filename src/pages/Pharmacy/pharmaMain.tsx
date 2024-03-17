@@ -148,7 +148,7 @@ export default function PharmacyMain() {
                 variant="permanent"
                 open={open}
                 PaperProps={{
-                    sx: { backgroundColor: "#141925" },
+                    sx: { background: "linear-gradient(127deg,#060B26, #082355)", opacity: 0.94 },
                 }}
             >
                 <DrawerHeader>
@@ -217,7 +217,15 @@ export default function PharmacyMain() {
                 </List>
                 <Divider />
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1 }}>
+            <Box component="main" sx={(theme) => ({
+                flexGrow: 1,
+                background:
+                    theme.palette.mode === 'light'
+                        ? 'white'
+                        : "radial-gradient(#082355,#060B26);",
+                height: '100vh',
+                opacity: 0.94
+            })}>
                 <Routes>
                     <Route path="/" element={<Dashboard />} />
                     {/* <Route path="/pharma" element={<AddPharmaForm />} />
