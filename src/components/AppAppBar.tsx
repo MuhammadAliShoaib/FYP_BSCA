@@ -12,10 +12,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
 import Navbar from './Navbar copy';
 import { ThemeContext } from '../config/Context/themeProvider';
+import { Margin } from '@mui/icons-material';
 
 const logoStyle = {
-  width: '140px',
-  height: 'auto',
+  width: '75px',
+  height: '50px',
   cursor: 'pointer',
 };
 
@@ -86,7 +87,7 @@ function AppAppBar() {
             >
               <img
                 src={
-                  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg'
+                  'https://www.pinclipart.com/picdir/big/170-1702140_blockchain-icone-blockchain-clipart.png'
                 }
                 style={logoStyle}
                 alt="logo of sitemark"
