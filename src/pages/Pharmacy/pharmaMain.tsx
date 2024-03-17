@@ -17,11 +17,11 @@ import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import MedicationLiquidIcon from "@mui/icons-material/MedicationLiquid";
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import Batches from "./batches";
-// import DispatchForm from ".../distroForms/dispatchForm";
-// import AddPharmaForm from "./distroForms/addPharmaForm";
+
 import Dashboard from "./dashboard";
+import SaleForm from "./pharmaForms/saleForm";
 
 const drawerWidth = 240;
 
@@ -107,19 +107,9 @@ export default function PharmacyMain() {
             icon: <DashboardIcon />,
         },
         {
-            Name: "Create Order",
-            route: "pharma",
-            icon: <MedicationLiquidIcon />,
-        },
-        // {
-        //   Name: "Create Batch",
-        //   route: "createbatch",
-        //   icon: <AddBoxIcon />,
-        // },
-        {
-            Name: "Pharmacy",
-            route: "dispatch",
-            icon: <LocalShippingIcon />,
+            Name: "Create Sale",
+            route: "saleForm",
+            icon: <ReceiptIcon />,
         },
         {
             Name: "Batches",
@@ -228,8 +218,8 @@ export default function PharmacyMain() {
             })}>
                 <Routes>
                     <Route path="/" element={<Dashboard />} />
-                    {/* <Route path="/pharma" element={<AddPharmaForm />} />
-                    <Route path="/dispatch" element={<DispatchForm />} /> */}
+                    <Route path="/saleForm" element={<SaleForm />} />
+                    {/* <Route path="/dispatch" element={<DispatchForm />} /> */}
                     <Route path="/batches" element={<Batches />} />
                 </Routes>
             </Box>

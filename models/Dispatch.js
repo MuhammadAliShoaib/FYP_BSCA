@@ -12,7 +12,7 @@ const schemaDispatch = Schema({
     ],
     pharmacy: [
         {
-            pharmaName: String,
+            pharmaAddress: String,
             deliveredAmount: Number,
             medicineSold: Number,
             pharmaTransactions: [String],

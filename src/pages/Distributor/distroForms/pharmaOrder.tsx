@@ -13,7 +13,7 @@ export default function PharmaOrder() {
     const [updateDispatch, setUpdateDispatch] = useState({
         distroAddress: auth.address,
         batchId: '',
-        pharmaName: '',
+        pharmaAddress: '',
         quantity: 0
     });
     const [availQty, setAvailQty] = useState(0)
@@ -149,16 +149,16 @@ export default function PharmaOrder() {
                                         name="batch"
                                         label="Select Pharmacy"
                                         variant="outlined"
-                                        value={updateDispatch.pharmaName || ''}
+                                        value={updateDispatch.pharmaAddress || ''}
                                         onChange={(event) => {
                                             setUpdateDispatch((prev) => ({
                                                 ...prev,
-                                                pharmaName: event.target.value
+                                                pharmaAddress: event.target.value
                                             }))
                                         }}
                                     >
                                        {pharmacies.map((pharma) => (
-                                        <MenuItem value={pharma.name}
+                                        <MenuItem value={pharma.address}
                                         key={pharma.address}>
                                         <option label={pharma.name} />
                                         </MenuItem>

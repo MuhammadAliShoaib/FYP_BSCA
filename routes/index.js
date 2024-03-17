@@ -261,7 +261,7 @@ router.post('/updateDispatch', async (req, res) => {
                 }
             })
             dispatch.pharmacy.push({
-                pharmaName: updateDispatch.pharmaName,
+                pharmaAddress: updateDispatch.pharmaAddress,
                 deliveredAmount: updateDispatch.quantity,
                 medicineSold: 0,
                 pharmaTransactions: [],
