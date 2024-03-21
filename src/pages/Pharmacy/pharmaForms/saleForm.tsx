@@ -9,7 +9,12 @@ import { toast } from "react-toastify";
 function SaleForm() {
   const { auth } = useAppSelector((state) => state.auth);
   const [stock, setStock] = useState<Stock[]>([]);
-//   const [availQty, setAvailQty] = useState(0)
+  const [updateDispatch, setUpdateDispatch] = useState({
+    pharmaAddress: auth.address,
+    batchId: '',
+    qtySold: 0,
+  })
+  const [availQty, setAvailQty] = useState(0)
 
   const getStock = async () => {
       try{
@@ -22,38 +27,42 @@ function SaleForm() {
       }
   }
 
-//   const handleQuantity = () => {
-//       const selectedBatch = dispatches.filter((dispatch) => dispatch.batchId === updateDispatch.batchId)
-//       for(const distro of selectedBatch[0].distributor) {
-//           if(distro.distributorAddress === auth.address) {
-//               setAvailQty(distro.distributedAmount - updateDispatch.quantity)
-//           }
-//       }
-
-//   }
+  const handleQuantity = () => {
+      if(stock) {
+        const selectedBatch = stock.filter((dispatch) => dispatch.batchId === updateDispatch.batchId)
+        for(const pharma of selectedBatch[0].pharmacy) {
+            if(pharma.pharmaAddress === auth.address) {
+                setAvailQty(pharma.deliveredAmount - updateDispatch.qtySold)
+            }
+        }
+      }
+  }
 
   
-//   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-//       event.preventDefault()
-//       const response = await axios.post('/api/updateDispatch', {updateDispatch});
-//       if (!response) {
-//           throw new Error("Dispatch Failed");
-//       }
-//       toast.success(`Helo`, {
-//           position: "bottom-right",
-//           autoClose: 5000,
-//           hideProgressBar: false,
-//           closeOnClick: true,
-//           pauseOnHover: true,
-//           draggable: true,
-//           progress: undefined,
-//           theme: "light",
-//       });
-//   }
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault()
+      const response = await axios.post('/api/pharmacy/updateDispatch', {updateDispatch});
+      if (!response) {
+          throw new Error("Dispatch Failed");
+      }
+      toast.success(`Medicine Sold`, {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+      });
+  }
 
   useEffect(() => {
       getStock()
-  }, [])
+      if(updateDispatch.batchId !== '') {
+        handleQuantity()
+    }
+  }, [updateDispatch])
 
   return (
     <>
@@ -87,7 +96,7 @@ function SaleForm() {
                             Create Order
                         </h1>
                     </Box>
-                    <form >
+                    <form onSubmit={(event) => handleSubmit(event)}>
                         <Box
                             display={"flex"}
                             alignItems={"center"}
@@ -101,13 +110,13 @@ function SaleForm() {
                                     select
                                     name="medicines"
                                     label="Select BatchID"
-                                    // value={updateDispatch.batchId || ''}
-                                    // onChange={(event) => {
-                                    //     setUpdateDispatch((prev) => ({
-                                    //         ...prev,
-                                    //         batchId: event.target.value
-                                    //     }))
-                                    // }}
+                                    value={updateDispatch.batchId || ''}
+                                    onChange={(event) => {
+                                        setUpdateDispatch((prev) => ({
+                                            ...prev,
+                                            batchId: event.target.value
+                                        }))
+                                    }}
                                     variant="outlined"
                                 >
                                     {stock.map((stock) => (
@@ -122,40 +131,7 @@ function SaleForm() {
                                     ))}
                                 </TextField>
                             </Box>
-                            <Box width={"48%"}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    select
-                                    name="batch"
-                                    label="Select Pharmacy"
-                                    variant="outlined"
-                                    // value={updateDispatch.pharmaName || ''}
-                                    // onChange={(event) => {
-                                    //     setUpdateDispatch((prev) => ({
-                                    //         ...prev,
-                                    //         pharmaName: event.target.value
-                                    //     }))
-                                    // }}
-                                >
-                                   {/* {pharmacies.map((pharma) => (
-                                    <MenuItem value={pharma.name}
-                                    key={pharma.address}>
-                                    <option label={pharma.name} />
-                                    </MenuItem>
-                                   ))} */}
-                                </TextField>
-                            </Box>
-                        </Box>
-                        {/* <p>{`Available Amount: ${availQty}`}</p> */}
-                        <Box
-                            display={"flex"}
-                            alignItems={"center"}
-                            justifyContent={"left"}
-                            mt={5}
-                            ml={2}
-                        >
-                            <Box width={"48.5%"}>
+                            <Box width={"48%"} mt={'3.8%'}>
                                 <TextField
                                     required
                                     type="number"
@@ -164,13 +140,14 @@ function SaleForm() {
                                     label="Quantity"
                                     variant="outlined"
                                     sx={{height: 55}}
-                                    // onChange={(event) => {
-                                    //     setUpdateDispatch((prev) => ({
-                                    //         ...prev,
-                                    //         quantity: Number(event.target.value)
-                                    //     }))
-                                    // }}
-                                />
+                                    onChange={(event) => {
+                                        setUpdateDispatch((prev) => ({
+                                            ...prev,
+                                            qtySold: Number(event.target.value)
+                                        }))
+                                    }}
+                                    />
+                                    <p>{`Available Amount: ${availQty}`}</p>
                             </Box>
                         </Box>
                         <Box>
