@@ -9,70 +9,54 @@ import { toast } from "react-toastify";
 function SaleForm() {
   const { auth } = useAppSelector((state) => state.auth);
   const [dispatches, setDipatches] = useState<Dispatches[]>([]);
-  const [pharmacies, setPharmacies] = useState<User[]>([]);
-  const [updateDispatch, setUpdateDispatch] = useState({
-      distroAddress: auth.address,
-      batchId: '',
-      pharmaName: '',
-      quantity: 0
-  });
-  const [availQty, setAvailQty] = useState(0)
+//   const [availQty, setAvailQty] = useState(0)
 
-  const getDispatches = async () => {
+  const getStock = async () => {
       try{
-          const res = (await axios.get('/api/getDispatches', {params: {pharmaAddress: auth.address}})).data    
+          const res = (await axios.get('/api/getStock', {params: {pharmaAddress: auth.address}})).data    
           setDipatches(res);
-          console.log('From Dispatch: ', dispatches)
+        //   console.log('From Dispatch: ', dispatches)
       } catch (error) {
           console.log(error, "Response Error")
       }
   }
 
-  const getPharma = async () => {
-      try {
-          const pharma = (await axios.get('/api/getPharma')).data
-          setPharmacies(pharma)
-      } catch (error) {
-          console.log(error, "Response Error")
-      }
-  }
+//   const handleQuantity = () => {
+//       const selectedBatch = dispatches.filter((dispatch) => dispatch.batchId === updateDispatch.batchId)
+//       for(const distro of selectedBatch[0].distributor) {
+//           if(distro.distributorAddress === auth.address) {
+//               setAvailQty(distro.distributedAmount - updateDispatch.quantity)
+//           }
+//       }
 
-  const handleQuantity = () => {
-      const selectedBatch = dispatches.filter((dispatch) => dispatch.batchId === updateDispatch.batchId)
-      for(const distro of selectedBatch[0].distributor) {
-          if(distro.distributorAddress === auth.address) {
-              setAvailQty(distro.distributedAmount - updateDispatch.quantity)
-          }
-      }
-
-  }
+//   }
 
   
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault()
-      const response = await axios.post('/api/updateDispatch', {updateDispatch});
-      if (!response) {
-          throw new Error("Dispatch Failed");
-      }
-      toast.success(`Helo`, {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-      });
-  }
+//   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+//       event.preventDefault()
+//       const response = await axios.post('/api/updateDispatch', {updateDispatch});
+//       if (!response) {
+//           throw new Error("Dispatch Failed");
+//       }
+//       toast.success(`Helo`, {
+//           position: "bottom-right",
+//           autoClose: 5000,
+//           hideProgressBar: false,
+//           closeOnClick: true,
+//           pauseOnHover: true,
+//           draggable: true,
+//           progress: undefined,
+//           theme: "light",
+//       });
+//   }
 
-  useEffect(() => {
-      getDispatches()
-      getPharma()
-      if(updateDispatch.batchId !== '') {
-          handleQuantity()
-      }
-  }, [updateDispatch])
+//   useEffect(() => {
+//       getDispatches()
+//       getPharma()
+//       if(updateDispatch.batchId !== '') {
+//           handleQuantity()
+//       }
+//   }, [updateDispatch])
 
   return (
     <>
@@ -106,7 +90,7 @@ function SaleForm() {
                             Create Order
                         </h1>
                     </Box>
-                    <form onSubmit={(event) => handleSubmit(event)}>
+                    <form >
                         <Box
                             display={"flex"}
                             alignItems={"center"}
@@ -120,13 +104,13 @@ function SaleForm() {
                                     select
                                     name="medicines"
                                     label="Select BatchID"
-                                    value={updateDispatch.batchId || ''}
-                                    onChange={(event) => {
-                                        setUpdateDispatch((prev) => ({
-                                            ...prev,
-                                            batchId: event.target.value
-                                        }))
-                                    }}
+                                    // value={updateDispatch.batchId || ''}
+                                    // onChange={(event) => {
+                                    //     setUpdateDispatch((prev) => ({
+                                    //         ...prev,
+                                    //         batchId: event.target.value
+                                    //     }))
+                                    // }}
                                     variant="outlined"
                                 >
                                     {dispatches.map((dispatch) => (
@@ -149,24 +133,24 @@ function SaleForm() {
                                     name="batch"
                                     label="Select Pharmacy"
                                     variant="outlined"
-                                    value={updateDispatch.pharmaName || ''}
-                                    onChange={(event) => {
-                                        setUpdateDispatch((prev) => ({
-                                            ...prev,
-                                            pharmaName: event.target.value
-                                        }))
-                                    }}
+                                    // value={updateDispatch.pharmaName || ''}
+                                    // onChange={(event) => {
+                                    //     setUpdateDispatch((prev) => ({
+                                    //         ...prev,
+                                    //         pharmaName: event.target.value
+                                    //     }))
+                                    // }}
                                 >
-                                   {pharmacies.map((pharma) => (
+                                   {/* {pharmacies.map((pharma) => (
                                     <MenuItem value={pharma.name}
                                     key={pharma.address}>
                                     <option label={pharma.name} />
                                     </MenuItem>
-                                   ))}
+                                   ))} */}
                                 </TextField>
                             </Box>
                         </Box>
-                        <p>{`Available Amount: ${availQty}`}</p>
+                        {/* <p>{`Available Amount: ${availQty}`}</p> */}
                         <Box
                             display={"flex"}
                             alignItems={"center"}
@@ -183,12 +167,12 @@ function SaleForm() {
                                     label="Quantity"
                                     variant="outlined"
                                     sx={{height: 55}}
-                                    onChange={(event) => {
-                                        setUpdateDispatch((prev) => ({
-                                            ...prev,
-                                            quantity: Number(event.target.value)
-                                        }))
-                                    }}
+                                    // onChange={(event) => {
+                                    //     setUpdateDispatch((prev) => ({
+                                    //         ...prev,
+                                    //         quantity: Number(event.target.value)
+                                    //     }))
+                                    // }}
                                 />
                             </Box>
                         </Box>

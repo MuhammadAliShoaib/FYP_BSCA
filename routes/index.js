@@ -260,18 +260,38 @@ router.post('/updateDispatch', async (req, res) => {
                     distro.distributedAmount -= updateDispatch.quantity
                 }
             })
-            dispatch.pharmacy.push({
-                pharmaAddress: updateDispatch.pharmaAddress,
-                deliveredAmount: updateDispatch.quantity,
-                medicineSold: 0,
-                pharmaTransactions: [],
-            },)
+            let pharmacyExists = false;
+            dispatch.pharmacy.forEach((pharma) => {
+                if(pharma.pharmaAddress === updateDispatch.pharmaAddress) {
+                    pharma.deliveredAmount += updateDispatch.quantity;
+                    pharmacyExists = true;
+                }
+            })
+            if(!pharmacyExists) {
+                dispatch.pharmacy.push({
+                    pharmaAddress: updateDispatch.pharmaAddress,
+                    deliveredAmount: updateDispatch.quantity,
+                    medicineSold: 0,
+                    pharmaTransactions: [],
+                },)
+            }
             await dispatch.save()
             res.status(200).json({message: "Dispatch Updates Successfully"})
+        } else {
+            res.status(404).json({message: "Dispatch not found"})
         }
     } catch (error) {
         console.log(error)
         res.status(500).json({message: 'Internal Server Error'})
+    }
+})
+
+router.get('/getStock', async (req, res) => {
+    try {
+        const stock = await db.Dispatch.aggregate({'pharmacy.pharmaAddress': req.query.pharmaAddress})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: 'Internal Server Error'});
     }
 })
 
