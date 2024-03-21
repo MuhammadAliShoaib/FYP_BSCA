@@ -288,7 +288,27 @@ router.post('/updateDispatch', async (req, res) => {
 
 router.get('/getStock', async (req, res) => {
     try {
-        const stock = await db.Dispatch.aggregate({'pharmacy.pharmaAddress': req.query.pharmaAddress})
+        const stock = await db.Dispatch.aggregate([
+            {
+              $match: {
+                'pharmacy.pharmaAddress': '0x64D960696643321b26976fb64f8c91EDFb04Ae18'
+              }
+            },
+            {
+              $lookup: {
+                from: 'batches',
+                foreignField: 'batchId',
+                localField: 'batchId',
+                as: 'batchDetails',
+              },
+            },
+            {
+                $unwind: '$batchDetails'
+            }
+          ])
+
+          res.status(200).json(stock)
+        // console.log(stock)
     } catch (error) {
         console.log(error);
         res.status(500).json({message: 'Internal Server Error'});

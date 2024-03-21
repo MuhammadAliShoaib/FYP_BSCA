@@ -37,3 +37,24 @@ export type Dispatches = {
     distributedAmount: number
   }]
 }
+
+export type Stock ={
+  batchDetails: Batch,
+  batchId: String,
+    status: String,
+    distributor: [
+        {
+            distributedAmount: Number,
+            distributorAddress: String,
+        },
+    ],
+    pharmacy: [
+        {
+            pharmaAddress: String,
+            deliveredAmount: Number,
+            medicineSold: Number,
+            pharmaTransactions: [String],
+        },
+    ],
+    transactions: [String],
+}

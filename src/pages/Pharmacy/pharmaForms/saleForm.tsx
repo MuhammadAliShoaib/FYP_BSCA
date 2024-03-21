@@ -2,19 +2,20 @@ import { FormEvent, useEffect, useState } from "react";
 import Header from "../../../components/Header.tsx";
 import {Container, Box, TextField, Button, MenuItem} from '@mui/material'
 import axios from "axios";
-import { User, Dispatches } from "../../../types/types.ts";
+import { User, Dispatches, Stock } from "../../../types/types.ts";
 import { useAppSelector } from "../../../config/redux/hooks.tsx";
 import { toast } from "react-toastify";
 
 function SaleForm() {
   const { auth } = useAppSelector((state) => state.auth);
-  const [dispatches, setDipatches] = useState<Dispatches[]>([]);
+  const [stock, setStock] = useState<Stock[]>([]);
 //   const [availQty, setAvailQty] = useState(0)
 
   const getStock = async () => {
       try{
           const res = (await axios.get('/api/getStock', {params: {pharmaAddress: auth.address}})).data    
-          setDipatches(res);
+        //   console.log(res)
+          setStock(res);
         //   console.log('From Dispatch: ', dispatches)
       } catch (error) {
           console.log(error, "Response Error")
@@ -50,13 +51,9 @@ function SaleForm() {
 //       });
 //   }
 
-//   useEffect(() => {
-//       getDispatches()
-//       getPharma()
-//       if(updateDispatch.batchId !== '') {
-//           handleQuantity()
-//       }
-//   }, [updateDispatch])
+  useEffect(() => {
+      getStock()
+  }, [])
 
   return (
     <>
@@ -113,13 +110,13 @@ function SaleForm() {
                                     // }}
                                     variant="outlined"
                                 >
-                                    {dispatches.map((dispatch) => (
+                                    {stock.map((stock) => (
                                         <MenuItem
-                                            value={dispatch.batchId}
-                                            key={dispatch.batchId}
+                                            value={stock.batchDetails.batchId}
+                                            key={stock.batchDetails.batchId}
                                         >
                                             <option
-                                                label={dispatch.batchId}
+                                                label={stock.batchDetails.medicine}
                                             />
                                         </MenuItem>
                                     ))}

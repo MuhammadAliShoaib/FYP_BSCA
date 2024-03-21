@@ -15,6 +15,9 @@ db.Dispatch.aggregate([
       localField: 'batchId',
       as: 'batchDetails',
     },
-  },
+  }, 
+  {
+    $unwind: '$batchDetails'
+  }
 ]).then((res) => console.log(JSON.stringify(res, null, 4)))
 .then(() => process.exit())
