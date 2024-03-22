@@ -1,7 +1,5 @@
 import { db } from "./models/index.js";
 
-// let batchId = 'EVN-1710679698112'
-
 db.Dispatch.aggregate([
   {
     $match: {
