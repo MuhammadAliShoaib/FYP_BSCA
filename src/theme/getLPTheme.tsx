@@ -1,4 +1,4 @@
-import type {} from '@mui/material/themeCssVarsAugmentation';
+import type { } from '@mui/material/themeCssVarsAugmentation';
 import { ThemeOptions, alpha } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 import { PaletteMode } from '@mui/material';
@@ -17,7 +17,7 @@ declare module '@mui/material/styles/createPalette' {
     900: string;
   }
 
-  interface PaletteColor extends ColorRange {}
+  interface PaletteColor extends ColorRange { }
 }
 
 export const brand = {
@@ -134,7 +134,7 @@ const getDesignTokens = (mode: PaletteMode) => ({
     background: {
       default: '#fff',
       paper: gray[50],
-      ...(mode === 'dark' && { default: gray[900], paper: gray[800] }),
+      ...(mode === 'dark' && { default: gray[900], paper: brand[400] }),
     },
     text: {
       primary: gray[800],
@@ -297,73 +297,6 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
           },
         },
       },
-      //button theme
-      // MuiButton: {
-      //   styleOverrides: {
-      //     root: ({ theme, ownerState }) => ({
-      //       boxSizing: 'border-box',
-      //       boxShadow: 'none',
-      //       borderRadius: '10px',
-      //       textTransform: 'none',
-      //       '&:active': {
-      //         transform: 'scale(0.98)',
-      //       },
-      //       ...(ownerState.size === 'small' && {
-      //         maxHeight: '32px',
-      //       }),
-      //       ...(ownerState.size === 'medium' && {
-      //         height: '40px',
-      //       }),
-      //       ...(ownerState.variant === 'contained' &&
-      //         ownerState.color === 'primary' && {
-      //           color: brand[50],
-      //           background: brand[500],
-      //           backgroundImage: `linear-gradient(to bottom, ${brand[400]}, ${brand[600]})`,
-      //           boxShadow: `inset 0 1px ${alpha(brand[300], 0.4)}`,
-      //           outline: `1px solid ${brand[700]}`,
-      //           '&:hover': {
-      //             background: brand[400],
-      //             backgroundImage: 'none',
-      //             boxShadow: `0 0 0 1px  ${alpha(brand[300], 0.5)}`,
-      //           },
-      //         }),
-      //       ...(ownerState.variant === 'outlined' && {
-      //         backgroundColor: alpha(brand[300], 0.1),
-      //         borderColor: brand[300],
-      //         color: brand[500],
-      //         '&:hover': {
-      //           backgroundColor: alpha(brand[300], 0.3),
-      //           borderColor: brand[200],
-      //         },
-      //       }),
-      //       ...(ownerState.variant === 'text' && {
-      //         color: brand[500],
-      //         '&:hover': {
-      //           backgroundColor: alpha(brand[300], 0.3),
-      //           borderColor: brand[200],
-      //         },
-      //       }),
-      //       ...(theme.palette.mode === 'dark' && {
-      //         ...(ownerState.variant === 'outlined' && {
-      //           backgroundColor: alpha(brand[600], 0.1),
-      //           borderColor: brand[700],
-      //           color: brand[300],
-      //           '&:hover': {
-      //             backgroundColor: alpha(brand[600], 0.3),
-      //             borderColor: brand[700],
-      //           },
-      //         }),
-      //         ...(ownerState.variant === 'text' && {
-      //           color: brand[300],
-      //           '&:hover': {
-      //             backgroundColor: alpha(brand[600], 0.3),
-      //             borderColor: brand[700],
-      //           },
-      //         }),
-      //       }),
-      //     }),
-      //   },
-      // },
       MuiCard: {
         styleOverrides: {
           root: ({ theme, ownerState }) => ({
@@ -449,6 +382,7 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
           }),
         },
       },
+
       MuiLink: {
         defaultProps: {
           underline: 'none',
@@ -487,7 +421,7 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
             color: gray[500],
             fontWeight: 500,
             ...(theme.palette.mode === 'dark' && {
-              color: gray[300],
+              color: 'black',
             }),
           }),
         },
@@ -574,6 +508,7 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
             },
             '& .MuiInputBase-input': {
               // boxSizing: 'border-box',
+              color: 'black',
               '&::placeholder': {
                 opacity: 0.7,
               },
@@ -590,7 +525,6 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
               '& fieldset': {
                 border: 'none',
                 boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                background: `${alpha('#FFF', 0.3)}`,
               },
               '&:hover': {
                 borderColor: brand[300],
@@ -604,17 +538,18 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
             ...(theme.palette.mode === 'dark' && {
               '& .MuiOutlinedInput-root': {
                 boxSizing: 'border-box',
+                color: 'red',
                 minWidth: 280,
                 minHeight: 40,
                 height: '100%',
                 borderRadius: '10px',
                 border: '1px solid',
-                borderColor: gray[600], 
+                borderColor: gray[600],
                 transition: 'border-color 120ms ease-in',
                 '& fieldset': {
                   border: 'none',
-                  boxShadow: ' 0px 2px 4px rgba(0, 0, 0, 0.4)',
-                  // background: `${alpha(gray[800], 0.4)}`,
+                  // boxShadow: ' 0px 2px 4px rgba(0, 0, 0, 0.4)',
+                  // background: `white`,
                 },
                 '&:hover': {
                   borderColor: brand[300],

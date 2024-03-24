@@ -183,6 +183,13 @@ export default function BatchForm() {
                                         dateAdapter={AdapterDayjs}
                                     >
                                         <DatePicker
+                                            sx={(theme) => ({
+                                                background: {
+                                                    paper: theme.palette.mode === 'light'
+                                                        ? 'white'
+                                                        : "black",
+                                                }
+                                            })}
                                             label="Expiry"
                                             format="DD/MM/YYYY"
                                             onChange={(date) =>

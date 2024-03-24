@@ -92,6 +92,7 @@ export default function DispatchForm() {
                 sx={{ flexGrow: 1 }}
             >
                 <Container
+                
                     style={{
                         minWidth: "55%",
                         minHeight: "25vh",
@@ -131,11 +132,13 @@ export default function DispatchForm() {
                                         }
                                         defaultValue={""}
                                         variant="outlined"
+                                       
                                     >
                                         {batches.map((batch) => (
                                             <MenuItem
                                                 value={batch.medicine}
                                                 key={batch.batchId}
+                                                sx={{background : { paper : 'white'}}}
                                             >
                                                 <option
                                                     label={batch.medicine}
@@ -209,7 +212,7 @@ export default function DispatchForm() {
                                         variant="outlined"
                                     >
                                         {distributors.map((distro) => (
-                                            <MenuItem value={distro.address}>
+                                            <MenuItem value={distro.address} >
                                                 <option label={distro.name} />
                                             </MenuItem>
                                         ))}
