@@ -14,6 +14,7 @@ export default function AppRouter() {
             <Route path="manufacturer/*" element={<ManufacturerMain/>} />
             <Route path="distributor/*" element={<DistributorMain/>} />
             <Route path='pharmacy/*' element={<PharmacyMain/>}/>
+            <Route path='courier/*' element={''} />
         </Routes>
     )
 }
