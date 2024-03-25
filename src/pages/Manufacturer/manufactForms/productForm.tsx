@@ -86,170 +86,111 @@ export default function ProductForm() {
 
     return (
         <>
-            <Header title="Products" />
-            <Box
-                mt={10}
-                display={"flex"}
-                flexDirection={"column"}
-                alignItems={"center"}
-                minHeight={"90vh"}
-                sx={{ flexGrow: 1, padding: '25px' }}
+        <Header title="Products" />
+        <Box
+            mt={10}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            minHeight="90vh"
+            sx={{ flexGrow: 1, padding: '25px' }}
+        >
+            <Container
+                style={{
+                    minWidth: "45%",
+                    minHeight: "22vh",
+                    display: "flex",
+                    flexDirection: "column",
+                    backgroundColor: "white",
+                    border: "2px solid black",
+                    borderRadius: "5px",
+                    boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+                    paddingBottom: "35px",
+                    marginBottom: "20px",
+                }}
             >
-                <Container
-                    style={{
-                        minWidth: "45%",
-                        minHeight: "22vh",
-                        display: "flex",
-                        backgroundColor: "white",
-                        borderTop: "2px solid black",
-                        borderBottomLeftRadius: "5px",
-                        borderBottomRightRadius: "5px",
-                        boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-                        paddingBottom: "35  px",
-                    }}
-                >
-                    <Box width={"100%"} paddingBottom={'40px'}>
-                        <Box width={"100%"} ml={2}>
-                            <h1 style={{ paddingLeft: "15px" }}>Add Product</h1>
-                        </Box>
-                        <form onSubmit={formik.handleSubmit}>
-                            <Box
-                                display={"flex"}
-                                alignItems={"center"}
-                                justifyContent={"space-evenly"}
-                                mt={5}
-                            >
-                                <Box width={"48%"}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        id="name"
-                                        name="name"
-                                        label="Name"
-                                        variant="outlined"
-                                        onChange={formik.handleChange}
-                                        value={formik.values.name}
-                                    />
-                                </Box>
-                                <Box width={"48%"}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        id="symbol"
-                                        name="symbol"
-                                        label="Symbol"
-                                        variant="outlined"
-                                        onChange={formik.handleChange}
-                                        value={formik.values.symbol}
-                                    />
-                                </Box>
-                            </Box>
-                            <Box>
-                                <Box
-                                    display={"flex"}
-                                    alignItems={"center"}
-                                    justifyContent={"space-evenly"}
-                                    mt={5}
-                                >
-                                    <Box width={"48%"}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            id="formula"
-                                            name="formula"
-                                            label="Formula"
-                                            variant="outlined"
-                                            onChange={formik.handleChange}
-                                            value={formik.values.formula}
-                                        />
-                                    </Box>
-                                    <Box
-                                        width={"48%"}
-                                        display={"flex"}
-                                        alignItems={"center"}
-                                        justifyContent={"right"}
-                                    >
-                                        <Button
-                                            type="submit"
-                                            variant="contained"
-                                            sx={{
-                                                width: "15%",
-                                                paddingTop: "10px",
-                                                paddingBottom: "10px",
-                                            }}
-                                        >
-                                            Add
-                                        </Button>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </form>
+                <Typography variant="h4" style={{ paddingLeft: "15px", paddingTop: "20px" }}>Add Product</Typography>
+                <form onSubmit={formik.handleSubmit} style={{ padding: "20px" }}>
+                    <Box mt={3} display="flex" justifyContent="space-between">
+                        <TextField
+                            required
+                            fullWidth
+                            id="name"
+                            name="name"
+                            label="Name"
+                            variant="outlined"
+                            onChange={formik.handleChange}
+                            value={formik.values.name}
+                        />
+                        <TextField
+                            required
+                            fullWidth
+                            id="symbol"
+                            name="symbol"
+                            label="Symbol"
+                            variant="outlined"
+                            onChange={formik.handleChange}
+                            value={formik.values.symbol}
+                            style={{ marginLeft: "10px" }}
+                        />
                     </Box>
-                </Container>
+                    <Box mt={3}>
+                        <TextField
+                            required
+                            fullWidth
+                            id="formula"
+                            name="formula"
+                            label="Formula"
+                            variant="outlined"
+                            onChange={formik.handleChange}
+                            value={formik.values.formula}
+                        />
+                    </Box>
+                    <Box mt={3} display="flex" justifyContent="flex-end">
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            sx={{ paddingTop: "10px", paddingBottom: "10px", width: "25%" }}
+                        >
+                            Add
+                        </Button>
+                    </Box>
+                </form>
+            </Container>
 
-                <Container
-                    style={{
-                        minWidth: "50%",
-                        minHeight: "22vh",
-                        display: "flex",
-                        flexDirection: "column",
-                        // backgroundColor: "white",
-                        // borderTop: "2px solid black",
-                        borderBottomLeftRadius: "5px",
-                        borderBottomRightRadius: "5px",
-
-                        paddingBottom: "15px",
-                        marginTop: "50px",
-                    }}
-                >
-                    <Box width={"95%"}>
-                        <Typography
-                            variant="h4"
-                            sx={(theme) => ({
-                                paddingLeft: "15px",
-                                textDecorationLine: "underline",
-                                textUnderlinePosition: "under",
-                                color:
-                                    theme.palette.mode === 'light'
-                                        ? 'black'
-                                        : "white",
-                            })}>
-                            List of Products
-                        </Typography>
-                    </Box>
-                    <Box width={"100%"}>
-                        <List dense>
-                            {meds.map((medicine) => (
-                                <Box
-                                    display={"flex"}
-                                    flexDirection={"column"}
-                                    margin={"10px"}
-                                    padding={"0"}
-                                    alignItems={"center"}
-                                    borderBottom={"1px solid black"}
-                                    bgcolor={"white"}
-                                    borderRadius={"3px"}
-                                // boxShadow={
-                                //     "rgba(0, 0, 0, 0.24) 0px 1px 3px"
-                                // }
-                                >
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                            <Avatar>
-                                                <LocalHospital />
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText
-                                            primary={medicine.name}
-                                            secondary={medicine.symbol}
-                                        />
-                                    </ListItem>
-                                </Box>
-                            ))}
-                        </List>
-                    </Box>
-                </Container>
-            </Box>
-        </>
+            <Container
+                style={{
+                    minWidth: "50%",
+                    minHeight: "22vh",
+                    display: "flex",
+                    flexDirection: "column",
+                    backgroundColor: "white",
+                    border: "2px solid black",
+                    borderRadius: "5px",
+                    boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+                    paddingBottom: "15px",
+                    width: "100%",
+                    maxWidth: "800px",
+                }}
+            >
+                <Typography variant="h4" style={{ paddingLeft: "15px", paddingTop: "20px" }}>List of Products</Typography>
+                <List>
+                    {meds.map((medicine) => (
+                        <ListItem key={medicine.manufacturer} style={{ borderBottom: "1px solid black" }}>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <LocalHospital />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={medicine.name}
+                                secondary={medicine.symbol}
+                            />
+                        </ListItem>
+                    ))}
+                </List>
+            </Container>
+        </Box>
+    </>
     );
 }

@@ -104,7 +104,7 @@ export default function Footer() {
           <Link color="text.secondary" href="#">
             Features
           </Link>
-          <Link color="text.secondary" href="#">
+          {/* <Link color="text.secondary" href="#">
             Testimonials
           </Link>
           <Link color="text.secondary" href="#">
@@ -112,7 +112,7 @@ export default function Footer() {
           </Link>
           <Link color="text.secondary" href="#">
             Pricing
-          </Link>
+          </Link> */}
           <Link color="text.secondary" href="#">
             FAQs
           </Link>
@@ -130,12 +130,12 @@ export default function Footer() {
           <Link color="text.secondary" href="#">
             About us
           </Link>
-          <Link color="text.secondary" href="#">
+          {/* <Link color="text.secondary" href="#">
             Careers
           </Link>
           <Link color="text.secondary" href="#">
             Press
-          </Link>
+          </Link> */}
         </Box>
         <Box
           sx={{
@@ -191,7 +191,7 @@ export default function Footer() {
         >
           <IconButton
             color="inherit"
-            href="https://github.com/mui"
+            href="https://github.com/MuhammadAliShoaib/FYP_BSCA"
             aria-label="GitHub"
             sx={{ alignSelf: 'center' }}
           >
@@ -199,7 +199,7 @@ export default function Footer() {
           </IconButton>
           <IconButton
             color="inherit"
-            href="https://twitter.com/MaterialUI"
+            href="https://twitter.com/"
             aria-label="X"
             sx={{ alignSelf: 'center' }}
           >
@@ -207,7 +207,7 @@ export default function Footer() {
           </IconButton>
           <IconButton
             color="inherit"
-            href="https://www.linkedin.com/company/mui/"
+            href="https://www.linkedin.com/"
             aria-label="LinkedIn"
             sx={{ alignSelf: 'center' }}
           >

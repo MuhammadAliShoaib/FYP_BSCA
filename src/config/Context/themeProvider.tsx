@@ -19,7 +19,7 @@ const defaultTheme = createTheme({});
 
 const CustomThemeProvider: FC<Props> = ({ children }) => {
 
-    const [mode, setMode] = React.useState<any>('light');
+    const [mode, setMode] = React.useState<any>('dark');
     const [showCustomTheme, setShowCustomTheme] = React.useState(true);
     const LPtheme = createTheme(getLPTheme(mode));
 
