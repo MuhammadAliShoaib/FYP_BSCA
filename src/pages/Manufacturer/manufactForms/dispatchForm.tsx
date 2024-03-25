@@ -48,7 +48,7 @@ export default function DispatchForm() {
                 await axios.post("/api/notification", {
                     senderAddress: auth.address,
                     receiverAddress: dispatch.distributor.distributorAddress,
-                    notification: "Dispatch on the way",
+                    notification: `${dispatch.distributor.distributedAmount} ${medicine} of batch ${batches} to distributor ${dispatch.distributor.distributorAddress} is dispatched`,
                     date: new Date(),
                 })
             ).data;
