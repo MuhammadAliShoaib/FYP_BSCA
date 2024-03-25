@@ -42,20 +42,20 @@ const rows = [
     date: "06/10/2023",
     notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
   },
-  {
-    _id: 4,
-    date: "07/10/2023",
-    notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
-  },
-  {
-    _id: 5,
-    date: "08/10/2023",
-    notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
-  }, {
-    _id: 6,
-    date: "09/10/2023",
-    notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
-  }
+  // {
+  //   _id: 4,
+  //   date: "07/10/2023",
+  //   notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+  // },
+  // {
+  //   _id: 5,
+  //   date: "08/10/2023",
+  //   notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+  // }, {
+  //   _id: 6,
+  //   date: "09/10/2023",
+  //   notification: "Please scan and update the portal before you are blacklisted or any additional charges are issued on you. Please Note!",
+  // }
 ]
 
 export default function NotificationTable() {
@@ -136,12 +136,12 @@ export default function NotificationTable() {
           <TableHead >
             <TableRow>
               <TableCell
-                sx={{ width: 170, paddingLeft: '25px', backgroundColor: '#E1ECF7' }}
+                sx={{ width: 170, paddingLeft: '25px' }}
               >
                 Date
               </TableCell>
               <TableCell
-                sx={{ width: '100%', paddingLeft: '25px', backgroundColor: '#E1ECF7' }}
+                sx={{ width: '100%', paddingLeft: '25px' }}
               >
                 Activities
               </TableCell>

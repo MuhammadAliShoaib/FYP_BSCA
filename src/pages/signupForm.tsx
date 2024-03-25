@@ -134,6 +134,9 @@ export default function SignUpForm() {
               <MenuItem value="distributor">
                 <option label="Distributor" />
               </MenuItem>
+              <MenuItem value="courier">
+                <option label="Courier" />
+              </MenuItem>
               <MenuItem value="pharmacy">
                 <option label="Pharmacy" />
               </MenuItem>
