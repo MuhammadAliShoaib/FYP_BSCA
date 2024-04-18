@@ -56,7 +56,7 @@ export default function BatchForm() {
       const batchId = [symbol?.toUpperCase(), unix].join("-");
 
       try {
-        const response = await axios.post("/api/createbatch", {
+        const response = await axios.post("/api/manufacturer/createbatch", {
           batchId: batchId,
           medicine: values.medicine,
           quantity: values.quantity,

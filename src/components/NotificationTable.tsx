@@ -90,7 +90,7 @@ export default function NotificationTable() {
       try {
         const res = (await axios.get(`/api/getNotification/${auth.address}`))
           .data;
-        const notificationsWithLocaleDate = res.map((notificationItem) => {
+        const notificationsWithLocaleDate = res.map((notificationItem: any) => {
           const date = new Date(notificationItem.date);
           const localeDateString = date.toLocaleDateString("en-GB");
           return { ...notificationItem, date: localeDateString };

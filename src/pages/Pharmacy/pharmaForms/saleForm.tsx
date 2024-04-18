@@ -26,7 +26,7 @@ function SaleForm() {
   const getStock = async () => {
     try {
       const res = (
-        await axios.get("/api/getStock", {
+        await axios.get("/api/pharmacy/getStock", {
           params: { pharmaAddress: auth.address },
         })
       ).data;

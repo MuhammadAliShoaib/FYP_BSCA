@@ -29,7 +29,7 @@ export default function DispatchForm() {
   const getBatches = async () => {
     try {
       const res = (
-        await axios.get(`/api/getbatch`, {
+        await axios.get(`/api/manufacturer/getbatch`, {
           params: { manufacturer: auth.address },
         })
       ).data;
@@ -41,34 +41,40 @@ export default function DispatchForm() {
 
   const getDistros = async () => {
     try {
-      const res = (await axios.get("/api/getdistro")).data;
+      const res = (await axios.get("/api/manufacturer/getdistro")).data;
       setDistributors(res);
     } catch (error) {
       console.log(error, "Response Error");
     }
   };
 
-    const handleClick = async () => {
-        if (dispatch.distributor.distributorAddress.length == 0) {
-            return;
-        }
-        try {
-            const res = (
-                await axios.post("/api/notification", {
-                    senderAddress: auth.address,
-                    receiverAddress: dispatch.distributor.distributorAddress,
-                    notification: `${dispatch.distributor.distributedAmount} ${medicine} of batch ${batches} to distributor ${dispatch.distributor.distributorAddress} is dispatched`,
-                    date: new Date(),
-                })
-            ).data;
-        } catch (error) {
-            console.log(error, "Response Error");
-        }
-    };
+  const handleClick = async () => {
+    if (dispatch.distributor.distributorAddress.length == 0) {
+      return;
+    }
+    try {
+      const res = (
+        await axios.post("/api/notification", {
+          senderAddress: auth.address,
+          receiverAddress: dispatch.distributor.distributorAddress,
+          notification: `${
+            dispatch.distributor.distributedAmount
+          } ${medicine} of batch ${JSON.stringify(batches)} to distributor ${
+            dispatch.distributor.distributorAddress
+          } is dispatched`,
+          date: new Date(),
+        })
+      ).data;
+    } catch (error) {
+      console.log(error, "Response Error");
+    }
+  };
 
   const handleDispatch = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await axios.post("/api/dispatch", { dispatch });
+    const response = await axios.post("/api/manufacturer/dispatch", {
+      dispatch,
+    });
     if (!response) {
       throw new Error("Dispatch Failed");
     }
@@ -150,6 +156,7 @@ export default function DispatchForm() {
                   select
                   name="batch"
                   label="Select Batch"
+                  defaultValue={""}
                   onChange={(event) =>
                     setDispatch((prevState) => ({
                       ...prevState,
@@ -158,6 +165,7 @@ export default function DispatchForm() {
                   }
                   variant="outlined"
                 >
+                  <MenuItem defaultValue={""} />
                   {medicine !== "" &&
                     batches
                       .filter((batch) => batch.medicine === medicine)
@@ -175,6 +183,7 @@ export default function DispatchForm() {
                   select
                   name="distributor"
                   label="Distributor"
+                  defaultValue={""}
                   onChange={(event) =>
                     setDispatch((prevState) => ({
                       ...prevState,
@@ -188,6 +197,7 @@ export default function DispatchForm() {
                   variant="outlined"
                   sx={{ marginRight: "15px" }}
                 >
+                  <MenuItem defaultValue={""} />
                   {distributors.map((distro) => (
                     <MenuItem key={distro.address} value={distro.address}>
                       <option label={distro.name} />

@@ -28,7 +28,7 @@ export default function PharmaOrder() {
   const getDispatches = async () => {
     try {
       const res = (
-        await axios.get("/api/getDispatches", {
+        await axios.get("/api/distributor/getDispatches", {
           params: { distributorAddress: auth.address },
         })
       ).data;
@@ -41,7 +41,7 @@ export default function PharmaOrder() {
 
   const getPharma = async () => {
     try {
-      const pharma = (await axios.get("/api/getPharma")).data;
+      const pharma = (await axios.get("/api/distributor/getPharma")).data;
       setPharmacies(pharma);
     } catch (error) {
       console.log(error, "Response Error");
@@ -61,7 +61,7 @@ export default function PharmaOrder() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await axios.post("/api/updateDispatch", {
+    const response = await axios.post("/api/distributor/updateDispatch", {
       updateDispatch,
     });
     if (!response) {
