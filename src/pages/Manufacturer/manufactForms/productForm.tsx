@@ -46,21 +46,21 @@ export default function ProductForm() {
   const formik = useFormik({
     initialValues: {
       name: "",
-      symbol: "",
-      formula: "",
+      dosage: 0,
+      activeIngredient: "",
       manufacturer: auth.address,
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
-      symbol: Yup.string().required("Symbol is required"),
-      formula: Yup.string().required("Formula is required"),
+      dosage: Yup.number().required("Symbol is required"),
+      activeIngredient: Yup.string().required("Formula is required"),
     }),
     onSubmit: async (values) => {
       try {
-        const response = await axios.post("/api/manufacturer/addproduct", {
+        const response = await axios.post("/api/manufacturer/addProduct", {
           name: values.name,
-          symbol: values.symbol,
-          formula: values.formula,
+          dosage: values.dosage,
+          activeeIngredient: values.activeIngredient,
           manufacturer: values.manufacturer,
         });
 
@@ -130,14 +130,15 @@ export default function ProductForm() {
                 value={formik.values.name}
               />
               <TextField
+                type="number"
                 required
                 fullWidth
-                id="symbol"
-                name="symbol"
-                label="Symbol"
+                id="dosage"
+                name="dosage"
+                label="Dosage"
                 variant="outlined"
                 onChange={formik.handleChange}
-                value={formik.values.symbol}
+                value={formik.values.dosage}
                 style={{ marginLeft: "10px" }}
               />
             </Box>
@@ -145,12 +146,12 @@ export default function ProductForm() {
               <TextField
                 required
                 fullWidth
-                id="formula"
-                name="formula"
-                label="Formula"
+                id="activeIngredient"
+                name="activeIngredient"
+                label="Active Ingredient"
                 variant="outlined"
                 onChange={formik.handleChange}
-                value={formik.values.formula}
+                value={formik.values.activeIngredient}
               />
             </Box>
             <Box mt={3} display="flex" justifyContent="flex-end">
@@ -199,7 +200,7 @@ export default function ProductForm() {
                 </ListItemAvatar>
                 <ListItemText
                   primary={medicine.name}
-                  secondary={medicine.symbol}
+                  secondary={medicine.activeIngredient}
                 />
               </ListItem>
             ))}

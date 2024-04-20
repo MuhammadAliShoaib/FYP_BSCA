@@ -6,8 +6,8 @@ export type User = {
 
 export type Medicine = {
   name: string,
-  symbol: string,
-  formula: string,
+  dosage: number,
+  activeIngredient: string,
   manufacturer: string,
 }
 

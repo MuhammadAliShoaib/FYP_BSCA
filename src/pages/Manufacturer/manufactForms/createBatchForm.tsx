@@ -52,11 +52,11 @@ export default function BatchForm() {
     }),
     onSubmit: async (values) => {
       const unix = +new Date();
-      const symbol = meds.find((med) => med.name === values.medicine)?.symbol;
-      const batchId = [symbol?.toUpperCase(), unix].join("-");
+      const name = meds.find((med) => med.name === values.medicine)?.name;
+      const batchId = [name?.toUpperCase(), unix].join("-");
 
       try {
-        const response = await axios.post("/api/manufacturer/createbatch", {
+        const response = await axios.post("/api/manufacturer/createBatch", {
           batchId: batchId,
           medicine: values.medicine,
           quantity: values.quantity,
@@ -156,7 +156,7 @@ export default function BatchForm() {
                     }
                     value={mfgDate}
                     disablePast
-                    sx={{ width: "48%" }}
+                    sx={{ width: "49%" }}
                   />
                 </LocalizationProvider>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -168,7 +168,7 @@ export default function BatchForm() {
                     }
                     value={expDate}
                     disablePast
-                    sx={{ width: "48%" }}
+                    sx={{ width: "50%" }}
                   />
                 </LocalizationProvider>
               </Box>

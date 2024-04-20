@@ -2,17 +2,17 @@ import express from "express";
 const router = express.Router();
 import { db } from "../models/index.js";
 
-router.post("/addproduct", async (req, res) => {
-  const { name, symbol, formula, manufacturer } = req.body;
+router.post("/addProduct", async (req, res) => {
+  const { name, dosage, activeIngredient, manufacturer } = req.body;
   try {
     const product = await db.Product.findOne({ name: req.body.name });
-    if (product) {
+    if (product !== null && product.dosage === dosage) {
       res.status(401).json({ message: "Product Already Exists" });
     } else {
       await db.Product.create({
         name,
-        symbol,
-        formula,
+        dosage,
+        activeIngredient,
         manufacturer,
       });
       res.status(200).json({ message: "Product Added" });
@@ -23,12 +23,14 @@ router.post("/addproduct", async (req, res) => {
   }
 });
 
+router.delete("/removeProduct");
+
 router.get("/meds", async (req, res) => {
   try {
     const meds = await db.Product.find({
       manufacturer: req.query.manufacturer,
     });
-    console.log(meds);
+    console.log("Medicines: ", meds);
     if (meds.length > 0) {
       res.status(200).json(meds);
     } else {
@@ -43,7 +45,7 @@ router.get("/meds", async (req, res) => {
 });
 
 // Creates a batch by Manufacturer
-router.post("/createbatch", async (req, res) => {
+router.post("/createBatch", async (req, res) => {
   const { batchId, medicine, quantity, mfg, exp, manufacturer } = req.body;
   try {
     console.log(batchId);
@@ -72,7 +74,7 @@ router.post("/createbatch", async (req, res) => {
 });
 
 // Gets batches created by the Manufacturer
-router.get("/getbatch", async (req, res) => {
+router.get("/getBatch", async (req, res) => {
   try {
     const batches = await db.Batch.find({
       manufacturer: req.query.manufacturer,
@@ -93,7 +95,7 @@ router.get("/getbatch", async (req, res) => {
 });
 
 // Gets all the Distributors
-router.get("/getdistro", async (req, res) => {
+router.get("/getDistro", async (req, res) => {
   try {
     const user = await db.User.find({ role: "distributor" });
     if (user) {

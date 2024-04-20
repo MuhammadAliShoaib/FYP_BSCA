@@ -29,7 +29,7 @@ export default function DispatchForm() {
   const getBatches = async () => {
     try {
       const res = (
-        await axios.get(`/api/manufacturer/getbatch`, {
+        await axios.get(`/api/manufacturer/getBatch`, {
           params: { manufacturer: auth.address },
         })
       ).data;
@@ -41,7 +41,7 @@ export default function DispatchForm() {
 
   const getDistros = async () => {
     try {
-      const res = (await axios.get("/api/manufacturer/getdistro")).data;
+      const res = (await axios.get("/api/manufacturer/getDistro")).data;
       setDistributors(res);
     } catch (error) {
       console.log(error, "Response Error");
