@@ -147,6 +147,66 @@ export default function BatchForm() {
                 />
               </Box>
               <Box mt={3} display="flex" justifyContent="space-between">
+                <TextField
+                  required
+                  fullWidth
+                  select
+                  name="medicine"
+                  label="Select Medicine"
+                  defaultValue={""}
+                  onChange={formik.handleChange}
+                  value={formik.values.medicine}
+                  variant="outlined"
+                >
+                  {Array.isArray(meds) &&
+                    meds.map((med) => (
+                      <MenuItem value={med.name} key={med.name}>
+                        <option label={med.name} />
+                      </MenuItem>
+                    ))}
+                </TextField>
+                <TextField
+                  required
+                  fullWidth
+                  name="quantity"
+                  label="Quantity"
+                  onChange={formik.handleChange}
+                  value={formik.values.quantity}
+                  variant="outlined"
+                  style={{ marginLeft: "10px" }}
+                />
+              </Box>
+              <Box mt={3} display="flex" justifyContent="space-between">
+                <TextField
+                  required
+                  fullWidth
+                  select
+                  name="medicine"
+                  label="Select Medicine"
+                  defaultValue={""}
+                  onChange={formik.handleChange}
+                  value={formik.values.medicine}
+                  variant="outlined"
+                >
+                  {Array.isArray(meds) &&
+                    meds.map((med) => (
+                      <MenuItem value={med.name} key={med.name}>
+                        <option label={med.name} />
+                      </MenuItem>
+                    ))}
+                </TextField>
+                <TextField
+                  required
+                  fullWidth
+                  name="quantity"
+                  label="Quantity"
+                  onChange={formik.handleChange}
+                  value={formik.values.quantity}
+                  variant="outlined"
+                  style={{ marginLeft: "10px" }}
+                />
+              </Box>
+              <Box mt={3} display="flex" justifyContent="space-between">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Manufacturing date"
