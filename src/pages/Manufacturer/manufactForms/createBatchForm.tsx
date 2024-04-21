@@ -16,6 +16,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { useAppSelector } from "../../../config/redux/hooks";
+import { containerTypes, units } from "../../../utility/utilts";
 
 export default function BatchForm() {
   const { auth } = useAppSelector((state) => state.auth);
@@ -43,12 +44,22 @@ export default function BatchForm() {
   const formik = useFormik({
     initialValues: {
       medicine: "",
-      quantity: 0,
+      containerType: "",
+      unit: "",
+      packSize: null,
+      cartonSize: null,
+      quantity: null,
       manufacturer: auth.address,
     },
     validationSchema: Yup.object({
       medicine: Yup.string().required("Name is required"),
-      quantity: Yup.number().required("Enter a Quantity"),
+      containerType: Yup.string().required(
+        "Container Type need to be Specified"
+      ),
+      unit: Yup.string().required("Unit needs to be Specified"),
+      packSize: Yup.string().min(1).required("Pack Size is Required"),
+      cartonSize: Yup.string().min(1).required("Carton Size is Required"),
+      quantity: Yup.number().min(1).required("Enter a Quantity"),
     }),
     onSubmit: async (values) => {
       const unix = +new Date();
@@ -59,6 +70,10 @@ export default function BatchForm() {
         const response = await axios.post("/api/manufacturer/createBatch", {
           batchId: batchId,
           medicine: values.medicine,
+          containerType: values.containerType,
+          unit: values.unit,
+          packSize: values.packSize,
+          cartonSize: values.cartonSize,
           quantity: values.quantity,
           mfg: mfgDate,
           exp: expDate,
@@ -107,7 +122,7 @@ export default function BatchForm() {
             paddingBottom: "45px",
             backgroundColor: "white",
             border: "2px solid black",
-            borderRadius: "5px",
+            borderRadius: "10px",
             boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
           }}
         >
@@ -138,66 +153,67 @@ export default function BatchForm() {
                 <TextField
                   required
                   fullWidth
-                  name="quantity"
-                  label="Quantity"
+                  select
+                  name="containerType"
+                  label="Container Type"
+                  defaultValue={""}
                   onChange={formik.handleChange}
-                  value={formik.values.quantity}
+                  value={formik.values.containerType}
                   variant="outlined"
                   style={{ marginLeft: "10px" }}
+                >
+                  <MenuItem defaultValue={""} />
+                  {containerTypes.map((item) => (
+                    <MenuItem value={item} key={item}>
+                      <option label={item} />
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+              <Box mt={3} display="flex" justifyContent="space-between">
+                <TextField
+                  required
+                  type="number"
+                  name="packSize"
+                  label="Pack Size"
+                  onChange={formik.handleChange}
+                  value={formik.values.packSize}
+                  variant="outlined"
+                  style={{ width: "70%" }}
                 />
+                <TextField
+                  required
+                  select
+                  name="unit"
+                  label="Unit"
+                  onChange={formik.handleChange}
+                  value={formik.values.unit}
+                  variant="outlined"
+                  style={{ width: "30%", marginLeft: "10px" }}
+                >
+                  <MenuItem defaultValue={""} />
+                  {units.map((unit) => (
+                    <MenuItem value={unit} key={unit}>
+                      <option label={unit}></option>
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Box>
               <Box mt={3} display="flex" justifyContent="space-between">
                 <TextField
                   required
                   fullWidth
-                  select
-                  name="medicine"
-                  label="Select Medicine"
-                  defaultValue={""}
+                  type="number"
+                  name="cartonSize"
+                  label="Carton Size"
                   onChange={formik.handleChange}
-                  value={formik.values.medicine}
+                  value={formik.values.cartonSize}
                   variant="outlined"
-                >
-                  {Array.isArray(meds) &&
-                    meds.map((med) => (
-                      <MenuItem value={med.name} key={med.name}>
-                        <option label={med.name} />
-                      </MenuItem>
-                    ))}
-                </TextField>
-                <TextField
-                  required
-                  fullWidth
-                  name="quantity"
-                  label="Quantity"
-                  onChange={formik.handleChange}
-                  value={formik.values.quantity}
-                  variant="outlined"
-                  style={{ marginLeft: "10px" }}
                 />
-              </Box>
-              <Box mt={3} display="flex" justifyContent="space-between">
                 <TextField
                   required
                   fullWidth
-                  select
-                  name="medicine"
-                  label="Select Medicine"
-                  defaultValue={""}
-                  onChange={formik.handleChange}
-                  value={formik.values.medicine}
-                  variant="outlined"
-                >
-                  {Array.isArray(meds) &&
-                    meds.map((med) => (
-                      <MenuItem value={med.name} key={med.name}>
-                        <option label={med.name} />
-                      </MenuItem>
-                    ))}
-                </TextField>
-                <TextField
-                  required
-                  fullWidth
+                  type="number"
                   name="quantity"
                   label="Quantity"
                   onChange={formik.handleChange}

@@ -14,6 +14,10 @@ export type Medicine = {
 export type Batch = {
   batchId: string,
   medicine: string,
+  containerType: string,
+  unit: string,
+  packSize: number,
+  cartonSize: number
   totalSupply: number,
   quantity: number,
   mfg: Date,
