@@ -51,16 +51,28 @@ export default function ProductForm() {
       manufacturer: auth.address,
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Name is required"),
-      dosage: Yup.number().required("Symbol is required"),
-      activeIngredient: Yup.string().required("Formula is required"),
+      name: Yup.string()
+        .min(3, "Name should be at least 3 characters")
+        .required("Name is required"),
+      dosage: Yup.number()
+        .positive("Should be a Positive Number")
+        .test("is-in-range", "Dosage must greater than 0", (value) => {
+          if (value === undefined) {
+            return false;
+          }
+          return value >= 1;
+        })
+        .required("Symbol is required"),
+      activeIngredient: Yup.string()
+        .min(3, "Ingredient should be at least 3 characters")
+        .required("Formula is required"),
     }),
     onSubmit: async (values) => {
       try {
         const response = await axios.post("/api/manufacturer/addProduct", {
           name: values.name,
           dosage: values.dosage,
-          activeeIngredient: values.activeIngredient,
+          activeIngredient: values.activeIngredient,
           manufacturer: values.manufacturer,
         });
 
@@ -119,28 +131,47 @@ export default function ProductForm() {
           </Typography>
           <form onSubmit={formik.handleSubmit} style={{ padding: "20px" }}>
             <Box mt={3} display="flex" justifyContent="space-between">
-              <TextField
-                required
-                fullWidth
-                id="name"
-                name="name"
-                label="Name"
-                variant="outlined"
-                onChange={formik.handleChange}
-                value={formik.values.name}
-              />
-              <TextField
-                type="number"
-                required
-                fullWidth
-                id="dosage"
-                name="dosage"
-                label="Dosage"
-                variant="outlined"
-                onChange={formik.handleChange}
-                value={formik.values.dosage}
-                style={{ marginLeft: "10px" }}
-              />
+              <Box sx={{ flex: "1", mr: "5px" }}>
+                <TextField
+                  required
+                  fullWidth
+                  id="name"
+                  name="name"
+                  label="Name"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  value={formik.values.name}
+                />
+                {formik.errors.name && formik.touched.name ? (
+                  <Box
+                    component={"span"}
+                    sx={{ display: "inline", color: "red" }}
+                  >
+                    {formik.errors.name}
+                  </Box>
+                ) : null}
+              </Box>
+              <Box sx={{ flex: "1", ml: "5px" }}>
+                <TextField
+                  type="number"
+                  required
+                  fullWidth
+                  id="dosage"
+                  name="dosage"
+                  label="Mg Dosage"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  value={formik.values.dosage}
+                />
+                {formik.errors.dosage && formik.touched.dosage ? (
+                  <Box
+                    component={"span"}
+                    sx={{ display: "inline", color: "red" }}
+                  >
+                    {formik.errors.dosage}
+                  </Box>
+                ) : null}
+              </Box>
             </Box>
             <Box mt={3}>
               <TextField
@@ -153,6 +184,15 @@ export default function ProductForm() {
                 onChange={formik.handleChange}
                 value={formik.values.activeIngredient}
               />
+              {formik.errors.activeIngredient &&
+              formik.touched.activeIngredient ? (
+                <Box
+                  component={"span"}
+                  sx={{ display: "inline", color: "red" }}
+                >
+                  {formik.errors.activeIngredient}
+                </Box>
+              ) : null}
             </Box>
             <Box mt={3} display="flex" justifyContent="flex-end">
               <Button

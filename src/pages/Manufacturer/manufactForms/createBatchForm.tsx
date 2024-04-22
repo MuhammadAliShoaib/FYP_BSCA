@@ -57,9 +57,33 @@ export default function BatchForm() {
         "Container Type need to be Specified"
       ),
       unit: Yup.string().required("Unit needs to be Specified"),
-      packSize: Yup.string().min(1).required("Pack Size is Required"),
-      cartonSize: Yup.string().min(1).required("Carton Size is Required"),
-      quantity: Yup.number().min(1).required("Enter a Quantity"),
+      packSize: Yup.number()
+        .positive("Should be a Positive Number")
+        .test("is-in-range", "Quantity must greater than 0", (value) => {
+          if (value === undefined) {
+            return false;
+          }
+          return value >= 1;
+        })
+        .required("Pack Size is Required"),
+      cartonSize: Yup.number()
+        .positive("Should be a Positive Number")
+        .test("is-in-range", "Quantity must greater than 0", (value) => {
+          if (value === undefined) {
+            return false;
+          }
+          return value >= 1;
+        })
+        .required("Carton Size is Required"),
+      quantity: Yup.number()
+        .positive("Should be a Positive Number")
+        .test("is-in-range", "Quantity must greater than 0", (value) => {
+          if (value === undefined) {
+            return false;
+          }
+          return value >= 1;
+        })
+        .required("Enter a Quantity"),
     }),
     onSubmit: async (values) => {
       const unix = +new Date();
@@ -199,28 +223,55 @@ export default function BatchForm() {
                   ))}
                 </TextField>
               </Box>
+              {formik.errors.packSize && formik.touched.packSize ? (
+                <Box
+                  component={"span"}
+                  sx={{ display: "inline", color: "red" }}
+                >
+                  {formik.errors.packSize}
+                </Box>
+              ) : null}
               <Box mt={3} display="flex" justifyContent="space-between">
-                <TextField
-                  required
-                  fullWidth
-                  type="number"
-                  name="cartonSize"
-                  label="Carton Size"
-                  onChange={formik.handleChange}
-                  value={formik.values.cartonSize}
-                  variant="outlined"
-                />
-                <TextField
-                  required
-                  fullWidth
-                  type="number"
-                  name="quantity"
-                  label="Quantity"
-                  onChange={formik.handleChange}
-                  value={formik.values.quantity}
-                  variant="outlined"
-                  style={{ marginLeft: "10px" }}
-                />
+                <Box sx={{ flex: "1", mr: "5px" }}>
+                  <TextField
+                    required
+                    fullWidth
+                    type="number"
+                    name="cartonSize"
+                    label="Carton Size"
+                    onChange={formik.handleChange}
+                    value={formik.values.cartonSize}
+                    variant="outlined"
+                  />
+                  {formik.errors.cartonSize && formik.touched.cartonSize ? (
+                    <Box
+                      component={"span"}
+                      sx={{ display: "inline", color: "red" }}
+                    >
+                      {formik.errors.cartonSize}
+                    </Box>
+                  ) : null}
+                </Box>
+                <Box sx={{ flex: "1", ml: "5px" }}>
+                  <TextField
+                    required
+                    fullWidth
+                    type="number"
+                    name="quantity"
+                    label="Quantity"
+                    onChange={formik.handleChange}
+                    value={formik.values.quantity}
+                    variant="outlined"
+                  />
+                  {formik.errors.quantity && formik.touched.quantity ? (
+                    <Box
+                      component={"span"}
+                      sx={{ display: "inline", color: "red" }}
+                    >
+                      {formik.errors.quantity}
+                    </Box>
+                  ) : null}
+                </Box>
               </Box>
               <Box mt={3} display="flex" justifyContent="space-between">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -232,7 +283,7 @@ export default function BatchForm() {
                     }
                     value={mfgDate}
                     disablePast
-                    sx={{ width: "49%" }}
+                    sx={{ width: "50%", mr: "5px" }}
                   />
                 </LocalizationProvider>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -244,7 +295,7 @@ export default function BatchForm() {
                     }
                     value={expDate}
                     disablePast
-                    sx={{ width: "50%" }}
+                    sx={{ width: "50%", ml: "5px" }}
                   />
                 </LocalizationProvider>
               </Box>
