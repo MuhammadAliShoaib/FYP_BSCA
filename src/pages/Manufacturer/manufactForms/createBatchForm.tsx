@@ -27,7 +27,7 @@ export default function BatchForm() {
   const getMedicines = async () => {
     try {
       const result = (
-        await axios.get(`/api/manufacturer/meds`, {
+        await axios.get(`/api/manufacturer/medicines`, {
           params: { manufacturer: auth.address },
         })
       ).data;

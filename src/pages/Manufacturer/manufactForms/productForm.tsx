@@ -28,7 +28,7 @@ export default function ProductForm() {
   const getMedicines = async () => {
     try {
       const result = (
-        await axios.get(`/api/manufacturer/meds`, {
+        await axios.get(`/api/manufacturer/medicines`, {
           params: { manufacturer: auth.address },
         })
       ).data;
@@ -62,7 +62,7 @@ export default function ProductForm() {
           }
           return value >= 1;
         })
-        .required("Symbol is required"),
+        .required("Dosage is required"),
       activeIngredient: Yup.string()
         .min(3, "Ingredient should be at least 3 characters")
         .required("Formula is required"),

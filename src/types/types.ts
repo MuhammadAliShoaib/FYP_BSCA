@@ -25,11 +25,19 @@ export type Batch = {
   manufacturer: string,
 }
 
+export type Product = {
+  name: string,
+  dosage: number,
+  activeIngredient: string,
+  manufacturer: string,
+  medicineBatches: Batch[];
+}
+
 export type Dispatch = {
   batchId: string,
   distributor: {
     distributorAddress: string,
-    distributedAmount: number
+    distributorSupply: number
   }
 }
 

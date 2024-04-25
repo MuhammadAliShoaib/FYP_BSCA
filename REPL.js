@@ -1,21 +1,24 @@
 import { db } from "./models/index.js";
 
-db.Dispatch.aggregate([
+db.Product.aggregate([
   {
     $match: {
-      'pharmacy.pharmaAddress': '0x64D960696643321b26976fb64f8c91EDFb04Ae18'
-    }
+      manufacturer: "0x867c6f443404cA5FC002148EC18bdD986EB4d8A6",
+    },
   },
   {
     $lookup: {
-      from: 'batches',
-      foreignField: 'batchId',
-      localField: 'batchId',
-      as: 'batchDetails',
+      from: "batches",
+      foreignField: "medicine",
+      localField: "name",
+      as: "medicineBatches",
     },
-  }, 
+  },
   {
-    $unwind: '$batchDetails'
-  }
-]).then((res) => console.log(JSON.stringify(res, null, 4)))
-.then(() => process.exit())
+    $match: {
+      medicineBatches: { $ne: [] },
+    },
+  },
+])
+  .then((res) => console.log(JSON.stringify(res, null, 4)))
+  .then(() => process.exit());

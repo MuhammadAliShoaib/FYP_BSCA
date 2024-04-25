@@ -25,7 +25,7 @@ router.post("/addProduct", async (req, res) => {
 
 router.delete("/removeProduct");
 
-router.get("/meds", async (req, res) => {
+router.get("/medicines", async (req, res) => {
   try {
     const meds = await db.Product.find({
       manufacturer: req.query.manufacturer,
@@ -46,12 +46,19 @@ router.get("/meds", async (req, res) => {
 
 // Creates a batch by Manufacturer
 router.post("/createBatch", async (req, res) => {
-  const { batchId, medicine, quantity, mfg, exp, manufacturer } = req.body;
+  const {
+    batchId,
+    medicine,
+    containerType,
+    packSize,
+    unit,
+    cartonSize,
+    quantity,
+    mfg,
+    exp,
+    manufacturer,
+  } = req.body;
   try {
-    console.log(batchId);
-    console.log(medicine);
-    console.log(mfg);
-
     const batch = await db.Batch.findOne({ batchId: req.body.batchId });
     if (batch) {
       res.status(401).json({ message: "Batch was being duplicated" });
@@ -59,6 +66,10 @@ router.post("/createBatch", async (req, res) => {
       await db.Batch.create({
         batchId,
         medicine,
+        containerType,
+        packSize,
+        unit,
+        cartonSize,
         totalSupply: quantity,
         quantity,
         mfg,
@@ -73,21 +84,34 @@ router.post("/createBatch", async (req, res) => {
   }
 });
 
-// Gets batches created by the Manufacturer
-router.get("/getBatch", async (req, res) => {
+router.get("/medicineBatches", async (req, res) => {
   try {
-    const batches = await db.Batch.find({
-      manufacturer: req.query.manufacturer,
-    });
-    console.log(batches);
+    const meds = await db.Product.aggregate([
+      {
+        $match: {
+          manufacturer: req.query.manufacturer,
+        },
+      },
+      {
+        $lookup: {
+          from: "batches",
+          foreignField: "medicine",
+          localField: "name",
+          as: "medicineBatches",
+        },
+      },
+      {
+        $match: {
+          medicineBatches: { $ne: [] },
+        },
+      },
+    ]);
+    console.log(meds);
 
-    if (batches) {
-      res.status(200).json(batches);
-    } else {
-      res.status(404).json({
-        message: "No batches found by this manufacturer",
-      });
-    }
+    if (meds !== null) {
+      res.status(200).json(meds);
+    } else
+      res.status(404).json({ messsage: "No Medicine with Batches Available" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -155,3 +179,26 @@ router.post("/dispatch", async (req, res) => {
 });
 
 export default router;
+
+// // Gets batches created by the Manufacturer
+// router.get("/getBatch", async (req, res) => {
+//   const { manufacturer, medicine } = req.query;
+//   try {
+//     const batches = await db.Batch.find({
+//       manufacturer,
+//       medicine,
+//     });
+//     console.log(batches);
+
+//     if (batches) {
+//       res.status(200).json(batches);
+//     } else {
+//       res.status(404).json({
+//         message: "No batches found by this manufacturer",
+//       });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// });

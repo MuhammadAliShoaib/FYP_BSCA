@@ -9,12 +9,13 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import { Batch, User, Dispatch } from "../../../types/types.ts";
+import { Batch, User, Dispatch, Product } from "../../../types/types.ts";
 import { useAppSelector } from "../../../config/redux/hooks.tsx";
 import { toast } from "react-toastify";
 
 export default function DispatchForm() {
   const { auth } = useAppSelector((state) => state.auth);
+  const [meds, setMeds] = useState<Product[]>([]);
   const [batches, setBatches] = useState<Batch[]>([]);
   const [medicine, setMedicine] = useState("");
   const [distributors, setDistributors] = useState<User[]>([]);
@@ -22,20 +23,28 @@ export default function DispatchForm() {
     batchId: "",
     distributor: {
       distributorAddress: "",
-      distributedAmount: 0,
+      distributorSupply: 0,
     },
   });
 
-  const getBatches = async () => {
+  const getMeds = async () => {
     try {
       const res = (
-        await axios.get(`/api/manufacturer/getBatch`, {
+        await axios.get(`/api/manufacturer/medicineBatches`, {
           params: { manufacturer: auth.address },
         })
       ).data;
-      setBatches(res);
+
+      setMeds(res);
     } catch (error) {
       console.log(error, "Response Error");
+    }
+  };
+
+  const filterBatches = async () => {
+    if (medicine !== "") {
+      const [selectedMedicine] = meds.filter((med) => med.name === medicine);
+      setBatches(selectedMedicine.medicineBatches);
     }
   };
 
@@ -58,7 +67,7 @@ export default function DispatchForm() {
           senderAddress: auth.address,
           receiverAddress: dispatch.distributor.distributorAddress,
           notification: `${
-            dispatch.distributor.distributedAmount
+            dispatch.distributor.distributorSupply
           } ${medicine} of batch ${JSON.stringify(batches)} to distributor ${
             dispatch.distributor.distributorAddress
           } is dispatched`,
@@ -91,9 +100,10 @@ export default function DispatchForm() {
   };
 
   useEffect(() => {
-    getBatches();
+    getMeds();
+    filterBatches();
     getDistros();
-  }, []);
+  }, [medicine]);
 
   return (
     <>
@@ -108,6 +118,7 @@ export default function DispatchForm() {
       >
         <Container
           style={{
+            marginTop: "25px",
             minWidth: "55%",
             minHeight: "25vh",
             display: "flex",
@@ -115,7 +126,7 @@ export default function DispatchForm() {
             paddingTop: "35px",
             paddingBottom: "45px",
             backgroundColor: "white",
-            border: "2px solid black",
+            border: "2px solid #0959AA",
             borderRadius: "5px",
             boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
           }}
@@ -129,52 +140,128 @@ export default function DispatchForm() {
               style={{ padding: "20px" }}
             >
               <Box mt={3} display="flex" justifyContent="space-between">
-                <TextField
-                  required
-                  fullWidth
-                  select
-                  name="medicines"
-                  label="Select Medicine"
-                  onChange={(event) => setMedicine(event.target.value)}
-                  defaultValue={""}
-                  variant="outlined"
-                  sx={{ marginRight: "15px" }}
-                >
-                  {batches.map((batch) => (
-                    <MenuItem
-                      key={batch.batchId}
-                      value={batch.medicine}
-                      sx={{ background: { paper: "white" } }}
-                    >
-                      <option label={batch.medicine} />
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <TextField
-                  required
-                  fullWidth
-                  select
-                  name="batch"
-                  label="Select Batch"
-                  defaultValue={""}
-                  onChange={(event) =>
-                    setDispatch((prevState) => ({
-                      ...prevState,
-                      batchId: event.target.value,
-                    }))
-                  }
-                  variant="outlined"
-                >
-                  <MenuItem defaultValue={""} />
-                  {medicine !== "" &&
-                    batches
-                      .filter((batch) => batch.medicine === medicine)
-                      .map((batch) => (
+                <Box width={"50%"}>
+                  <TextField
+                    required
+                    fullWidth
+                    select
+                    name="medicines"
+                    label="Select Medicine"
+                    onChange={(event) => {
+                      setMedicine(event.target.value);
+                      setDispatch((prevState) => ({
+                        ...prevState,
+                        batchId: "",
+                      }));
+                    }}
+                    defaultValue={""}
+                    variant="outlined"
+                  >
+                    {meds.map((med) => (
+                      <MenuItem
+                        key={med.dosage}
+                        value={med.name}
+                        sx={{ background: { paper: "white" } }}
+                      >
+                        <option label={med.name} />
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <TextField
+                    required
+                    fullWidth
+                    select
+                    name="batch"
+                    label="Select Batch"
+                    defaultValue={""}
+                    value={dispatch.batchId || ""}
+                    sx={{ mt: "15px" }}
+                    onChange={(event) =>
+                      setDispatch((prevState) => ({
+                        ...prevState,
+                        batchId: event.target.value,
+                      }))
+                    }
+                    variant="outlined"
+                  >
+                    <MenuItem value={""} />
+                    {medicine !== "" &&
+                      batches.map((batch) => (
                         <MenuItem key={batch.batchId} value={batch.batchId}>
                           <option label={batch.batchId} />
                         </MenuItem>
                       ))}
-                </TextField>
+                  </TextField>
+                </Box>
+                <Box
+                  ml={"15px"}
+                  width={"50%"}
+                  border={"2px solid #0959AA"}
+                  borderRadius={"5px"}
+                >
+                  {dispatch.batchId === "" ? null : (
+                    <Box px={"10px"}>
+                      <Typography variant="h6" borderBottom={"1px solid black"}>
+                        Medicine:{" "}
+                        {
+                          batches.find(
+                            (batch) => batch.batchId === dispatch.batchId
+                          )?.medicine
+                        }
+                      </Typography>
+                      <Typography variant="h6">
+                        Manufactured:{" "}
+                        {dispatch.batchId &&
+                        batches.find(
+                          (batch) => batch.batchId === dispatch.batchId
+                        )?.mfg
+                          ? new Date(
+                              batches.find(
+                                (batch) => batch.batchId === dispatch.batchId
+                              )?.mfg || ""
+                            ).toLocaleDateString("en-GB")
+                          : "N/A"}
+                      </Typography>
+                      <Typography variant="h6">
+                        Pack Size:{" "}
+                        {
+                          batches.find(
+                            (batch) => batch.batchId === dispatch.batchId
+                          )?.packSize
+                        }{" "}
+                        {
+                          batches.find(
+                            (batch) => batch.batchId === dispatch.batchId
+                          )?.unit
+                        }
+                      </Typography>
+                      <Typography variant="h6">
+                        Carton Size:{" "}
+                        {
+                          batches.find(
+                            (batch) => batch.batchId === dispatch.batchId
+                          )?.cartonSize
+                        }
+                      </Typography>
+                      <Typography variant="h6">
+                        Initial Supply:{" "}
+                        {
+                          batches.find(
+                            (batch) => batch.batchId === dispatch.batchId
+                          )?.totalSupply
+                        }
+                      </Typography>
+                      <Typography variant="h6">
+                        Available Supply:{" "}
+                        {
+                          batches.find(
+                            (batch) => batch.batchId === dispatch.batchId
+                          )?.quantity
+                        }
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
               </Box>
               <Box mt={3} display="flex" justifyContent="space-between">
                 <TextField
@@ -189,8 +276,8 @@ export default function DispatchForm() {
                       ...prevState,
                       distributor: {
                         distributorAddress: event.target.value,
-                        distributedAmount:
-                          prevState.distributor.distributedAmount,
+                        distributorSupply:
+                          prevState.distributor.distributorSupply,
                       },
                     }))
                   }
@@ -216,7 +303,7 @@ export default function DispatchForm() {
                       distributor: {
                         distributorAddress:
                           prevState.distributor.distributorAddress,
-                        distributedAmount: Number(event.target.value),
+                        distributorSupply: Number(event.target.value),
                       },
                     }));
                   }}
