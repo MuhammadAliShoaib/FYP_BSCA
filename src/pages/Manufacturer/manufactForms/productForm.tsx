@@ -27,12 +27,12 @@ export default function ProductForm() {
 
   const getMedicines = async () => {
     try {
-      const result = (
+      const response = (
         await axios.get(`/api/manufacturer/medicines`, {
           params: { manufacturer: auth.address },
         })
       ).data;
-      setMeds(result);
+      setMeds(response);
     } catch (error) {
       console.log(error);
     }
@@ -46,7 +46,7 @@ export default function ProductForm() {
   const formik = useFormik({
     initialValues: {
       name: "",
-      dosage: 0,
+      dosage: null,
       activeIngredient: "",
       manufacturer: auth.address,
     },
@@ -92,8 +92,20 @@ export default function ProductForm() {
         });
         setFlag(true);
         console.log(data);
-      } catch (error) {
-        console.error("Error submitting form:", error);
+      } catch (error: any) {
+        if (error.response && error.response.status === 400) {
+          toast.error(`${error.response.data.message}`, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+        console.error("Error:", error);
       }
     },
   });
@@ -239,8 +251,8 @@ export default function ProductForm() {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary={medicine.name}
-                  secondary={medicine.activeIngredient}
+                  primary={medicine.completeName}
+                  secondary={`Dosage: ${medicine.dosage} Mg`}
                 />
               </ListItem>
             ))}

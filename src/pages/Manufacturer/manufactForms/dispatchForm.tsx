@@ -43,7 +43,9 @@ export default function DispatchForm() {
 
   const filterBatches = async () => {
     if (medicine !== "") {
-      const [selectedMedicine] = meds.filter((med) => med.name === medicine);
+      const [selectedMedicine] = meds.filter(
+        (med) => med.completeName === medicine
+      );
       setBatches(selectedMedicine.medicineBatches);
     }
   };
@@ -81,22 +83,49 @@ export default function DispatchForm() {
 
   const handleDispatch = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await axios.post("/api/manufacturer/dispatch", {
-      dispatch,
-    });
-    if (!response) {
-      throw new Error("Dispatch Failed");
+    try {
+      const response = await axios.post("/api/manufacturer/dispatch", {
+        dispatch,
+      });
+      if (!response) {
+        throw new Error("Dispatch Failed");
+      }
+      toast.success(`${response.data.message}`, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        toast.error(`${error.response.message}`, {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else if (error.response && error.response.status === 404) {
+        toast.error(`${error.response.message}`, {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+      console.log("Error: ", error);
     }
-    toast.success(`${response.data.message}`, {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
   };
 
   useEffect(() => {
@@ -160,10 +189,10 @@ export default function DispatchForm() {
                     {meds.map((med) => (
                       <MenuItem
                         key={med.dosage}
-                        value={med.name}
+                        value={med.completeName}
                         sx={{ background: { paper: "white" } }}
                       >
-                        <option label={med.name} />
+                        <option label={med.completeName} />
                       </MenuItem>
                     ))}
                   </TextField>

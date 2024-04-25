@@ -4,15 +4,17 @@ import { db } from "../models/index.js";
 
 router.post("/addProduct", async (req, res) => {
   const { name, dosage, activeIngredient, manufacturer } = req.body;
+  const completeName = [name, dosage, activeIngredient].join(" - ");
   try {
     const product = await db.Product.findOne({ name: req.body.name });
     if (product !== null && product.dosage === dosage) {
-      res.status(401).json({ message: "Product Already Exists" });
+      res.status(400).json({ message: "Product Already Exists" });
     } else {
       await db.Product.create({
         name,
         dosage,
         activeIngredient,
+        completeName,
         manufacturer,
       });
       res.status(200).json({ message: "Product Added" });
@@ -61,7 +63,7 @@ router.post("/createBatch", async (req, res) => {
   try {
     const batch = await db.Batch.findOne({ batchId: req.body.batchId });
     if (batch) {
-      res.status(401).json({ message: "Batch was being duplicated" });
+      res.status(403).json({ message: "Batch was being duplicated" });
     } else {
       await db.Batch.create({
         batchId,
@@ -96,7 +98,7 @@ router.get("/medicineBatches", async (req, res) => {
         $lookup: {
           from: "batches",
           foreignField: "medicine",
-          localField: "name",
+          localField: "completeName",
           as: "medicineBatches",
         },
       },
@@ -170,8 +172,8 @@ router.post("/dispatch", async (req, res) => {
         }
 
         res.status(200).json({ message: "Dispatch successful!" });
-      } else res.status(400).json({ message: "Batch quantity exceeded!" });
-    } else res.status(400).json({ message: "Batch does not exists." });
+      } else res.status(400).json({ message: "Available quantity exceeded!" });
+    } else res.status(404).json({ message: "Batch does not exists." });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal Server Error" });

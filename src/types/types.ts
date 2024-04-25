@@ -8,6 +8,7 @@ export type Medicine = {
   name: string,
   dosage: number,
   activeIngredient: string,
+  completeName: string,
   manufacturer: string,
 }
 
@@ -29,6 +30,7 @@ export type Product = {
   name: string,
   dosage: number,
   activeIngredient: string,
+  completeName: string,
   manufacturer: string,
   medicineBatches: Batch[];
 }

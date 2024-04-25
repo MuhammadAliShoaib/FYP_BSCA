@@ -87,7 +87,9 @@ export default function BatchForm() {
     }),
     onSubmit: async (values) => {
       const unix = +new Date();
-      const name = meds.find((med) => med.name === values.medicine)?.name;
+      const name = meds.find(
+        (med) => med.completeName === values.medicine
+      )?.name;
       const batchId = [name?.toUpperCase(), unix].join("-");
 
       try {
@@ -119,8 +121,20 @@ export default function BatchForm() {
         });
         const data = await response.data;
         console.log(data);
-      } catch (error) {
-        console.error("Error submitting form:", error);
+      } catch (error: any) {
+        if (error.response && error.response.status === 403) {
+          toast.error(`${error.response.message}`, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+        console.error("Error:", error);
       }
     },
   });
@@ -169,8 +183,8 @@ export default function BatchForm() {
                 >
                   {Array.isArray(meds) &&
                     meds.map((med) => (
-                      <MenuItem value={med.name} key={med.name}>
-                        <option label={med.name} />
+                      <MenuItem value={med.completeName} key={med.completeName}>
+                        <option label={med.completeName} />
                       </MenuItem>
                     ))}
                 </TextField>
