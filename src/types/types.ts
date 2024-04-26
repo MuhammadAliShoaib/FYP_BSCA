@@ -37,6 +37,7 @@ export type Product = {
 
 export type Dispatch = {
   batchId: string,
+  courier: string,
   distributor: {
     distributorAddress: string,
     distributorSupply: number
@@ -46,6 +47,7 @@ export type Dispatch = {
 // Used in Distributor Pharmacy Order Form
 export type Dispatches = {
   batchId: string,
+  courier: string,
   distributor: [{
     distributorAddress: string,
     distributedAmount: number

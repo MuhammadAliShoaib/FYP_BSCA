@@ -119,11 +119,9 @@ export default function BatchForm() {
           progress: undefined,
           theme: "light",
         });
-        const data = await response.data;
-        console.log(data);
       } catch (error: any) {
         if (error.response && error.response.status === 403) {
-          toast.error(`${error.response.message}`, {
+          toast.error(`${error.response.data.message}`, {
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,

@@ -51,6 +51,20 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.get("/getCouriers", async (req, res) => {
+  try {
+    const couriers = await db.User.find({ role: "courier" });
+    if (couriers === null) {
+      res.status(404).json({ message: "No couriers registered on platform" });
+    } else {
+      res.status(200).json(couriers);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 // Handles Notifications
 router.post("/notification", async (req, res) => {
   const { senderAddress, receiverAddress, notification, date } = req.body;

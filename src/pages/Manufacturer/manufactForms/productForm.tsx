@@ -91,7 +91,6 @@ export default function ProductForm() {
           theme: "light",
         });
         setFlag(true);
-        console.log(data);
       } catch (error: any) {
         if (error.response && error.response.status === 400) {
           toast.error(`${error.response.data.message}`, {
@@ -242,7 +241,7 @@ export default function ProductForm() {
           <List>
             {meds.map((medicine) => (
               <ListItem
-                key={medicine.name}
+                key={medicine.completeName}
                 style={{ borderBottom: "1px solid black" }}
               >
                 <ListItemAvatar>

@@ -42,15 +42,15 @@ const wagmiConfig = createConfig({
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
-        <Router>
-          <Provider store={store}>
-            <App />
-          </Provider>
-        </Router>
-      </RainbowKitProvider>
-    </WagmiConfig>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <WagmiConfig config={wagmiConfig}>
+    <RainbowKitProvider chains={chains}>
+      <Router>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </Router>
+    </RainbowKitProvider>
+  </WagmiConfig>
+  // </React.StrictMode>
 );

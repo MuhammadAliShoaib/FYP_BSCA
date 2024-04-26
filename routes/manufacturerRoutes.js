@@ -143,37 +143,66 @@ router.post("/dispatch", async (req, res) => {
       batchId: dispatch.batchId,
     });
     const batch = await db.Batch.findOne({ batchId: dispatch.batchId });
-    if (batch) {
-      if (batch.quantity - dispatch.distributor.distributedAmount >= 0) {
-        if (existingDispatch) {
-          batch.quantity -= dispatch.distributor.distributedAmount;
-          existingDispatch.distributor.push({
-            distributedAmount: dispatch.distributor.distributedAmount,
+
+    if (!batch)
+      return res.status(404).json({ message: "Batch does not exists" });
+    if (batch.quantity < dispatch.distributor.distributorSupply)
+      return res
+        .status(400)
+        .json({ message: "Available Batch Quantity Exceeded" });
+
+    if (existingDispatch) {
+      batch.quantity -= dispatch.distributor.distributorSupply;
+      let courierExists = existingDispatch.courier.some((courier) => {
+        courier === dispatch.courier;
+      });
+      if (!courierExists) {
+        existingDispatch.courier.push(dispatch.courier);
+      }
+      let distroExists = existingDispatch.distributor.some(
+        (distro) =>
+          distro.distributorAddress === dispatch.distributor.distributorAddress
+      );
+      if (distroExists) {
+        existingDispatch.distributor.forEach((distro) => {
+          if (
+            distro.distributorAddress ===
+            dispatch.distributor.distributorAddress
+          ) {
+            distro.distributorSupply += dispatch.distributor.distributorSupply;
+          }
+        });
+      } else {
+        existingDispatch.distributor.push({
+          distributorAddress: dispatch.distributor.distributorAddress,
+          distributorSupply: dispatch.distributor.distributorSupply,
+          distributedAmount: 0,
+        });
+      }
+
+      await batch.save();
+      await existingDispatch.save();
+    } else {
+      batch.quantity -= dispatch.distributor.distributorSupply;
+      const newDispatch = await db.Dispatch.create({
+        batchId: dispatch.batchId,
+        status: "Dispatched",
+        courier: [dispatch.courier],
+        distributor: [
+          {
             distributorAddress: dispatch.distributor.distributorAddress,
-          });
+            distributorSupply: dispatch.distributor.distributorSupply,
+            distributedAmount: 0,
+          },
+        ],
+        pharmacy: [],
+        transactions: [],
+      });
+      console.log(newDispatch);
+      await batch.save();
+    }
 
-          await batch.save();
-          await existingDispatch.save();
-        } else {
-          batch.quantity -= dispatch.distributor.distributedAmount;
-          const newDispatch = await db.Dispatch.create({
-            batchId: dispatch.batchId,
-            status: "Dispatched",
-            distributor: [
-              {
-                distributedAmount: dispatch.distributor.distributedAmount,
-                distributorAddress: dispatch.distributor.distributorAddress,
-              },
-            ],
-            pharmacy: [],
-            transactions: [],
-          });
-          await batch.save();
-        }
-
-        res.status(200).json({ message: "Dispatch successful!" });
-      } else res.status(400).json({ message: "Available quantity exceeded!" });
-    } else res.status(404).json({ message: "Batch does not exists." });
+    res.status(200).json({ message: "Dispatch successful!" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal Server Error" });

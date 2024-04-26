@@ -19,8 +19,10 @@ export default function DispatchForm() {
   const [batches, setBatches] = useState<Batch[]>([]);
   const [medicine, setMedicine] = useState("");
   const [distributors, setDistributors] = useState<User[]>([]);
+  const [couriers, setCouriers] = useState<User[]>([]);
   const [dispatch, setDispatch] = useState<Dispatch>({
     batchId: "",
+    courier: "",
     distributor: {
       distributorAddress: "",
       distributorSupply: 0,
@@ -59,20 +61,33 @@ export default function DispatchForm() {
     }
   };
 
+  const getCouriers = async () => {
+    try {
+      const res = (await axios.get("/api/getCouriers")).data;
+      setCouriers(res);
+    } catch (error) {
+      console.log(error, "Response Error");
+    }
+  };
+
   const handleClick = async () => {
     if (dispatch.distributor.distributorAddress.length == 0) {
       return;
     }
     try {
+      const batchId = dispatch.batchId;
+      const distributor = distributors.find(
+        (distro) => distro.address === dispatch.distributor.distributorAddress
+      );
       const res = (
         await axios.post("/api/notification", {
           senderAddress: auth.address,
-          receiverAddress: dispatch.distributor.distributorAddress,
-          notification: `${
-            dispatch.distributor.distributorSupply
-          } ${medicine} of batch ${JSON.stringify(batches)} to distributor ${
-            dispatch.distributor.distributorAddress
-          } is dispatched`,
+          receiverAddress: dispatch.courier,
+          notification: {
+            batchId,
+            deliverTo: distributor?.name,
+            dispatchDetails: dispatch,
+          },
           date: new Date(),
         })
       ).data;
@@ -102,7 +117,7 @@ export default function DispatchForm() {
       });
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
-        toast.error(`${error.response.message}`, {
+        toast.error(`${error.response.data.message}`, {
           position: "bottom-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -113,7 +128,7 @@ export default function DispatchForm() {
           theme: "light",
         });
       } else if (error.response && error.response.status === 404) {
-        toast.error(`${error.response.message}`, {
+        toast.error(`${error.response.data.message}`, {
           position: "bottom-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -132,6 +147,7 @@ export default function DispatchForm() {
     getMeds();
     filterBatches();
     getDistros();
+    getCouriers();
   }, [medicine]);
 
   return (
@@ -338,6 +354,30 @@ export default function DispatchForm() {
                   }}
                   variant="outlined"
                 />
+              </Box>
+              <Box mt={3} display="flex">
+                <TextField
+                  required
+                  fullWidth
+                  select
+                  name="courier"
+                  label="Courier"
+                  defaultValue={""}
+                  onChange={(event) =>
+                    setDispatch((prevState) => ({
+                      ...prevState,
+                      courier: event.target.value,
+                    }))
+                  }
+                  variant="outlined"
+                >
+                  <MenuItem defaultValue={""} />
+                  {couriers.map((courier) => (
+                    <MenuItem key={courier.address} value={courier.address}>
+                      <option label={courier.name} />
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Box>
               <Box mt={3} display="flex" justifyContent="flex-end">
                 <Button

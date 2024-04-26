@@ -4,11 +4,12 @@ const { Schema, model } = mongoose;
 const schemaDispatch = Schema({
   batchId: String,
   status: String,
+  courier: [String],
   distributor: [
     {
+      distributorAddress: String,
       distributorSupply: Number,
       distributedAmount: Number,
-      distributorAddress: String,
     },
   ],
   pharmacy: [
