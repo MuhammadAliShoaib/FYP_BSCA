@@ -59,6 +59,32 @@ export default function PharmaOrder() {
     }
   };
 
+  const handleClick = async () => {
+    if (updateDispatch.pharmaAddress.length == 0) {
+      return;
+    }
+    try {
+      const batchId = updateDispatch.batchId;
+      const pharma = pharmacies.find(
+        (pharmacy) => pharmacy.address === updateDispatch.pharmaAddress
+      );
+      const res = (
+        await axios.post("/api/notification", {
+          senderAddress: auth.address,
+          receiverAddress: updateDispatch.pharmaAddress,
+          notification: {
+            batchId,
+            deliverTo: pharma?.name,
+            dispatchDetails: updateDispatch,
+          },
+          date: new Date(),
+        })
+      ).data;
+    } catch (error) {
+      console.log(error, "Response Error");
+    }
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const response = await axios.post("/api/distributor/updateDispatch", {
@@ -190,6 +216,7 @@ export default function PharmaOrder() {
               <Box mt={3} display="flex" justifyContent="flex-end">
                 <Button
                   type="submit"
+                  onClick={handleClick}
                   variant="contained"
                   sx={{
                     paddingTop: "10px",
