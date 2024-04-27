@@ -44,26 +44,26 @@ const rows = [
   {
     id:"MED-PAN-1-13092023",
     manufactuter:"Medios",
+    distributor : "Muhammad",
+    courier : "Ali",
     medicine:"Panadol",
     quantity : 100,
-    distributor : "Muhammad Ali",
     batchTokeId:10,
     expiry  : "13/09/2024",
     mfg  : "13/09/2024",
-    status :  "Reached Warehouse",
     sold : 0,
     created : "13/09/2024",
   },
   {
     id:"MED-PAN-1-06112023",
     manufactuter:"Medios",
+    distributor : "Muhammad",
+    courier : "Ali",
     medicine:"Panadol",
     quantity : 1000,
-    distributor : "Muhammad Ali",
     batchTokeId:13,
     expiry  : "13/09/2024",
     mfg  : "13/09/2024",
-    status :  "manufactured",
     sold : 0,
     created : "13/09/2024",
   },
@@ -77,16 +77,13 @@ export default function BatchTable() {
           <TableHead>
             <TableRow>
               <StyledTableCell>ID</StyledTableCell>
-              <StyledTableCell>Manufacturer</StyledTableCell>
               <StyledTableCell>Medicine</StyledTableCell>
-              <StyledTableCell>Quantity</StyledTableCell>
+              <StyledTableCell>Manufacturer</StyledTableCell>
               <StyledTableCell>Distributor</StyledTableCell>
-              <StyledTableCell>Batch Token ID</StyledTableCell>
+              <StyledTableCell>Courier</StyledTableCell>
+              <StyledTableCell>Quantity</StyledTableCell>
               <StyledTableCell>Expiry</StyledTableCell>
               <StyledTableCell>MFG</StyledTableCell>
-              <StyledTableCell>Status</StyledTableCell>
-              <StyledTableCell>Sold</StyledTableCell>
-              <StyledTableCell>Created</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -95,16 +92,13 @@ export default function BatchTable() {
                 <StyledTableCell component="th" scope="row">
                   {row.id}
                 </StyledTableCell>
-                <StyledTableCell>{row.manufactuter}</StyledTableCell>
                 <StyledTableCell>{row.medicine}</StyledTableCell>
-                <StyledTableCell>{row.quantity}</StyledTableCell>
+                <StyledTableCell>{row.manufactuter}</StyledTableCell>
                 <StyledTableCell>{row.distributor}</StyledTableCell>
-                <StyledTableCell>{row.batchTokeId}</StyledTableCell>
+                <StyledTableCell>{row.courier}</StyledTableCell>
+                <StyledTableCell>{row.quantity}</StyledTableCell>
                 <StyledTableCell>{row.expiry}</StyledTableCell>
                 <StyledTableCell>{row.mfg}</StyledTableCell>
-                <StyledTableCell>{row.status}</StyledTableCell>
-                <StyledTableCell>{row.sold}</StyledTableCell>
-                <StyledTableCell>{row.created}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
