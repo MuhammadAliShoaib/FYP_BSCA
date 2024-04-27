@@ -11,6 +11,7 @@ import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import { socket } from "../socket";
 import axios from "axios";
 import { useAppSelector } from "../config/redux/hooks";
+import { Button } from "@mui/material";
 
 interface Column {
   id: "date" | "notification";
@@ -144,10 +145,10 @@ export default function NotificationTable() {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ width: 170, paddingLeft: "25px" }}>
+              <TableCell sx={{ width: '10%', paddingLeft: "25px" }}>
                 <QueryStatsIcon style={{ marginRight: "10px" }} />
               </TableCell>
-              <TableCell sx={{ width: "100%", paddingLeft: "25px" }}>
+              <TableCell sx={{ width: "80%", paddingLeft: "25px" }}>
                 Your latest activity across all projects
               </TableCell>
             </TableRow>
@@ -166,13 +167,23 @@ export default function NotificationTable() {
               </TableCell>
               <TableCell
                 sx={{
-                  width: "100%",
                   paddingLeft: "25px",
                   background: "#a2d2ff",
                   color: "black",
                 }}
               >
                 Activities
+              </TableCell>
+              <TableCell
+                sx={{
+                  paddingLeft: "25px",
+                  background: "#a2d2ff",
+                  color: "black",
+                  display:'flex',
+                  justifyContent:'center'
+                }}
+              >
+                Status
               </TableCell>
             </TableRow>
           </TableHead>
@@ -207,6 +218,25 @@ export default function NotificationTable() {
                     Supply:{" "}
                     {row.dispatchDetails?.distributor?.distributorSupply}
                   </TableCell>
+                  <TableCell
+                    key="status"
+                    align="left"
+                    sx={{
+                      paddingLeft: "25px",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    <Button
+                      href=""
+                      size="medium"
+                      variant="contained"
+                    >
+                      Delivered
+                    </Button>
+                  </TableCell>
+
                 </TableRow>
               ))}
           </TableBody>
