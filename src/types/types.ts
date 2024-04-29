@@ -39,19 +39,37 @@ export type Dispatch = {
   batchId: string,
   courier: string,
   distributor: {
+    distributorName: string,
     distributorAddress: string,
     distributorSupply: number
   }
 }
 
+
+export type Distributor = {
+    status: string;
+    distributorName: string,
+    distributorAddress: string;
+    distributorSupply: number;
+    distributedAmount: number;
+    _id: string;
+};
 // Used in Distributor Pharmacy Order Form
 export type Dispatches = {
-  batchId: string,
-  courier: string,
-  distributor: [{
-    distributorAddress: string,
-    distributedAmount: number
-  }]
+  batchId: string;
+    courier: string[];
+    distributor: Distributor[];
+    pharmacy?: [
+        {
+            pharmaName: string,
+            pharmaAddress: string,
+            deliveredAmount: number,
+            medicineSold: number,
+            pharmaTransactions: [string],
+        },
+    ];
+    transactions?: string[]; 
+    batch: Batch;
 }
 
 export type Stock ={

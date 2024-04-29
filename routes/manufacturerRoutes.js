@@ -153,9 +153,9 @@ router.post("/dispatch", async (req, res) => {
 
     if (existingDispatch) {
       batch.quantity -= dispatch.distributor.distributorSupply;
-      let courierExists = existingDispatch.courier.some((courier) => {
-        courier === dispatch.courier;
-      });
+      let courierExists = existingDispatch.courier.some(
+        (courier) => courier === dispatch.courier
+      );
       if (!courierExists) {
         existingDispatch.courier.push(dispatch.courier);
       }
@@ -170,10 +170,13 @@ router.post("/dispatch", async (req, res) => {
             dispatch.distributor.distributorAddress
           ) {
             distro.distributorSupply += dispatch.distributor.distributorSupply;
+            distro.status = "Dispatched";
           }
         });
       } else {
         existingDispatch.distributor.push({
+          status: dispatch.status,
+          distributorName: dispatch.distributor.distributorName,
           distributorAddress: dispatch.distributor.distributorAddress,
           distributorSupply: dispatch.distributor.distributorSupply,
           distributedAmount: 0,
@@ -186,10 +189,11 @@ router.post("/dispatch", async (req, res) => {
       batch.quantity -= dispatch.distributor.distributorSupply;
       const newDispatch = await db.Dispatch.create({
         batchId: dispatch.batchId,
-        status: "Dispatched",
         courier: [dispatch.courier],
         distributor: [
           {
+            status: "Dispatched",
+            distributorName: dispatch.distributor.distributorName,
             distributorAddress: dispatch.distributor.distributorAddress,
             distributorSupply: dispatch.distributor.distributorSupply,
             distributedAmount: 0,

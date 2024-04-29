@@ -5,9 +5,25 @@ import { db } from "../models/index.js";
 // Gets batches dispatched to Distributor to create order for Pharmacy
 router.get("/getDispatches", async (req, res) => {
   try {
-    const dispatches = await db.Dispatch.find({
-      "distributor.distributorAddress": req.query.distributorAddress,
-    });
+    const dispatches = await db.Dispatch.aggregate([
+      {
+        $match: {
+          "distributor.distributorAddress":
+            "0x7e3989EC5689f60aED26e683c8f87cB9A4a22DC4",
+        },
+      },
+      {
+        $lookup: {
+          from: "batches",
+          foreignField: "batchId",
+          localField: "batchId",
+          as: "batch",
+        },
+      },
+      {
+        $unwind: "$batch",
+      },
+    ]);
     if (dispatches) {
       res.status(200).json(dispatches);
     } else {

@@ -3,10 +3,11 @@ const { Schema, model } = mongoose;
 
 const schemaDispatch = Schema({
   batchId: String,
-  status: String,
   courier: [String],
   distributor: [
     {
+      status: String,
+      distributorName: String,
       distributorAddress: String,
       distributorSupply: Number,
       distributedAmount: Number,
@@ -14,6 +15,7 @@ const schemaDispatch = Schema({
   ],
   pharmacy: [
     {
+      pharmaName: String,
       pharmaAddress: String,
       deliveredAmount: Number,
       medicineSold: Number,

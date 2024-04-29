@@ -24,6 +24,7 @@ export default function DispatchForm() {
     batchId: "",
     courier: "",
     distributor: {
+      distributorName: "",
       distributorAddress: "",
       distributorSupply: 0,
     },
@@ -85,7 +86,7 @@ export default function DispatchForm() {
           receiverAddress: dispatch.courier,
           notification: {
             batchId,
-            deliverTo: distributor?.name,
+            deliverTo: distributor?.address,
             dispatchDetails: dispatch,
           },
           date: new Date(),
@@ -98,6 +99,10 @@ export default function DispatchForm() {
 
   const handleDispatch = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    dispatch.distributor.distributorName =
+      distributors.find(
+        (distro) => distro.address === dispatch.distributor.distributorAddress
+      )?.name || "Distro";
     try {
       const response = await axios.post("/api/manufacturer/dispatch", {
         dispatch,
@@ -320,6 +325,7 @@ export default function DispatchForm() {
                     setDispatch((prevState) => ({
                       ...prevState,
                       distributor: {
+                        distributorName: prevState.distributor.distributorName,
                         distributorAddress: event.target.value,
                         distributorSupply:
                           prevState.distributor.distributorSupply,
@@ -346,6 +352,7 @@ export default function DispatchForm() {
                     setDispatch((prevState) => ({
                       ...prevState,
                       distributor: {
+                        distributorName: prevState.distributor.distributorName,
                         distributorAddress:
                           prevState.distributor.distributorAddress,
                         distributorSupply: Number(event.target.value),
