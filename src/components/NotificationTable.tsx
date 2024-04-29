@@ -174,17 +174,19 @@ export default function NotificationTable() {
               >
                 Activities
               </TableCell>
-              <TableCell
-                sx={{
-                  paddingLeft: "25px",
-                  background: "#a2d2ff",
-                  color: "black",
-                  display:'flex',
-                  justifyContent:'center'
-                }}
-              >
-                Status
-              </TableCell>
+              {auth.role != "manufacturer" &&
+                <TableCell
+                  sx={{
+                    paddingLeft: "25px",
+                    background: "#a2d2ff",
+                    color: "black",
+                    display: 'flex',
+                    justifyContent: 'center'
+                  }}
+                >
+                  Status
+                </TableCell>
+              }
             </TableRow>
           </TableHead>
           <TableBody>
@@ -218,25 +220,28 @@ export default function NotificationTable() {
                     Supply:{" "}
                     {row.dispatchDetails?.distributor?.distributorSupply}
                   </TableCell>
-                  <TableCell
-                    key="status"
-                    align="left"
-                    sx={{
-                      paddingLeft: "25px",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    <Button
-                      href=""
-                      size="medium"
-                      variant="contained"
-                    >
-                      Delivered
-                    </Button>
-                  </TableCell>
+                  {auth.role != "manufacturer" &&
 
+                    <TableCell
+                      key="status"
+                      align="left"
+                      sx={{
+                        paddingLeft: "25px",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      <Button
+                        href=""
+                        size="medium"
+                        variant="contained"
+                      >
+                        Delivered
+                      </Button>
+                    </TableCell>
+
+                  }
                 </TableRow>
               ))}
           </TableBody>
