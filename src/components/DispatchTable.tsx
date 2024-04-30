@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useAppSelector } from "../config/redux/hooks.tsx";
-import { Product } from "../types/types.ts";
+import { Dispatches } from "../types/types.ts";
 import axios from "axios";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -32,25 +32,25 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function BatchTable() {
+export default function DispatchTable() {
   const { auth } = useAppSelector((state) => state.auth);
-  const [batches, setBatches] = useState<Product[]>([]);
+  const [dispatches, setDipatches] = useState<Dispatches[]>([]);
 
-  const getBatches = async () => {
+  const getDispatches = async () => {
     try {
-      const response = await axios.get(`/api/manufacturer/medicineBatches`, {
-        params: { manufacturer: auth.address },
+      const response = await axios.get(`/api/distributor/getDispatches`, {
+        params: { distributorAddress: auth.address },
       });
 
       console.log(response.data);
-      setBatches(response.data);
+      setDipatches(response.data);
     } catch (error) {
       console.log("Error: ", error);
     }
   };
 
   useEffect(() => {
-    getBatches();
+    getDispatches();
   }, []);
 
   return (
@@ -61,33 +61,44 @@ export default function BatchTable() {
             <TableRow>
               <StyledTableCell>ID</StyledTableCell>
               <StyledTableCell>Medicine</StyledTableCell>
-              <StyledTableCell>Dosage</StyledTableCell>
-              <StyledTableCell>Active Ingredient</StyledTableCell>
+              <StyledTableCell>Manufacturer</StyledTableCell>
+              <StyledTableCell>Status</StyledTableCell>
+              {/* <StyledTableCell>Courier</StyledTableCell> */}
               <StyledTableCell>Quantity</StyledTableCell>
               <StyledTableCell>MFG</StyledTableCell>
               <StyledTableCell>Expiry</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {batches.map((product) =>
-              product.medicineBatches.map((batch) => (
-                <StyledTableRow key={batch.batchId}>
-                  <StyledTableCell component="th" scope="row">
-                    {batch.batchId}
-                  </StyledTableCell>
-                  <StyledTableCell>{product.completeName}</StyledTableCell>
-                  <StyledTableCell>{product.dosage}</StyledTableCell>
-                  <StyledTableCell>{product.activeIngredient}</StyledTableCell>
-                  <StyledTableCell>{batch.totalSupply}</StyledTableCell>
-                  <StyledTableCell>
-                    {new Date(batch.mfg).toLocaleDateString("en-GB")}
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    {new Date(batch.exp).toLocaleDateString("en-GB")}
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))
-            )}
+            {dispatches.map((dispatch) => (
+              <StyledTableRow key={dispatch.batchId}>
+                <StyledTableCell component="th" scope="row">
+                  {dispatch.batchId}
+                </StyledTableCell>
+                <StyledTableCell>{dispatch.batch.medicine}</StyledTableCell>
+                <StyledTableCell>{dispatch.batch.manufacturer}</StyledTableCell>
+                <StyledTableCell>
+                  {
+                    dispatch.distributor.find(
+                      (distro) => distro.distributorAddress === auth.address
+                    )?.status
+                  }
+                </StyledTableCell>
+                <StyledTableCell>
+                  {
+                    dispatch.distributor.find(
+                      (distro) => distro.distributorAddress === auth.address
+                    )?.distributorSupply
+                  }
+                </StyledTableCell>
+                <StyledTableCell>
+                  {new Date(dispatch.batch.mfg).toLocaleDateString("en-GB")}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {new Date(dispatch.batch.exp).toLocaleDateString("en-GB")}
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -96,5 +107,5 @@ export default function BatchTable() {
 }
 
 {
-  /* <StyledTableCell>{product.courier}</StyledTableCell> */
+  /* <StyledTableCell>{dispatch.courier}</StyledTableCell> */
 }
