@@ -1,4 +1,3 @@
-import React from "react";
 import BatchTable from "../../components/BatchTable";
 import Header from "../../components/Header";
 import { Container, Grid } from "@mui/material";
