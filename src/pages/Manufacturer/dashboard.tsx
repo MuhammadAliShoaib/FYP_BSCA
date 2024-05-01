@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
-import { Box, Container, Grid } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import { useAppSelector } from "../../config/redux/hooks";
 import { socket } from "../../socket";
 import BatchTable from "../../components/BatchTable";
+import { ThemeContext } from "../../config/Context/themeProvider";
+import { useContext } from "react";
 
 let start = true;
 
 export default function Dashboard() {
-  // const { auth } = useAppSelector(
-  //     (state) => state.auth
-  // );
+  const { auth } = useAppSelector((state) => state.auth);
+  const ctx = useContext(ThemeContext);
 
   useEffect(() => {
     if (start) {
@@ -26,25 +27,12 @@ export default function Dashboard() {
       <Header title="Dashboard" />
       <Box sx={{ paddingTop: "25px" }}>
         <Container>
-          <Grid container spacing={3}>
-            {[1, 2, 3, 4].map((item) => (
-              <Grid item xs={12} md={3} key={item} className="flexCenter">
-                <div className="messagesDiv">
-                  <p
-                    style={{
-                      fontFamily: "Poppins",
-                      fontWeight: 600,
-                      fontSize: 50,
-                      margin: 0,
-                    }}
-                  >
-                    4
-                  </p>
-                  <div>New messages</div>
-                </div>
-              </Grid>
-            ))}
-          </Grid>
+          <Typography
+            variant="h2"
+            color={ctx.mode === "light" ? "black" : "white"}
+          >
+            Batches Created By {auth.name}
+          </Typography>
         </Container>
 
         <Container style={{ marginTop: "20px", marginBottom: "20px" }}>

@@ -123,11 +123,11 @@ export default function ManufacturerMain() {
       route: "dispatch",
       icon: <LocalShippingIcon />,
     },
-    // {
-    //     Name: "Batches",
-    //     route: "batches",
-    //     icon: <TimelineIcon />,
-    // },
+    {
+      Name: "Batches",
+      route: "batches",
+      icon: <TimelineIcon />,
+    },
   ]);
 
   const handleDrawerOpen = () => {
@@ -233,7 +233,7 @@ export default function ManufacturerMain() {
           <Route path="/addproduct" element={<ProductForm />} />
           <Route path="/createbatch" element={<BatchForm />} />
           <Route path="/dispatch" element={<DispatchForm />} />
-          {/* <Route path="/batches" element={<Batches />} /> */}
+          <Route path="/batches" element={<Batches />} />
         </Routes>
       </Box>
     </Box>

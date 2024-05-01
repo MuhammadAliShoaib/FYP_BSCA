@@ -579,7 +579,12 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
                 "-webkit-text-fill-color": "black",
                 WebkitBoxShadow: "0 0 0 1000px #FFF inset",
               },
-
+              "& .MuiInputBase-input": {
+                color: "white",
+                "&::placeholder": {
+                  opacity: 0.7,
+                },
+              },
               "& .MuiSelect-select": {
                 color: "black",
               },
