@@ -31,6 +31,7 @@
     "mongoose": "^8.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-qr-code": "^2.0.12",
     "react-redux": "^9.0.4",
     "react-router-dom": "^6.20.1",
     "react-toastify": "^9.1.3",
