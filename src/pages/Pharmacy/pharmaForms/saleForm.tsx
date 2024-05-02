@@ -30,9 +30,7 @@ function SaleForm() {
           params: { pharmaAddress: auth.address },
         })
       ).data;
-      //   console.log(res)
       setStock(res);
-      //   console.log('From Dispatch: ', dispatches)
     } catch (error) {
       console.log(error, "Response Error");
     }

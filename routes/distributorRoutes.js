@@ -55,7 +55,6 @@ router.get("/getPharma", async (req, res) => {
 // Update Dispatch
 router.post("/updateDispatch", async (req, res) => {
   const { updateDispatch } = req.body;
-  console.log(updateDispatch.batchId, "  ", updateDispatch.quantity);
   try {
     const dispatch = await db.Dispatch.findOne({
       batchId: updateDispatch.batchId,
@@ -64,6 +63,7 @@ router.post("/updateDispatch", async (req, res) => {
       dispatch.distributor.forEach((distro) => {
         if (distro.distributorAddress === updateDispatch.distroAddress) {
           distro.distributedAmount -= updateDispatch.quantity;
+          distro.status = "Dispacted to Pharmacy";
         }
       });
       let pharmacyExists = false;

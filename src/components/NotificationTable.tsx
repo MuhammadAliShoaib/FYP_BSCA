@@ -11,7 +11,9 @@ import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import { socket } from "../socket";
 import axios from "axios";
 import { useAppSelector } from "../config/redux/hooks";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
+import { DispatchDetails } from "../types/types";
+import { toast } from "react-toastify";
 
 interface Column {
   id: "date" | "notification";
@@ -36,8 +38,10 @@ const rows = [
         batchId: "12334",
         courier: "abc",
         distributor: {
-          distributorAddress: "1234",
-          distributorSupply: 400,
+          status: "Dispatched to Distributor",
+          distributorName: "",
+          distributorAddress: "",
+          distributorSupply: 0,
         },
       },
     },
@@ -54,12 +58,16 @@ export default function NotificationTable() {
       batchId: "12334",
       deliverTo: "Distro",
       dispatchDetails: {
-        batchId: "12334",
-        courier: "abc",
+        batchId: "",
+        courier: "",
         distributor: {
-          distributorAddress: "1234",
-          distributorSupply: 400,
+          status: "",
+          distributorName: "",
+          distributorAddress: "",
+          distributorSupply: 0,
         },
+        pharmaAddress: "",
+        quantity: 0,
       },
     },
   ]);
@@ -76,14 +84,6 @@ export default function NotificationTable() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
-  // React.useEffect(() => {
-  //   socket.on("getNotification", (data) => {
-  //     setNotification((prev) => [...prev, {
-  //       _id: Math.floor(Math.random()), date: "04/10/2024", notification: data
-  //     }]);
-  //   });
-  // }, [socket, notification]);
 
   React.useEffect(() => {
     async function getNotification() {
@@ -133,6 +133,65 @@ export default function NotificationTable() {
     getNotification();
   }, []);
 
+  const statusUpdate = async (
+    dispatchDetails: DispatchDetails,
+    batchId: string,
+    deliverTo: string
+  ) => {
+    if (dispatchDetails.distributor.status === "Dispatched to Distributor") {
+      dispatchDetails.distributor.status = "Delivered to Distributor";
+    } else if (dispatchDetails.distributor.status === "Dispatched to Pharmacy")
+      dispatchDetails.distributor.status = "Delivered to Pharmacy";
+    try {
+      const response = await axios.put(`/api/updateStatus`, {
+        dispatchDetails,
+      });
+      if (!response) {
+        throw new Error("Update Failed");
+      }
+      try {
+        const res = (
+          await axios.post("/api/notification", {
+            senderAddress: auth.address,
+            receiverAddress: deliverTo,
+            notification: {
+              batchId,
+              deliverTo,
+              dispatchDetails,
+            },
+            date: new Date(),
+          })
+        ).data;
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+      toast.success(`${response.data.message}`, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } catch (error: any) {
+      console.log("Error: ", error);
+      if (error.response && error.response.status === 500) {
+        toast.error(`${error.response.data.message}`, {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    }
+  };
+
   return (
     <Paper
       sx={{
@@ -145,7 +204,7 @@ export default function NotificationTable() {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ width: '10%', paddingLeft: "25px" }}>
+              <TableCell sx={{ width: "10%", paddingLeft: "25px" }}>
                 <QueryStatsIcon style={{ marginRight: "10px" }} />
               </TableCell>
               <TableCell sx={{ width: "80%", paddingLeft: "25px" }}>
@@ -174,19 +233,19 @@ export default function NotificationTable() {
               >
                 Activities
               </TableCell>
-              {auth.role != "manufacturer" &&
+              {auth.role != "manufacturer" && (
                 <TableCell
                   sx={{
                     paddingLeft: "25px",
                     background: "#a2d2ff",
                     color: "black",
-                    display: 'flex',
-                    justifyContent: 'center'
+                    display: "flex",
+                    justifyContent: "center",
                   }}
                 >
                   Status
                 </TableCell>
-              }
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -216,12 +275,11 @@ export default function NotificationTable() {
                       textOverflow: "ellipsis",
                     }}
                   >
-                    Batch ID: {row.batchId}, Delivered To: {row.deliverTo},
-                    Supply:{" "}
+                    Batch ID: {row.batchId}, Delivered To:{" "}
+                    {row.dispatchDetails.distributor.distributorName}, Supply:{" "}
                     {row.dispatchDetails?.distributor?.distributorSupply}
                   </TableCell>
-                  {auth.role != "manufacturer" &&
-
+                  {auth.role != "manufacturer" && (
                     <TableCell
                       key="status"
                       align="left"
@@ -232,16 +290,28 @@ export default function NotificationTable() {
                         textOverflow: "ellipsis",
                       }}
                     >
-                      <Button
-                        href=""
-                        size="medium"
-                        variant="contained"
-                      >
-                        Delivered
-                      </Button>
+                      {row.dispatchDetails.distributor.status ===
+                        "Dispatched to Distributor" ||
+                      row.dispatchDetails.distributor.status ===
+                        "Dispatched to Pharmacy" ? (
+                        <Button
+                          size="medium"
+                          variant="contained"
+                          onClick={() =>
+                            statusUpdate(
+                              row.dispatchDetails,
+                              row.batchId,
+                              row.deliverTo
+                            )
+                          }
+                        >
+                          {row.dispatchDetails.distributor.status}
+                        </Button>
+                      ) : (
+                        <Typography>Delivered</Typography>
+                      )}
                     </TableCell>
-
-                  }
+                  )}
                 </TableRow>
               ))}
           </TableBody>
