@@ -11,6 +11,7 @@ const schemaDispatch = Schema({
       distributorAddress: String,
       distributorSupply: Number,
       distributedAmount: Number,
+      distroTransactions: [String],
     },
   ],
   pharmacy: [

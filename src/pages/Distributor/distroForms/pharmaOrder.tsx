@@ -18,8 +18,14 @@ export default function PharmaOrder() {
   const [dispatches, setDipatches] = useState<Dispatches[]>([]);
   const [pharmacies, setPharmacies] = useState<User[]>([]);
   const [updateDispatch, setUpdateDispatch] = useState({
-    distroAddress: auth.address,
     batchId: "",
+    courier: "",
+    distributor: {
+      status: "Dispatched to Pharmacy",
+      distributorName: auth.name,
+      distributorAddress: auth.address,
+      distributorSupply: 0,
+    },
     pharmaAddress: "",
     quantity: 0,
   });

@@ -170,12 +170,12 @@ router.post("/dispatch", async (req, res) => {
             dispatch.distributor.distributorAddress
           ) {
             distro.distributorSupply += dispatch.distributor.distributorSupply;
-            distro.status = "Dispatched";
+            distro.status = dispatch.distributor.status;
           }
         });
       } else {
         existingDispatch.distributor.push({
-          status: dispatch.status,
+          status: dispatch.distributor.status,
           distributorName: dispatch.distributor.distributorName,
           distributorAddress: dispatch.distributor.distributorAddress,
           distributorSupply: dispatch.distributor.distributorSupply,

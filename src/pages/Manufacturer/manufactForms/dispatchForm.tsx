@@ -24,6 +24,7 @@ export default function DispatchForm() {
     batchId: "",
     courier: "",
     distributor: {
+      status: "Dispatched to Distributor",
       distributorName: "",
       distributorAddress: "",
       distributorSupply: 0,
@@ -325,6 +326,7 @@ export default function DispatchForm() {
                     setDispatch((prevState) => ({
                       ...prevState,
                       distributor: {
+                        status: prevState.distributor.status,
                         distributorName: prevState.distributor.distributorName,
                         distributorAddress: event.target.value,
                         distributorSupply:
@@ -352,6 +354,7 @@ export default function DispatchForm() {
                     setDispatch((prevState) => ({
                       ...prevState,
                       distributor: {
+                        status: prevState.distributor.status,
                         distributorName: prevState.distributor.distributorName,
                         distributorAddress:
                           prevState.distributor.distributorAddress,

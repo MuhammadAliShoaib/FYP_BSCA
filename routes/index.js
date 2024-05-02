@@ -95,3 +95,25 @@ router.get("/getNotification/:address", async (req, res) => {
 });
 
 export default router;
+
+router.put(`/updateStatus`, async (req, res) => {
+  const { dispatchDetails } = req.body;
+  try {
+    const dispatch = await db.Dispatch.find({
+      batchId: dispatchDetails.batchId,
+    });
+    if (dispatch) {
+      dispatch.distributor.forEach((distro) => {
+        if (
+          distro.distributorAddress ===
+          dispatchDetails.distributor.distributorAddress
+        ) {
+          distro.status = dispatchDetails.distributor.status;
+        }
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});

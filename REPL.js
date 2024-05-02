@@ -23,24 +23,28 @@ import { db } from "./models/index.js";
 //   .then((res) => console.log(JSON.stringify(res, null, 4)))
 //   .then(() => process.exit());
 
-db.Dispatch.aggregate([
-  {
-    $match: {
-      "distributor.distributorAddress":
-        "0x7e3989EC5689f60aED26e683c8f87cB9A4a22DC4",
-    },
-  },
-  {
-    $lookup: {
-      from: "batches",
-      foreignField: "batchId",
-      localField: "batchId",
-      as: "batch",
-    },
-  },
-  {
-    $unwind: "$batch",
-  },
-])
+// db.Dispatch.aggregate([
+//   {
+//     $match: {
+//       "distributor.distributorAddress":
+//         "0x7e3989EC5689f60aED26e683c8f87cB9A4a22DC4",
+//     },
+//   },
+//   {
+//     $lookup: {
+//       from: "batches",
+//       foreignField: "batchId",
+//       localField: "batchId",
+//       as: "batch",
+//     },
+//   },
+//   {
+//     $unwind: "$batch",
+//   },
+// ])
+//   .then((res) => console.log(JSON.stringify(res, null, 4)))
+//   .then(() => process.exit());
+
+db.Dispatch.find({ batchId: "FOLIC-1714411922315" })
   .then((res) => console.log(JSON.stringify(res, null, 4)))
   .then(() => process.exit());
