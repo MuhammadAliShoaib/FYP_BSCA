@@ -80,7 +80,7 @@ export default function PharmaOrder() {
           receiverAddress: updateDispatch.pharmaAddress,
           notification: {
             batchId,
-            deliverTo: pharma?.name,
+            deliverTo: pharma?.address,
             dispatchDetails: updateDispatch,
           },
           date: new Date(),
