@@ -580,7 +580,7 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
                 WebkitBoxShadow: "0 0 0 1000px #FFF inset",
               },
               "& .MuiInputBase-input": {
-                color: "white",
+                color: "black",
                 "&::placeholder": {
                   opacity: 0.7,
                 },

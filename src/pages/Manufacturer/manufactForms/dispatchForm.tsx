@@ -76,6 +76,10 @@ export default function DispatchForm() {
     if (dispatch.distributor.distributorAddress.length == 0) {
       return;
     }
+    dispatch.distributor.distributorName =
+      distributors.find(
+        (distro) => distro.address === dispatch.distributor.distributorAddress
+      )?.name || "Distro";
     try {
       const batchId = dispatch.batchId;
       const distributor = distributors.find(
@@ -87,7 +91,10 @@ export default function DispatchForm() {
           receiverAddress: dispatch.courier,
           notification: {
             batchId,
-            deliverTo: distributor?.address,
+            deliverTo: {
+              name: distributor?.name,
+              address: distributor?.address,
+            },
             dispatchDetails: dispatch,
           },
           date: new Date(),

@@ -15,48 +15,51 @@ import { Button, Typography } from "@mui/material";
 import { DispatchDetails } from "../types/types";
 import { toast } from "react-toastify";
 
-interface Column {
-  id: "date" | "notification";
-  label: string;
-  minWidth?: number | string;
-  align?: "right";
+// interface Column {
+//   id: "date" | "notification";
+//   label: string;
+//   minWidth?: number | string;
+//   align?: "right";
+// }
+
+// const columns: readonly Column[] = [
+//   { id: "date", label: "Date", minWidth: 170 },
+//   { id: "notification", label: "Activities", minWidth: "100%" },
+// ];
+
+// const rows = [
+//   {
+//     _id: 1,
+//     date: "04/10/2023",
+//     notification: {
+//       batchId: "12334",
+//       deliverTo: "Distro",
+//       dispatchDetails: {
+//         batchId: "12334",
+//         courier: "abc",
+//         distributor: {
+//           status: "Dispatched to Distributor",
+//           distributorName: "",
+//           distributorAddress: "",
+//           distributorSupply: 0,
+//         },
+//       },
+//     },
+//   },
+// ];
+interface iDeliverTo {
+  name: string;
+  address: string;
 }
-
-const columns: readonly Column[] = [
-  { id: "date", label: "Date", minWidth: 170 },
-  { id: "notification", label: "Activities", minWidth: "100%" },
-];
-
-const rows = [
-  {
-    _id: 1,
-    date: "04/10/2023",
-    notification: {
-      batchId: "12334",
-      deliverTo: "Distro",
-      dispatchDetails: {
-        batchId: "12334",
-        courier: "abc",
-        distributor: {
-          status: "Dispatched to Distributor",
-          distributorName: "",
-          distributorAddress: "",
-          distributorSupply: 0,
-        },
-      },
-    },
-  },
-];
 
 export default function NotificationTable() {
   const { auth } = useAppSelector((state) => state.auth);
-
   const [notifications, setNotification] = React.useState([
     {
-      _id: 1,
+      _id: "1",
       date: "04/10/2023",
       batchId: "12334",
-      deliverTo: "Distro",
+      deliverTo: { name: "Company", address: "0x305" },
       dispatchDetails: {
         batchId: "",
         courier: "",
@@ -67,10 +70,12 @@ export default function NotificationTable() {
           distributorSupply: 0,
         },
         pharmaAddress: "",
+        pharmaName: "",
         quantity: 0,
       },
     },
   ]);
+  const [flag, setFlag] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -131,12 +136,13 @@ export default function NotificationTable() {
     }
 
     getNotification();
-  }, []);
+  }, [flag]);
 
   const statusUpdate = async (
+    _id: string,
     dispatchDetails: DispatchDetails,
     batchId: string,
-    deliverTo: string
+    deliverTo: iDeliverTo
   ) => {
     if (dispatchDetails.distributor.status === "Dispatched to Distributor") {
       dispatchDetails.distributor.status = "Delivered to Distributor";
@@ -145,6 +151,7 @@ export default function NotificationTable() {
     try {
       const response = await axios.put(`/api/updateStatus`, {
         dispatchDetails,
+        _id,
       });
       if (!response) {
         throw new Error("Update Failed");
@@ -153,7 +160,7 @@ export default function NotificationTable() {
         const res = (
           await axios.post("/api/notification", {
             senderAddress: auth.address,
-            receiverAddress: deliverTo,
+            receiverAddress: deliverTo.address,
             notification: {
               batchId,
               deliverTo,
@@ -165,6 +172,7 @@ export default function NotificationTable() {
       } catch (error) {
         console.log("Error: ", error);
       }
+      setFlag(!flag);
       toast.success(`${response.data.message}`, {
         position: "bottom-right",
         autoClose: 5000,
@@ -275,8 +283,8 @@ export default function NotificationTable() {
                       textOverflow: "ellipsis",
                     }}
                   >
-                    Batch ID: {row.batchId}, Delivered To:{" "}
-                    {row.dispatchDetails.distributor.distributorName}, Supply:{" "}
+                    Batch ID: {row.batchId}, Delivered To: {row.deliverTo.name},
+                    Supply:{" "}
                     {row.dispatchDetails?.distributor?.distributorSupply}
                   </TableCell>
                   {auth.role != "manufacturer" && (
@@ -299,6 +307,7 @@ export default function NotificationTable() {
                           variant="contained"
                           onClick={() =>
                             statusUpdate(
+                              row._id,
                               row.dispatchDetails,
                               row.batchId,
                               row.deliverTo
@@ -308,7 +317,9 @@ export default function NotificationTable() {
                           {row.dispatchDetails.distributor.status}
                         </Button>
                       ) : (
-                        <Typography>Delivered</Typography>
+                        <Typography>
+                          {row.dispatchDetails.distributor.status}
+                        </Typography>
                       )}
                     </TableCell>
                   )}
@@ -320,7 +331,7 @@ export default function NotificationTable() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={notifications.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

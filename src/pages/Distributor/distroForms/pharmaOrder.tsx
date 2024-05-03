@@ -17,6 +17,7 @@ export default function PharmaOrder() {
   const { auth } = useAppSelector((state) => state.auth);
   const [dispatches, setDipatches] = useState<Dispatches[]>([]);
   const [pharmacies, setPharmacies] = useState<User[]>([]);
+  const [couriers, setCouriers] = useState<User[]>([]);
   const [updateDispatch, setUpdateDispatch] = useState({
     batchId: "",
     courier: "",
@@ -27,6 +28,7 @@ export default function PharmaOrder() {
       distributorSupply: 0,
     },
     pharmaAddress: "",
+    pharmaName: "",
     quantity: 0,
   });
   const [availQty, setAvailQty] = useState(0);
@@ -54,13 +56,22 @@ export default function PharmaOrder() {
     }
   };
 
+  const getCouriers = async () => {
+    try {
+      const res = (await axios.get("/api/getCouriers")).data;
+      setCouriers(res);
+    } catch (error) {
+      console.log(error, "Response Error");
+    }
+  };
+
   const handleQuantity = () => {
     const selectedBatch = dispatches.filter(
       (dispatch) => dispatch.batchId === updateDispatch.batchId
     );
     for (const distro of selectedBatch[0].distributor) {
       if (distro.distributorAddress === auth.address) {
-        setAvailQty(distro.distributedAmount - updateDispatch.quantity);
+        setAvailQty(distro.distributorSupply - updateDispatch.quantity);
       }
     }
   };
@@ -69,6 +80,10 @@ export default function PharmaOrder() {
     if (updateDispatch.pharmaAddress.length == 0) {
       return;
     }
+    updateDispatch.pharmaName =
+      pharmacies.find(
+        (pharma) => pharma.address === updateDispatch.pharmaAddress
+      )?.name || "Pharma";
     try {
       const batchId = updateDispatch.batchId;
       const pharma = pharmacies.find(
@@ -77,10 +92,10 @@ export default function PharmaOrder() {
       const res = (
         await axios.post("/api/notification", {
           senderAddress: auth.address,
-          receiverAddress: updateDispatch.pharmaAddress,
+          receiverAddress: updateDispatch.courier,
           notification: {
             batchId,
-            deliverTo: pharma?.address,
+            deliverTo: { name: pharma?.name, address: pharma?.address },
             dispatchDetails: updateDispatch,
           },
           date: new Date(),
@@ -93,13 +108,17 @@ export default function PharmaOrder() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    updateDispatch.pharmaName =
+      pharmacies.find(
+        (pharma) => pharma.address === updateDispatch.pharmaAddress
+      )?.name || "Pharma";
     const response = await axios.post("/api/distributor/updateDispatch", {
       updateDispatch,
     });
     if (!response) {
       throw new Error("Dispatch Failed");
     }
-    toast.success(`Helo`, {
+    toast.success(`${response.data.message}`, {
       position: "bottom-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -114,6 +133,7 @@ export default function PharmaOrder() {
   useEffect(() => {
     getDispatches();
     getPharma();
+    getCouriers();
     if (updateDispatch.batchId !== "") {
       handleQuantity();
     }
@@ -218,6 +238,30 @@ export default function PharmaOrder() {
                     }));
                   }}
                 />
+              </Box>
+              <Box mt={3} display="flex">
+                <TextField
+                  required
+                  fullWidth
+                  select
+                  name="courier"
+                  label="Courier"
+                  defaultValue={""}
+                  onChange={(event) =>
+                    setUpdateDispatch((prevState) => ({
+                      ...prevState,
+                      courier: event.target.value,
+                    }))
+                  }
+                  variant="outlined"
+                >
+                  <MenuItem defaultValue={""} />
+                  {couriers.map((courier) => (
+                    <MenuItem key={courier.address} value={courier.address}>
+                      <option label={courier.name} />
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Box>
               <Box mt={3} display="flex" justifyContent="flex-end">
                 <Button

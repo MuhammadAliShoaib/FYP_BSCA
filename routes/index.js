@@ -94,26 +94,37 @@ router.get("/getNotification/:address", async (req, res) => {
   }
 });
 
-export default router;
-
 router.put(`/updateStatus`, async (req, res) => {
-  const { dispatchDetails } = req.body;
+  const { dispatchDetails, _id } = req.body;
+  console.log(dispatchDetails);
   try {
-    const dispatch = await db.Dispatch.find({
+    const dispatch = await db.Dispatch.findOne({
       batchId: dispatchDetails.batchId,
     });
-    if (dispatch) {
-      dispatch.distributor.forEach((distro) => {
-        if (
-          distro.distributorAddress ===
-          dispatchDetails.distributor.distributorAddress
-        ) {
-          distro.status = dispatchDetails.distributor.status;
-        }
-      });
+    const notification = await db.Notification.findById(_id);
+    if (!dispatch) {
+      return res.status(404).json({ message: "Dispatch not found" });
     }
+    dispatch.distributor.forEach((distro) => {
+      if (
+        distro.distributorAddress ===
+        dispatchDetails.distributor.distributorAddress
+      ) {
+        distro.status = dispatchDetails.distributor.status;
+      }
+    });
+    notification.notification.dispatchDetails.distributor.status =
+      dispatchDetails.distributor.status;
+    notification.markModified(
+      "notification.dispatchDetails.distributor.status"
+    );
+    await notification.save();
+    await dispatch.save();
+    res.status(200).json({ message: "Status Updated" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+export default router;
