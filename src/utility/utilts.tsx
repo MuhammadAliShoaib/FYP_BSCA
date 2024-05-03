@@ -26,33 +26,33 @@ export const timelineConfig: Array<{
     };
   };
 }> = [
-  {
-    typography: "Manufactured",
-    icon: {
-      Comp: FactoryRounded,
+    {
+      typography: "Manufactured",
+      icon: {
+        Comp: FactoryRounded,
+      },
     },
-  },
-  {
-    typography: "Shipped To Warehouse",
-    icon: { Comp: LocalShippingRounded, props: { color: "primary" } },
-  },
-  {
-    typography: "Reached Warehouse",
-    icon: { Comp: WarehouseRounded },
-  },
-  {
-    typography: "Shipped to Pharmacy(s)",
-    icon: { Comp: DeliveryDiningRounded, props: { color: "primary" } },
-  },
-  {
-    typography: "Reached Pharmacy(s)",
-    icon: { Comp: LocalPharmacyRounded },
-  },
-  {
-    typography: "Sold To Customer(s)",
-    icon: { Comp: ShoppingCartCheckoutRounded },
-  },
-];
+    {
+      typography: "Shipped To Warehouse",
+      icon: { Comp: LocalShippingRounded, props: { color: "primary" } },
+    },
+    // {
+    //   typography: "Reached Warehouse",
+    //   icon: { Comp: WarehouseRounded },
+    // },
+    {
+      typography: "Shipped to Pharmacy(s)",
+      icon: { Comp: DeliveryDiningRounded, props: { color: "primary" } },
+    },
+    // {
+    //   typography: "Reached Pharmacy(s)",
+    //   icon: { Comp: LocalPharmacyRounded },
+    // },
+    {
+      typography: "Sold To Customer(s)",
+      icon: { Comp: ShoppingCartCheckoutRounded },
+    },
+  ];
 
 export const containerTypes: Array<string> = [
   "Aluminium",
