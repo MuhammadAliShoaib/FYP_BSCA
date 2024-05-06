@@ -7,10 +7,7 @@ import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import { Button, Typography } from "@mui/material";
 import { ThemeContext } from "../config/Context/themeProvider";
-import {
-  useContext
-
-} from "react";
+import { useContext } from "react";
 import { timelineConfig, timelineNumber } from "../utility/utilts";
 import { FactoryRounded } from "@mui/icons-material";
 import DropDown from "./DropDown";

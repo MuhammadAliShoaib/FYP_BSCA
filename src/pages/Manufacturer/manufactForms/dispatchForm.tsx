@@ -12,6 +12,9 @@ import axios from "axios";
 import { Batch, User, Dispatch, Product } from "../../../types/types.ts";
 import { useAppSelector } from "../../../config/redux/hooks.tsx";
 import { toast } from "react-toastify";
+import { ACCESS_CONTROL_CONTRACT_ADDRESS } from "../../../utility/utilts.tsx";
+import AccessControl from "../../../contract/AccessControl.json";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
 export default function DispatchForm() {
   const { auth } = useAppSelector((state) => state.auth);
@@ -71,6 +74,24 @@ export default function DispatchForm() {
       console.log(error, "Response Error");
     }
   };
+
+  const { config } = usePrepareContractWrite({
+    address: ACCESS_CONTROL_CONTRACT_ADDRESS,
+    abi: AccessControl,
+    functionName: 'dispatchBatch',
+    args: [
+      dispatch.batchId,
+      medicine,
+      dispatch.distributor.distributorSupply,
+      dispatch.distributor.distributorAddress,
+      dispatch.distributor.distributorName,
+      dispatch.courier,
+      "Courier"
+    ],
+  });
+
+  const { write } = useContractWrite(config);
+
 
   const handleClick = async () => {
     if (dispatch.distributor.distributorAddress.length == 0) {
@@ -270,14 +291,14 @@ export default function DispatchForm() {
                       <Typography variant="h6">
                         Manufactured:{" "}
                         {dispatch.batchId &&
-                        batches.find(
-                          (batch) => batch.batchId === dispatch.batchId
-                        )?.mfg
+                          batches.find(
+                            (batch) => batch.batchId === dispatch.batchId
+                          )?.mfg
                           ? new Date(
-                              batches.find(
-                                (batch) => batch.batchId === dispatch.batchId
-                              )?.mfg || ""
-                            ).toLocaleDateString("en-GB")
+                            batches.find(
+                              (batch) => batch.batchId === dispatch.batchId
+                            )?.mfg || ""
+                          ).toLocaleDateString("en-GB")
                           : "N/A"}
                       </Typography>
                       <Typography variant="h6">

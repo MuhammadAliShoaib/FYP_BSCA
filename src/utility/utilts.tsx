@@ -62,3 +62,8 @@ export const containerTypes: Array<string> = [
 ];
 
 export const units: Array<string> = ["ML", "Tablets", "Capsules"];
+
+
+export const ACCESS_CONTROL_CONTRACT_ADDRESS =
+  '0xe5d3c840e8da18291ba6cf95ccc8ea695ec9806b';
+

@@ -16,13 +16,18 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { useAppSelector } from "../../../config/redux/hooks";
-import { containerTypes, units } from "../../../utility/utilts";
+import { ACCESS_CONTROL_CONTRACT_ADDRESS, containerTypes, units } from "../../../utility/utilts";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import AccessControl from "../../../contract/AccessControl.json";
+import { SecurityUpdateWarningSharp } from "@mui/icons-material";
 
 export default function BatchForm() {
   const { auth } = useAppSelector((state) => state.auth);
   const [meds, setMeds] = useState<Medicine[]>([]);
   const [mfgDate, setMfgDate] = useState("");
   const [expDate, setExpDate] = useState("");
+  const [batchID, setBatchID] = useState("");
+  const [args, setArgs] = useState({ medName: "", quantity: 0 })
 
   const getMedicines = async () => {
     try {
@@ -41,6 +46,28 @@ export default function BatchForm() {
     getMedicines();
   }, []);
 
+  const handleArg = (key: string, value: any) => {
+    console.log(key,value)
+    setArgs({ ...args, [key]: value })
+  }
+
+
+  const { config, isFetched, isFetchedAfterMount } = usePrepareContractWrite({
+    address: ACCESS_CONTROL_CONTRACT_ADDRESS,
+    abi: AccessControl,
+    functionName: 'createBatch',
+    args: [
+      batchID,
+      args.medName,
+      args.quantity,
+      mfgDate,
+      expDate
+    ],
+  });
+
+  const { data: result, write } = useContractWrite(config);
+
+
   const formik = useFormik({
     initialValues: {
       medicine: "",
@@ -48,7 +75,7 @@ export default function BatchForm() {
       unit: "",
       packSize: null,
       cartonSize: null,
-      quantity: null,
+      quantity: 0,
       manufacturer: auth.address,
     },
     validationSchema: Yup.object({
@@ -91,7 +118,7 @@ export default function BatchForm() {
         (med) => med.completeName === values.medicine
       )?.name;
       const batchId = [name?.toUpperCase(), unix].join("-");
-
+      setBatchID(batchId)
       try {
         const response = await axios.post("/api/manufacturer/createBatch", {
           batchId: batchId,
@@ -109,6 +136,9 @@ export default function BatchForm() {
         if (!response) {
           throw new Error("Something Went Wrong!");
         }
+        const { hash } = result;
+        console.log("Hash : " + hash)
+        write && write()
         toast.success(`${response.data.message}`, {
           position: "bottom-right",
           autoClose: 5000,
@@ -136,6 +166,8 @@ export default function BatchForm() {
       }
     },
   });
+
+
 
   return (
     <>
@@ -175,7 +207,7 @@ export default function BatchForm() {
                   name="medicine"
                   label="Select Medicine"
                   defaultValue={""}
-                  onChange={formik.handleChange}
+                  onChange={(e) => { handleArg("medName", formik.values.medicine), formik.handleChange(e) }}
                   value={formik.values.medicine}
                   variant="outlined"
                 >
@@ -271,7 +303,7 @@ export default function BatchForm() {
                     type="number"
                     name="quantity"
                     label="Quantity"
-                    onChange={formik.handleChange}
+                    onChange={(e) => { handleArg("quantity", formik.values.quantity), formik.handleChange(e) }}
                     value={formik.values.quantity}
                     variant="outlined"
                   />

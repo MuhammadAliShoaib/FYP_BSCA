@@ -8,15 +8,18 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { useAccount } from "wagmi";
+import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { MenuItem } from "@mui/material";
+import { ACCESS_CONTROL_CONTRACT_ADDRESS } from "../utility/utilts";
+import AccessControl from "../contract/AccessControl.json";
 
 export default function SignUpForm() {
-  const { address } = useAccount();
+  const { address,isConnected } = useAccount();
+  const [user, setUser] = useState({ role: "", name: "" })
 
   const navigate = useNavigate();
   const [backgroundImage, setBackgroundImage] = useState(
@@ -28,6 +31,27 @@ export default function SignUpForm() {
     "url(https://source.unsplash.com/random?landscape)",
     "url(https://source.unsplash.com/random?nature)",
   ];
+
+
+  const { config, isFetched, isFetchedAfterMount } = usePrepareContractWrite({
+    address: ACCESS_CONTROL_CONTRACT_ADDRESS,
+    abi: AccessControl,
+    functionName: 'grantRole',
+    args: [
+      user.role,
+      user.name
+    ],
+  });
+
+  const { writeAsync } = useContractWrite(config);
+
+  useEffect(() => {
+    if (address && isConnected && isFetchedAfterMount && writeAsync && user.role.length!=0) {
+      (async () => {
+        await writeAsync();
+      })();
+    }
+  }, [address, isFetchedAfterMount]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -52,6 +76,7 @@ export default function SignUpForm() {
     }),
     onSubmit: async (values: any) => {
       try {
+        // setUser({ role: values.role, name: values.name });
         console.log("hello");
         const response = await Axios.post("/api/signup/user", {
           name: values.name,
@@ -62,6 +87,7 @@ export default function SignUpForm() {
         if (!response) {
           throw new Error("Something Went Wrong!");
         }
+        // await writeAsync()
         const data = await response.data;
         console.log(data);
         navigate(`/${values.role}`);
@@ -146,6 +172,7 @@ export default function SignUpForm() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              // onClick={writeAsync}
             >
               Sign Up
             </Button>
