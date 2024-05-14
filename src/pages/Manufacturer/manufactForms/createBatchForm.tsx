@@ -46,26 +46,32 @@ export default function BatchForm() {
     getMedicines();
   }, []);
 
-  const handleArg = (key: string, value: any) => {
-    console.log(key,value)
-    setArgs({ ...args, [key]: value })
+  const handleArg = (key: string, e: any) => {
+    // console.log(key, e)
+    setArgs({ ...args, [key]: e })
   }
 
 
-  const { config, isFetched, isFetchedAfterMount } = usePrepareContractWrite({
+  // console.log(batchID,args.medName,args.quantity,mfgDate,expDate)
+
+  // const { config, isFetched, isFetchedAfterMount } = usePrepareContractWrite({
+  //   address: ACCESS_CONTROL_CONTRACT_ADDRESS,
+  //   abi: AccessControl,
+  //   functionName: 'createBatch',
+  //   args: [
+  //     batchID,
+  //     args.medName,
+  //     args.quantity,
+  //     mfgDate,
+  //     expDate
+  //   ],
+  // });
+
+  const { data: result, writeAsync, isSuccess } = useContractWrite({
     address: ACCESS_CONTROL_CONTRACT_ADDRESS,
     abi: AccessControl,
     functionName: 'createBatch',
-    args: [
-      batchID,
-      args.medName,
-      args.quantity,
-      mfgDate,
-      expDate
-    ],
   });
-
-  const { data: result, write } = useContractWrite(config);
 
 
   const formik = useFormik({
@@ -120,35 +126,46 @@ export default function BatchForm() {
       const batchId = [name?.toUpperCase(), unix].join("-");
       setBatchID(batchId)
       try {
-        const response = await axios.post("/api/manufacturer/createBatch", {
-          batchId: batchId,
-          medicine: values.medicine,
-          containerType: values.containerType,
-          unit: values.unit,
-          packSize: values.packSize,
-          cartonSize: values.cartonSize,
-          quantity: values.quantity,
-          mfg: mfgDate,
-          exp: expDate,
-          manufacturer: values.manufacturer,
-        });
+        await writeAsync && writeAsync({
+          args: [
+            batchID,
+            args.medName,
+            args.quantity,
+            mfgDate,
+            expDate
+          ],
+        })
+        if (isSuccess) {
+          console.log('success')
+          const response = await axios.post("/api/manufacturer/createBatch", {
+            batchId: batchId,
+            medicine: values.medicine,
+            containerType: values.containerType,
+            unit: values.unit,
+            packSize: values.packSize,
+            cartonSize: values.cartonSize,
+            quantity: values.quantity,
+            mfg: mfgDate,
+            exp: expDate,
+            manufacturer: values.manufacturer,
+          });
 
-        if (!response) {
-          throw new Error("Something Went Wrong!");
+          if (!response) {
+            throw new Error("Something Went Wrong!");
+          }
+          // const { hash } = result;
+          // console.log("Hash : " + hash)
+          toast.success(`${response.data.message}`, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
-        const { hash } = result;
-        console.log("Hash : " + hash)
-        write && write()
-        toast.success(`${response.data.message}`, {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
       } catch (error: any) {
         if (error.response && error.response.status === 403) {
           toast.error(`${error.response.data.message}`, {
@@ -207,7 +224,7 @@ export default function BatchForm() {
                   name="medicine"
                   label="Select Medicine"
                   defaultValue={""}
-                  onChange={(e) => { handleArg("medName", formik.values.medicine), formik.handleChange(e) }}
+                  onChange={(e) => { handleArg("medName", e.target.value), formik.handleChange(e) }}
                   value={formik.values.medicine}
                   variant="outlined"
                 >
@@ -303,7 +320,7 @@ export default function BatchForm() {
                     type="number"
                     name="quantity"
                     label="Quantity"
-                    onChange={(e) => { handleArg("quantity", formik.values.quantity), formik.handleChange(e) }}
+                    onChange={(e) => { handleArg("quantity", e.target.value), formik.handleChange(e) }}
                     value={formik.values.quantity}
                     variant="outlined"
                   />
@@ -352,6 +369,7 @@ export default function BatchForm() {
                     paddingBottom: "10px",
                     width: "25%",
                   }}
+                // onClick={write}
                 >
                   Create
                 </Button>
