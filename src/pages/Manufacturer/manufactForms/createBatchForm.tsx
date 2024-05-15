@@ -47,25 +47,8 @@ export default function BatchForm() {
   }, []);
 
   const handleArg = (key: string, e: any) => {
-    // console.log(key, e)
     setArgs({ ...args, [key]: e })
   }
-
-
-  // console.log(batchID,args.medName,args.quantity,mfgDate,expDate)
-
-  // const { config, isFetched, isFetchedAfterMount } = usePrepareContractWrite({
-  //   address: ACCESS_CONTROL_CONTRACT_ADDRESS,
-  //   abi: AccessControl,
-  //   functionName: 'createBatch',
-  //   args: [
-  //     batchID,
-  //     args.medName,
-  //     args.quantity,
-  //     mfgDate,
-  //     expDate
-  //   ],
-  // });
 
   const { data: result, writeAsync, isSuccess } = useContractWrite({
     address: ACCESS_CONTROL_CONTRACT_ADDRESS,
@@ -128,44 +111,14 @@ export default function BatchForm() {
       try {
         await writeAsync && writeAsync({
           args: [
-            batchID,
+            batchId,
             args.medName,
             args.quantity,
             mfgDate,
             expDate
           ],
         })
-        if (isSuccess) {
-          console.log('success')
-          const response = await axios.post("/api/manufacturer/createBatch", {
-            batchId: batchId,
-            medicine: values.medicine,
-            containerType: values.containerType,
-            unit: values.unit,
-            packSize: values.packSize,
-            cartonSize: values.cartonSize,
-            quantity: values.quantity,
-            mfg: mfgDate,
-            exp: expDate,
-            manufacturer: values.manufacturer,
-          });
 
-          if (!response) {
-            throw new Error("Something Went Wrong!");
-          }
-          // const { hash } = result;
-          // console.log("Hash : " + hash)
-          toast.success(`${response.data.message}`, {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        }
       } catch (error: any) {
         if (error.response && error.response.status === 403) {
           toast.error(`${error.response.data.message}`, {
@@ -183,6 +136,42 @@ export default function BatchForm() {
       }
     },
   });
+
+
+  useEffect(() => {
+    (async () => {
+      if (isSuccess) {
+        const response = await axios.post("/api/manufacturer/createBatch", {
+          batchId: batchID,
+          medicine: formik.values.medicine,
+          containerType: formik.values.containerType,
+          unit: formik.values.unit,
+          packSize: formik.values.packSize,
+          cartonSize: formik.values.cartonSize,
+          quantity: formik.values.quantity,
+          mfg: mfgDate,
+          exp: expDate,
+          manufacturer: formik.values.manufacturer,
+        });
+
+        if (!response) {
+          throw new Error("Something Went Wrong!");
+        }
+        // const { hash } = result;
+        // console.log("Hash : " + hash)
+        toast.success(`${response.data.message}`, {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    })();
+  }, [isSuccess])
 
 
 
