@@ -18,40 +18,27 @@ import { ACCESS_CONTROL_CONTRACT_ADDRESS } from "../utility/utilts";
 import AccessControl from "../contract/AccessControl.json";
 
 export default function SignUpForm() {
-  const { address,isConnected } = useAccount();
-  const [user, setUser] = useState({ role: "", name: "" })
-
+  const { address, isConnected } = useAccount();
   const navigate = useNavigate();
   const [backgroundImage, setBackgroundImage] = useState(
     "url(https://source.unsplash.com/random?wallpapers)"
   );
-
   const imageUrls = [
     "url(https://source.unsplash.com/random?wallpapers)",
     "url(https://source.unsplash.com/random?landscape)",
     "url(https://source.unsplash.com/random?nature)",
   ];
 
+  const [user, setUser] = useState({ role: "", name: "" });
 
-  const { config, isFetched, isFetchedAfterMount } = usePrepareContractWrite({
+  const { config, isFetchedAfterMount } = usePrepareContractWrite({
     address: ACCESS_CONTROL_CONTRACT_ADDRESS,
     abi: AccessControl,
-    functionName: 'grantRole',
-    args: [
-      user.role,
-      user.name
-    ],
+    functionName: "grantRole",
+    args: [user.role, user.name], // Ensure args are updated
   });
 
   const { writeAsync } = useContractWrite(config);
-
-  useEffect(() => {
-    if (address && isConnected && isFetchedAfterMount && writeAsync && user.role.length!=0) {
-      (async () => {
-        await writeAsync();
-      })();
-    }
-  }, [address, isFetchedAfterMount]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -74,28 +61,47 @@ export default function SignUpForm() {
       address: Yup.string().required("Address is required"),
       role: Yup.string().required("Please select a role"),
     }),
-    onSubmit: async (values: any) => {
-      try {
-        // setUser({ role: values.role, name: values.name });
-        console.log("hello");
-        const response = await Axios.post("/api/signup/user", {
-          name: values.name,
-          address: values.address,
-          role: values.role,
-        });
-
-        if (!response) {
-          throw new Error("Something Went Wrong!");
-        }
-        // await writeAsync()
-        const data = await response.data;
-        console.log(data);
-        navigate(`/${values.role}`);
-      } catch (error) {
-        console.error("Error submitting form:", error);
-      }
+    onSubmit: (values) => {
+      // No need for onSubmit logic here since it's handled in useEffect
     },
   });
+
+  useEffect(() => {
+    // Update user state when formik values change
+    setUser({ role: formik.values.role, name: formik.values.name });
+  }, [formik.values]);
+
+  useEffect(() => {
+    if (
+      address &&
+      isConnected &&
+      isFetchedAfterMount &&
+      writeAsync &&
+      user.role.length !== 0
+    ) {
+      (async () => {
+        await writeAsync();
+        // After contract write completes, submit the form
+        try {
+          const response = await Axios.post("/api/signup/user", {
+            name: user.name,
+            address: formik.values.address,
+            role: user.role,
+          });
+
+          if (!response) {
+            throw new Error("Something Went Wrong!");
+          }
+
+          const data = await response.data;
+          console.log(data);
+          navigate(`/${formik.values.role}`);
+        } catch (error) {
+          console.error("Error submitting form:", error);
+        }
+      })();
+    }
+  }, [address, isConnected, isFetchedAfterMount]);
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
@@ -172,7 +178,6 @@ export default function SignUpForm() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              // onClick={writeAsync}
             >
               Sign Up
             </Button>
