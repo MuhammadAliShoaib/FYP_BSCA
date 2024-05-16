@@ -16,7 +16,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { useAppSelector } from "../../../config/redux/hooks";
-import { ACCESS_CONTROL_CONTRACT_ADDRESS, containerTypes, units } from "../../../utility/utilts";
+import {
+  ACCESS_CONTROL_CONTRACT_ADDRESS,
+  containerTypes,
+  units,
+} from "../../../utility/utilts";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import AccessControl from "../../../contract/AccessControl.json";
 import { SecurityUpdateWarningSharp } from "@mui/icons-material";
@@ -27,7 +31,7 @@ export default function BatchForm() {
   const [mfgDate, setMfgDate] = useState("");
   const [expDate, setExpDate] = useState("");
   const [batchID, setBatchID] = useState("");
-  const [args, setArgs] = useState({ medName: "", quantity: 0 })
+  const [args, setArgs] = useState({ medName: "", quantity: 0 });
 
   const getMedicines = async () => {
     try {
@@ -47,15 +51,18 @@ export default function BatchForm() {
   }, []);
 
   const handleArg = (key: string, e: any) => {
-    setArgs({ ...args, [key]: e })
-  }
+    setArgs({ ...args, [key]: e });
+  };
 
-  const { data: result, writeAsync, isSuccess } = useContractWrite({
+  const {
+    data: result,
+    writeAsync,
+    isSuccess,
+  } = useContractWrite({
     address: ACCESS_CONTROL_CONTRACT_ADDRESS,
     abi: AccessControl,
-    functionName: 'createBatch',
+    functionName: "createBatch",
   });
-
 
   const formik = useFormik({
     initialValues: {
@@ -107,18 +114,12 @@ export default function BatchForm() {
         (med) => med.completeName === values.medicine
       )?.name;
       const batchId = [name?.toUpperCase(), unix].join("-");
-      setBatchID(batchId)
+      setBatchID(batchId);
       try {
-        await writeAsync && writeAsync({
-          args: [
-            batchId,
-            args.medName,
-            args.quantity,
-            mfgDate,
-            expDate
-          ],
-        })
-
+        writeAsync &&
+          (await writeAsync({
+            args: [batchId, args.medName, args.quantity, mfgDate, expDate],
+          }));
       } catch (error: any) {
         if (error.response && error.response.status === 403) {
           toast.error(`${error.response.data.message}`, {
@@ -136,7 +137,6 @@ export default function BatchForm() {
       }
     },
   });
-
 
   useEffect(() => {
     (async () => {
@@ -171,9 +171,7 @@ export default function BatchForm() {
         });
       }
     })();
-  }, [isSuccess])
-
-
+  }, [isSuccess]);
 
   return (
     <>
@@ -213,7 +211,10 @@ export default function BatchForm() {
                   name="medicine"
                   label="Select Medicine"
                   defaultValue={""}
-                  onChange={(e) => { handleArg("medName", e.target.value), formik.handleChange(e) }}
+                  onChange={(e) => {
+                    handleArg("medName", e.target.value),
+                      formik.handleChange(e);
+                  }}
                   value={formik.values.medicine}
                   variant="outlined"
                 >
@@ -309,7 +310,10 @@ export default function BatchForm() {
                     type="number"
                     name="quantity"
                     label="Quantity"
-                    onChange={(e) => { handleArg("quantity", e.target.value), formik.handleChange(e) }}
+                    onChange={(e) => {
+                      handleArg("quantity", e.target.value),
+                        formik.handleChange(e);
+                    }}
                     value={formik.values.quantity}
                     variant="outlined"
                   />
@@ -358,7 +362,7 @@ export default function BatchForm() {
                     paddingBottom: "10px",
                     width: "25%",
                   }}
-                // onClick={write}
+                  // onClick={write}
                 >
                   Create
                 </Button>

@@ -137,7 +137,7 @@ router.get("/getDistro", async (req, res) => {
 
 // Dispatches a Batch from Manufacturer
 router.post("/dispatch", async (req, res) => {
-  const { dispatch } = req.body;
+  const { dispatch, txnHash } = req.body;
   try {
     const existingDispatch = await db.Dispatch.findOne({
       batchId: dispatch.batchId,
@@ -173,6 +173,7 @@ router.post("/dispatch", async (req, res) => {
             distro.status = dispatch.distributor.status;
           }
         });
+        existingDispatch.transactions.push(txnHash);
       } else {
         existingDispatch.distributor.push({
           status: dispatch.distributor.status,
@@ -181,6 +182,7 @@ router.post("/dispatch", async (req, res) => {
           distributorSupply: dispatch.distributor.distributorSupply,
           distributedAmount: 0,
         });
+        existingDispatch.transactions.push(txnHash);
       }
 
       await batch.save();
@@ -200,7 +202,7 @@ router.post("/dispatch", async (req, res) => {
           },
         ],
         pharmacy: [],
-        transactions: [],
+        transactions: [txnHash],
       });
       console.log(newDispatch);
       await batch.save();

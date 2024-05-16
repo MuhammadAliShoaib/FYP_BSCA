@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { ACCESS_CONTROL_CONTRACT_ADDRESS } from "../../../utility/utilts.tsx";
 import AccessControl from "../../../contract/AccessControl.json";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
+// import {useWriteContract} from 'wagmi';
 
 export default function DispatchForm() {
   const { auth } = useAppSelector((state) => state.auth);
@@ -78,7 +79,7 @@ export default function DispatchForm() {
   const { config } = usePrepareContractWrite({
     address: ACCESS_CONTROL_CONTRACT_ADDRESS,
     abi: AccessControl,
-    functionName: 'dispatchBatch',
+    functionName: "dispatchBatch",
     args: [
       dispatch.batchId,
       medicine,
@@ -86,12 +87,11 @@ export default function DispatchForm() {
       dispatch.distributor.distributorAddress,
       dispatch.distributor.distributorName,
       dispatch.courier,
-      "Courier"
+      "Courier",
     ],
   });
 
-  const { write } = useContractWrite(config);
-
+  const { data, writeAsync, isSuccess } = useContractWrite(config);
 
   const handleClick = async () => {
     if (dispatch.distributor.distributorAddress.length == 0) {
@@ -133,46 +133,8 @@ export default function DispatchForm() {
         (distro) => distro.address === dispatch.distributor.distributorAddress
       )?.name || "Distro";
     try {
-      const response = await axios.post("/api/manufacturer/dispatch", {
-        dispatch,
-      });
-      if (!response) {
-        throw new Error("Dispatch Failed");
-      }
-      toast.success(`${response.data.message}`, {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    } catch (error: any) {
-      if (error.response && error.response.status === 400) {
-        toast.error(`${error.response.data.message}`, {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      } else if (error.response && error.response.status === 404) {
-        toast.error(`${error.response.data.message}`, {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
+      writeAsync && (await writeAsync());
+    } catch (error) {
       console.log("Error: ", error);
     }
   };
@@ -183,6 +145,59 @@ export default function DispatchForm() {
     getDistros();
     getCouriers();
   }, [medicine]);
+
+  useEffect(() => {
+    (async () => {
+      if (isSuccess) {
+        const txnHash = data;
+        console.log("Txn Hash: ", txnHash?.hash);
+        try {
+          const response = await axios.post("/api/manufacturer/dispatch", {
+            dispatch,
+            txnHash: txnHash?.hash,
+          });
+          if (!response) {
+            throw new Error("Dispatch Failed");
+          }
+          toast.success(`${response.data.message}`, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } catch (error: any) {
+          if (error.response && error.response.status === 400) {
+            toast.error(`${error.response.data.message}`, {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          } else if (error.response && error.response.status === 404) {
+            toast.error(`${error.response.data.message}`, {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
+          console.log("Error: ", error);
+        }
+      }
+    })();
+  }, [isSuccess]);
 
   return (
     <>
@@ -291,14 +306,14 @@ export default function DispatchForm() {
                       <Typography variant="h6">
                         Manufactured:{" "}
                         {dispatch.batchId &&
-                          batches.find(
-                            (batch) => batch.batchId === dispatch.batchId
-                          )?.mfg
+                        batches.find(
+                          (batch) => batch.batchId === dispatch.batchId
+                        )?.mfg
                           ? new Date(
-                            batches.find(
-                              (batch) => batch.batchId === dispatch.batchId
-                            )?.mfg || ""
-                          ).toLocaleDateString("en-GB")
+                              batches.find(
+                                (batch) => batch.batchId === dispatch.batchId
+                              )?.mfg || ""
+                            ).toLocaleDateString("en-GB")
                           : "N/A"}
                       </Typography>
                       <Typography variant="h6">
