@@ -3,12 +3,12 @@ const router = express.Router();
 import { db } from "../models/index.js";
 
 router.get("/getStock", async (req, res) => {
+  const { pharmaAddress } = req.query;
   try {
     const stock = await db.Dispatch.aggregate([
       {
         $match: {
-          "pharmacy.pharmaAddress":
-            "0x64D960696643321b26976fb64f8c91EDFb04Ae18",
+          "pharmacy.pharmaAddress": pharmaAddress,
         },
       },
       {

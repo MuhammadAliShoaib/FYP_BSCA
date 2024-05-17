@@ -8,12 +8,15 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
-import { socket } from "../socket";
+// import { socket } from "../socket";
 import axios from "axios";
 import { useAppSelector } from "../config/redux/hooks";
 import { Button, Typography } from "@mui/material";
 import { DispatchDetails } from "../types/types";
 import { toast } from "react-toastify";
+import { ACCESS_CONTROL_CONTRACT_ADDRESS } from "../utility/utilts.tsx";
+import AccessControl from "../contract/AccessControl.json";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
 // interface Column {
 //   id: "date" | "notification";
@@ -127,9 +130,9 @@ export default function NotificationTable() {
           ...prevNotifications,
           ...newNotifications,
         ]);
-        console.log("notifications :" + JSON.stringify(res));
-        console.log("new notifications", newNotifications);
-        console.log("Notifications", notifications);
+        // console.log("notifications :" + JSON.stringify(res));
+        // console.log("new notifications", newNotifications);
+        // console.log("Notifications", notifications);
       } catch (error) {
         console.log(error, "Response Error");
       }
@@ -137,6 +140,16 @@ export default function NotificationTable() {
 
     getNotification();
   }, [flag]);
+
+  const {
+    data: result,
+    writeAsync,
+    isSuccess,
+  } = useContractWrite({
+    address: ACCESS_CONTROL_CONTRACT_ADDRESS,
+    abi: AccessControl,
+    functionName: "updateStatus",
+  });
 
   const statusUpdate = async (
     _id: string,
@@ -149,6 +162,11 @@ export default function NotificationTable() {
     } else if (dispatchDetails.distributor.status === "Dispatched to Pharmacy")
       dispatchDetails.distributor.status = "Delivered to Pharmacy";
     try {
+      writeAsync &&
+        (await writeAsync({
+          args: [batchId, dispatchDetails.distributor.distributorAddress],
+        }));
+
       const response = await axios.put(`/api/updateStatus`, {
         dispatchDetails,
         _id,

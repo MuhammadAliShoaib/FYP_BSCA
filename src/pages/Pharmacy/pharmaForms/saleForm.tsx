@@ -12,6 +12,9 @@ import axios from "axios";
 import { User, Dispatches, Stock } from "../../../types/types.ts";
 import { useAppSelector } from "../../../config/redux/hooks.tsx";
 import { toast } from "react-toastify";
+import { ACCESS_CONTROL_CONTRACT_ADDRESS } from "../../../utility/utilts.tsx";
+import AccessControl from "../../../contract/AccessControl.json";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
 function SaleForm() {
   const { auth } = useAppSelector((state) => state.auth);
@@ -51,23 +54,50 @@ function SaleForm() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await axios.post("/api/pharmacy/updateDispatch", {
-      updateDispatch,
-    });
-    if (!response) {
-      throw new Error("Dispatch Failed");
+    try {
+      writeAsync &&
+        (await writeAsync({
+          args: [updateDispatch.batchId],
+        }));
+    } catch (error) {
+      console.log("Error", error);
     }
-    toast.success(`Medicine Sold`, {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
   };
+
+  const {
+    data: result,
+    writeAsync,
+    isSuccess,
+  } = useContractWrite({
+    address: ACCESS_CONTROL_CONTRACT_ADDRESS,
+    abi: AccessControl,
+    functionName: "pharmacyCreateOrder",
+  });
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.post("/api/pharmacy/updateDispatch", {
+          updateDispatch,
+        });
+        if (!response) {
+          throw new Error("Dispatch Failed");
+        }
+        toast.success(`Medicine Sold`, {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+    })();
+  }, [isSuccess]);
 
   useEffect(() => {
     getStock();

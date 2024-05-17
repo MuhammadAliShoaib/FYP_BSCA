@@ -12,6 +12,9 @@ import axios from "axios";
 import { User, Dispatches } from "../../../types/types.ts";
 import { useAppSelector } from "../../../config/redux/hooks.tsx";
 import { toast } from "react-toastify";
+import { ACCESS_CONTROL_CONTRACT_ADDRESS } from "../../../utility/utilts.tsx";
+import AccessControl from "../../../contract/AccessControl.json";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
 export default function PharmaOrder() {
   const { auth } = useAppSelector((state) => state.auth);
@@ -71,7 +74,11 @@ export default function PharmaOrder() {
     );
     for (const distro of selectedBatch[0].distributor) {
       if (distro.distributorAddress === auth.address) {
-        setAvailQty(distro.distributorSupply - updateDispatch.quantity);
+        setAvailQty(
+          distro.distributorSupply -
+            distro.distributedAmount -
+            updateDispatch.quantity
+        );
       }
     }
   };
@@ -106,29 +113,68 @@ export default function PharmaOrder() {
     }
   };
 
+  const {
+    data: result,
+    writeAsync,
+    isSuccess,
+  } = useContractWrite({
+    address: ACCESS_CONTROL_CONTRACT_ADDRESS,
+    abi: AccessControl,
+    functionName: "updateDispatch",
+  });
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     updateDispatch.pharmaName =
       pharmacies.find(
         (pharma) => pharma.address === updateDispatch.pharmaAddress
       )?.name || "Pharma";
-    const response = await axios.post("/api/distributor/updateDispatch", {
-      updateDispatch,
-    });
-    if (!response) {
-      throw new Error("Dispatch Failed");
+
+    try {
+      writeAsync &&
+        (await writeAsync({
+          args: [
+            updateDispatch.batchId,
+            updateDispatch.pharmaAddress,
+            updateDispatch.quantity,
+            updateDispatch.courier,
+            "Courier",
+          ],
+        }));
+    } catch (error) {
+      console.log("Error", error);
     }
-    toast.success(`${response.data.message}`, {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
   };
+
+  useEffect(() => {
+    (async () => {
+      if (isSuccess) {
+        try {
+          let txnHash = result;
+          console.log("TxnHash: ", txnHash?.hash);
+          const response = await axios.post("/api/distributor/updateDispatch", {
+            updateDispatch,
+            txnHash: txnHash?.hash,
+          });
+          if (!response) {
+            throw new Error("Dispatch Failed");
+          }
+          toast.success(`${response.data.message}`, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } catch (error) {
+          console.log("Error: ", error);
+        }
+      }
+    })();
+  }, [isSuccess]);
 
   useEffect(() => {
     getDispatches();

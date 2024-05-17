@@ -54,16 +54,29 @@ router.get("/getPharma", async (req, res) => {
 
 // Update Dispatch
 router.post("/updateDispatch", async (req, res) => {
-  const { updateDispatch } = req.body;
+  const { updateDispatch, txnHash } = req.body;
+  console.log(txnHash);
   try {
     const dispatch = await db.Dispatch.findOne({
       batchId: updateDispatch.batchId,
     });
     if (dispatch) {
       dispatch.distributor.forEach((distro) => {
-        if (distro.distributorAddress === updateDispatch.distroAddress) {
-          distro.distributedAmount -= updateDispatch.quantity;
+        if (
+          distro.distributorAddress ===
+          updateDispatch.distributor.distributorAddress
+        ) {
+          if (
+            updateDispatch.quantity >
+            distro.distributorSupply - distro.distributedAmount
+          ) {
+            return res
+              .status(403)
+              .json({ message: "Available Quantity Exceeded" });
+          }
+          distro.distributedAmount += updateDispatch.quantity;
           distro.status = "Dispacted to Pharmacy";
+          distro.distroTransactions.push(txnHash);
         }
       });
       let pharmacyExists = false;
@@ -82,7 +95,7 @@ router.post("/updateDispatch", async (req, res) => {
         });
       }
       await dispatch.save();
-      res.status(200).json({ message: "Dispatch Updates Successfully" });
+      res.status(200).json({ message: "Dispatch Updated Successfully" });
     } else {
       res.status(404).json({ message: "Dispatch not found" });
     }
