@@ -77,23 +77,23 @@ router.post("/updateDispatch", async (req, res) => {
           distro.distributedAmount += updateDispatch.quantity;
           distro.status = "Dispacted to Pharmacy";
           distro.distroTransactions.push(txnHash);
+          let pharmacyExists = false;
+          distro.pharmacy.forEach((pharma) => {
+            if (pharma.pharmaAddress === updateDispatch.pharmaAddress) {
+              pharma.deliveredAmount += updateDispatch.quantity;
+              pharmacyExists = true;
+            }
+          });
+          if (!pharmacyExists) {
+            distro.pharmacy.push({
+              pharmaAddress: updateDispatch.pharmaAddress,
+              deliveredAmount: updateDispatch.quantity,
+              medicineSold: 0,
+              pharmaTransactions: [],
+            });
+          }
         }
       });
-      let pharmacyExists = false;
-      dispatch.pharmacy.forEach((pharma) => {
-        if (pharma.pharmaAddress === updateDispatch.pharmaAddress) {
-          pharma.deliveredAmount += updateDispatch.quantity;
-          pharmacyExists = true;
-        }
-      });
-      if (!pharmacyExists) {
-        dispatch.pharmacy.push({
-          pharmaAddress: updateDispatch.pharmaAddress,
-          deliveredAmount: updateDispatch.quantity,
-          medicineSold: 0,
-          pharmaTransactions: [],
-        });
-      }
       await dispatch.save();
       res.status(200).json({ message: "Dispatch Updated Successfully" });
     } else {

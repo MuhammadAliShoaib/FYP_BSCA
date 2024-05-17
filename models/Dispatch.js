@@ -12,15 +12,15 @@ const schemaDispatch = Schema({
       distributorSupply: Number,
       distributedAmount: Number,
       distroTransactions: [String],
-    },
-  ],
-  pharmacy: [
-    {
-      pharmaName: String,
-      pharmaAddress: String,
-      deliveredAmount: Number,
-      medicineSold: Number,
-      pharmaTransactions: [String],
+      pharmacy: [
+        {
+          pharmaName: String,
+          pharmaAddress: String,
+          deliveredAmount: Number,
+          medicineSold: Number,
+          pharmaTransactions: [String],
+        },
+      ],
     },
   ],
   transactions: [String],

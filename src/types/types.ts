@@ -80,14 +80,14 @@ export type Stock = {
     {
       distributedAmount: number;
       distributorAddress: string;
-    }
-  ];
-  pharmacy: [
-    {
-      pharmaAddress: string;
-      deliveredAmount: number;
-      medicineSold: number;
-      pharmaTransactions: [string];
+      pharmacy: [
+        {
+          pharmaAddress: string;
+          deliveredAmount: number;
+          medicineSold: number;
+          pharmaTransactions: [string];
+        }
+      ];
     }
   ];
   transactions: [string];

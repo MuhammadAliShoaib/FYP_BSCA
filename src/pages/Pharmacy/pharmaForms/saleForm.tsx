@@ -19,6 +19,7 @@ import { useContractWrite, usePrepareContractWrite } from "wagmi";
 function SaleForm() {
   const { auth } = useAppSelector((state) => state.auth);
   const [stock, setStock] = useState<Stock[]>([]);
+  const [distro, setDistributor] = useState("");
   const [updateDispatch, setUpdateDispatch] = useState({
     pharmaAddress: auth.address,
     batchId: "",
@@ -41,26 +42,20 @@ function SaleForm() {
 
   const handleQuantity = () => {
     if (stock) {
-      const selectedBatch = stock.filter(
+      const selectedBatch = stock.find(
         (dispatch) => dispatch.batchId === updateDispatch.batchId
       );
-      for (const pharma of selectedBatch[0].pharmacy) {
+
+      console.log("Selected Batch: ", JSON.stringify(selectedBatch));
+      if (selectedBatch != null) {
+        const distributor = selectedBatch.distributor;
+        setDistributor(distributor.distributorAddress);
+        console.log("Distro: ", distro);
+        const pharma = distributor.pharmacy;
         if (pharma.pharmaAddress === auth.address) {
           setAvailQty(pharma.deliveredAmount - updateDispatch.qtySold);
         }
       }
-    }
-  };
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    try {
-      writeAsync &&
-        (await writeAsync({
-          args: [updateDispatch.batchId],
-        }));
-    } catch (error) {
-      console.log("Error", error);
     }
   };
 
@@ -74,27 +69,45 @@ function SaleForm() {
     functionName: "pharmacyCreateOrder",
   });
 
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      writeAsync &&
+        (await writeAsync({
+          args: [updateDispatch.batchId, distro, updateDispatch.qtySold],
+        }));
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
   useEffect(() => {
     (async () => {
-      try {
-        const response = await axios.post("/api/pharmacy/updateDispatch", {
-          updateDispatch,
-        });
-        if (!response) {
-          throw new Error("Dispatch Failed");
+      if (isSuccess) {
+        try {
+          let txnHash = result;
+          console.log("TxnHash: ", txnHash?.hash);
+          const response = await axios.post("/api/pharmacy/updateDispatch", {
+            updateDispatch,
+            distro,
+            txnHash: txnHash?.hash,
+          });
+          if (!response) {
+            throw new Error("Dispatch Failed");
+          }
+          toast.success(`Medicine Sold`, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } catch (error) {
+          console.log("Error: ", error);
         }
-        toast.success(`Medicine Sold`, {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      } catch (error) {
-        console.log("Error: ", error);
       }
     })();
   }, [isSuccess]);

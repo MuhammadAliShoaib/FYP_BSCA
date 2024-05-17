@@ -199,9 +199,9 @@ router.post("/dispatch", async (req, res) => {
             distributorAddress: dispatch.distributor.distributorAddress,
             distributorSupply: dispatch.distributor.distributorSupply,
             distributedAmount: 0,
+            pharmacy: [],
           },
         ],
-        pharmacy: [],
         transactions: [txnHash],
       });
       console.log(newDispatch);
