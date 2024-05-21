@@ -10,8 +10,8 @@ export default function Batches() {
       <Container style={{ marginTop: "50px" }}>
         <Grid container>
           <Grid item md={12}>
-            <BatchTable />
-            <BatchProgress />
+            {/* <BatchTable /> */}
+            <BatchProgress batchId="PANADOL-1715022700102"/>
           </Grid>
         </Grid>
       </Container>

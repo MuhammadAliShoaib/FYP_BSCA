@@ -41,8 +41,6 @@ export default function BatchTable() {
       const response = await axios.get(`/api/manufacturer/medicineBatches`, {
         params: { manufacturer: auth.address },
       });
-
-      console.log(response.data);
       setBatches(response.data);
     } catch (error) {
       console.log("Error: ", error);

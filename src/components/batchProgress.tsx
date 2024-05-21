@@ -84,7 +84,8 @@ export const BatchProgress = ({ batchId }: { batchId?: any }) => {
         const response = await axios.get("/api/getBatchProgress", {
           params: { batchId },
         });
-
+        console.log("<============Batch Progress========>")
+        console.log(response.data)
         setBatch(response.data);
       } catch (error) {
         console.log("Error: ", error);
@@ -92,9 +93,10 @@ export const BatchProgress = ({ batchId }: { batchId?: any }) => {
     }
   };
 
+
   useEffect(() => {
     getBatchProgress();
-  }, [batchId]);
+  }, []);
 
   return (
     <>
@@ -104,40 +106,42 @@ export const BatchProgress = ({ batchId }: { batchId?: any }) => {
         onResize={undefined}
         onResizeCapture={undefined}
       >
-        <TimelineItem>
-          <TimelineOppositeContent
-            sx={{ m: "auto 0" }}
-            align="right"
-            variant="body2"
-            color="text.secondary"
-          >
-            <Button variant="contained" fullWidth target="_blank" href="">
-              View Transaction
-            </Button>
-          </TimelineOppositeContent>
-          <TimelineSeparator>
-            <TimelineConnector />
-            <TimelineDot>
-              <FactoryRounded fontSize="large" />
-            </TimelineDot>
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent sx={{ py: "12px", px: 2 }}>
-            <Typography
-              variant="h6"
-              component="span"
-              color={ctx.mode === "light" ? "black" : "white"}
+        {batch?.transactions[0] &&
+          <TimelineItem>
+            <TimelineOppositeContent
+              sx={{ m: "auto 0" }}
+              align="right"
+              variant="body2"
+              color="text.secondary"
             >
-              Manufacturer
-            </Typography>
-            <br />
-            {/* <QRCode
+              <Button variant="contained" fullWidth target="_blank" href={`https://sepolia.etherscan.io/tx/${batch?.transactions[0]}`}>
+                View Transaction
+              </Button>
+            </TimelineOppositeContent>
+            <TimelineSeparator>
+              <TimelineConnector />
+              <TimelineDot>
+                <FactoryRounded fontSize="large" />
+              </TimelineDot>
+              <TimelineConnector />
+            </TimelineSeparator>
+            <TimelineContent sx={{ py: "12px", px: 2 }}>
+              <Typography
+                variant="h6"
+                component="span"
+                color={ctx.mode === "light" ? "black" : "white"}
+              >
+                Manufacturer
+              </Typography>
+              <br />
+              {/* <QRCode
               size={50}
               value={`https://sepolia.etherscan.io/tx/${batches.transactions[i]}`}
             /> */}
-          </TimelineContent>
-        </TimelineItem>
-        {sample.distributor.distroTransactions.length != 0 && (
+            </TimelineContent>
+          </TimelineItem>
+        }
+        {batch?.distributor[0].distroTransactions.length != 0 ? (
           <TimelineItem>
             <TimelineOppositeContent
               sx={{ m: "auto 0" }}
@@ -169,9 +173,9 @@ export const BatchProgress = ({ batchId }: { batchId?: any }) => {
             /> */}
             </TimelineContent>
           </TimelineItem>
-        )}
+        ) : null}
 
-        {sample.pharmacy.pharmaTransactions.length != 0 && (
+        {batch?.distributor[0].pharmacy.pharmaTransactions && (
           <TimelineItem>
             <TimelineOppositeContent
               sx={{ m: "auto 0" }}
@@ -204,7 +208,7 @@ export const BatchProgress = ({ batchId }: { batchId?: any }) => {
             </TimelineContent>
           </TimelineItem>
         )}
-        {sample.customerTransaction && (
+        {/* {sample.customerTransaction && (
           <TimelineItem>
             <TimelineOppositeContent
               sx={{ m: "auto 0" }}
@@ -232,13 +236,9 @@ export const BatchProgress = ({ batchId }: { batchId?: any }) => {
                 Sold To Customer
               </Typography>
               <br />
-              {/* <QRCode
-              size={50}
-              value={`https://sepolia.etherscan.io/tx/${batches.transactions[i]}`}
-            /> */}
             </TimelineContent>
           </TimelineItem>
-        )}
+        )} */}
       </Timeline>
     </>
   );
