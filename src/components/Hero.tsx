@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useRef } from "react";
 import { alpha } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -7,8 +7,18 @@ import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { BatchProgress } from "./batchProgress";
 
 export default function Hero() {
+  const inputRef = useRef("");
+  const [batchId, setBatchId] = useState("");
+
+  const handleClick = () => {
+    const searchValue = inputRef.current.value;
+    setBatchId(searchValue);
+    console.log(batchId);
+  };
+
   return (
     <Box
       id="hero"
@@ -97,23 +107,34 @@ export default function Hero() {
           >
             <TextField
               id="outlined-basic"
+              inputRef={inputRef}
               hiddenLabel
               size="medium"
               variant="outlined"
               aria-label="Input Batch Id"
-              placeholder="Input Batch Id"
+              // placeholder="Input Batch Id"
               inputProps={{
                 autocomplete: "off",
                 ariaLabel: "Input Batch Id",
               }}
+              sx={{
+                "& .MuiInputBase-input": {
+                  color: (theme) =>
+                    theme.palette.mode === "dark" ? "white" : "black",
+                },
+              }}
             />
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={handleClick}>
               Search
             </Button>
           </Stack>
         </Stack>
         <Box
           id="image"
+          padding={"15px"}
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
           sx={(theme) => ({
             mt: { xs: 8, sm: 10 },
             alignSelf: "center",
@@ -135,7 +156,9 @@ export default function Hero() {
                 ? `0 0 12px 8px ${alpha("#9CCCFC", 0.2)}`
                 : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
           })}
-        />
+        >
+          <BatchProgress batchId={batchId} />
+        </Box>
       </Container>
     </Box>
   );

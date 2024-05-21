@@ -45,6 +45,10 @@ import { db } from "./models/index.js";
 //   .then((res) => console.log(JSON.stringify(res, null, 4)))
 //   .then(() => process.exit());
 
-db.Dispatch.find({ batchId: "FOLIC-1714411922315" })
+// db.Dispatch.find({ batchId: "FOLIC-1714411922315" })
+// .then((res) => console.log(JSON.stringify(res, null, 4)))
+// .then(() => process.exit());
+
+db.Dispatch.findOne({ batchId: "HYDRA-1715957095100" })
   .then((res) => console.log(JSON.stringify(res, null, 4)))
   .then(() => process.exit());

@@ -7,21 +7,22 @@ import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import { Button, Typography } from "@mui/material";
 import { ThemeContext } from "../config/Context/themeProvider";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { timelineConfig, timelineNumber } from "../utility/utilts";
 import { FactoryRounded } from "@mui/icons-material";
 import DropDown from "./DropDown";
+import axios from "axios";
 
 const sample = {
   manuTransaction: "Manufacturer Transaction",
   customerTransaction: "Customer Transaction",
   distributor: {
-    distroTransactions: ["Distro1", "Distro2", "Distro3", "Distro4"]
+    distroTransactions: ["Distro1", "Distro2", "Distro3", "Distro4"],
   },
   pharmacy: {
-    pharmaTransactions: ["pharma1", "pharma2", "pharma3", "pharma4"]
-  }
-}
+    pharmaTransactions: ["pharma1", "pharma2", "pharma3", "pharma4"],
+  },
+};
 
 const getComponent = (batches: any) => {
   const ctx = useContext(ThemeContext);
@@ -73,9 +74,27 @@ const getComponent = (batches: any) => {
   return comp;
 };
 
-export const BatchProgress = ({ batches }: { batches?: any }) => {
-
+export const BatchProgress = ({ batchId }: { batchId?: any }) => {
   const ctx = useContext(ThemeContext);
+  const [batch, setBatch] = useState();
+
+  const getBatchProgress = async () => {
+    if (batchId !== null) {
+      try {
+        const response = await axios.get("/api/getBatchProgress", {
+          params: { batchId },
+        });
+
+        setBatch(response.data);
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getBatchProgress();
+  }, [batchId]);
 
   return (
     <>
@@ -118,7 +137,7 @@ export const BatchProgress = ({ batches }: { batches?: any }) => {
             /> */}
           </TimelineContent>
         </TimelineItem>
-        {sample.distributor.distroTransactions.length != 0 &&
+        {sample.distributor.distroTransactions.length != 0 && (
           <TimelineItem>
             <TimelineOppositeContent
               sx={{ m: "auto 0" }}
@@ -150,9 +169,9 @@ export const BatchProgress = ({ batches }: { batches?: any }) => {
             /> */}
             </TimelineContent>
           </TimelineItem>
-        }
+        )}
 
-        {sample.pharmacy.pharmaTransactions.length != 0 &&
+        {sample.pharmacy.pharmaTransactions.length != 0 && (
           <TimelineItem>
             <TimelineOppositeContent
               sx={{ m: "auto 0" }}
@@ -184,9 +203,8 @@ export const BatchProgress = ({ batches }: { batches?: any }) => {
             /> */}
             </TimelineContent>
           </TimelineItem>
-        }
-        {sample.customerTransaction &&
-
+        )}
+        {sample.customerTransaction && (
           <TimelineItem>
             <TimelineOppositeContent
               sx={{ m: "auto 0" }}
@@ -220,7 +238,7 @@ export const BatchProgress = ({ batches }: { batches?: any }) => {
             /> */}
             </TimelineContent>
           </TimelineItem>
-        }
+        )}
       </Timeline>
     </>
   );

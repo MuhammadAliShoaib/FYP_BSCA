@@ -127,4 +127,20 @@ router.put(`/updateStatus`, async (req, res) => {
   }
 });
 
+router.get("/getBatchProgress", async (req, res) => {
+  const { batchId } = req.query;
+
+  try {
+    const batch = await db.Dispatch.findOne({ batchId });
+
+    if (!batch)
+      return res.status(404).json({ message: "Batch does not Exist" });
+
+    res.status(200).json(batch);
+  } catch (error) {
+    console.log("Error: ", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 export default router;
