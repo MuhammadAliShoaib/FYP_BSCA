@@ -24,59 +24,10 @@ const sample = {
   },
 };
 
-const getComponent = (batches: any) => {
-  const ctx = useContext(ThemeContext);
-  const comp = [];
-
-  for (let i = 0; i <= 3; i++) {
-    const {
-      typography,
-      icon: { Comp, props },
-    } = timelineConfig[i];
-
-    comp.push(
-      <TimelineItem key={typography}>
-        <TimelineOppositeContent
-          sx={{ m: "auto 0" }}
-          align="right"
-          variant="body2"
-          color="text.secondary"
-        >
-          <Button variant="contained" fullWidth target="_blank" href="">
-            View Transaction
-          </Button>
-        </TimelineOppositeContent>
-        <TimelineSeparator>
-          <TimelineConnector />
-          <TimelineDot color={props?.color || "inherit"}>
-            <Comp fontSize="large" />
-          </TimelineDot>
-          <TimelineConnector />
-        </TimelineSeparator>
-        <TimelineContent sx={{ py: "12px", px: 2 }}>
-          <Typography
-            variant="h6"
-            component="span"
-            color={ctx.mode === "light" ? "black" : "white"}
-          >
-            {typography}
-          </Typography>
-          <br />
-          {/* <QRCode
-              size={50}
-              value={`https://sepolia.etherscan.io/tx/${batches.transactions[i]}`}
-            /> */}
-        </TimelineContent>
-      </TimelineItem>
-    );
-  }
-
-  return comp;
-};
-
 export const BatchProgress = ({ batchId }: { batchId?: any }) => {
   const ctx = useContext(ThemeContext);
   const [batch, setBatch] = useState();
+  const [index, setIndex] = useState(0)
 
   const getBatchProgress = async () => {
     if (batchId !== null) {
@@ -98,50 +49,47 @@ export const BatchProgress = ({ batchId }: { batchId?: any }) => {
     getBatchProgress();
   }, []);
 
-  return (
-    <>
-      <Timeline
-        position="alternate"
-        nonce={undefined}
-        onResize={undefined}
-        onResizeCapture={undefined}
-      >
-        {batch?.transactions[0] &&
-          <TimelineItem>
-            <TimelineOppositeContent
-              sx={{ m: "auto 0" }}
-              align="right"
-              variant="body2"
-              color="text.secondary"
-            >
-              <Button variant="contained" fullWidth target="_blank" href={`https://sepolia.etherscan.io/tx/${batch?.transactions[0]}`}>
+
+  const dispatches = {
+    manufacturer: (
+      <TimelineItem>
+        <TimelineOppositeContent
+          sx={{ m: "auto 0" }}
+          align="right"
+          variant="body2"
+          color="text.secondary"
+        >
+          {/* <Button variant="contained" fullWidth target="_blank" href={`https://sepolia.etherscan.io/tx/${batch?.transactions[0]}`}>
                 View Transaction
-              </Button>
-            </TimelineOppositeContent>
-            <TimelineSeparator>
-              <TimelineConnector />
-              <TimelineDot>
-                <FactoryRounded fontSize="large" />
-              </TimelineDot>
-              <TimelineConnector />
-            </TimelineSeparator>
-            <TimelineContent sx={{ py: "12px", px: 2 }}>
-              <Typography
-                variant="h6"
-                component="span"
-                color={ctx.mode === "light" ? "black" : "white"}
-              >
-                Manufacturer
-              </Typography>
-              <br />
-              {/* <QRCode
+              </Button> */}
+          <DropDown options={batch?.transactions} />
+        </TimelineOppositeContent>
+        <TimelineSeparator>
+          <TimelineConnector />
+          <TimelineDot>
+            <FactoryRounded fontSize="large" />
+          </TimelineDot>
+          <TimelineConnector />
+        </TimelineSeparator>
+        <TimelineContent sx={{ py: "12px", px: 2 }}>
+          <Typography
+            variant="h6"
+            component="span"
+            color={ctx.mode === "light" ? "black" : "white"}
+          >
+            Manufacturer
+          </Typography>
+          <br />
+          {/* <QRCode
               size={50}
-              value={`https://sepolia.etherscan.io/tx/${batches.transactions[i]}`}
+              value={`https://sepolia.etherscan.io/tx/${batch?.transactions[0]}`}
             /> */}
-            </TimelineContent>
-          </TimelineItem>
-        }
-        {batch?.distributor[0].distroTransactions.length != 0 ? (
+        </TimelineContent>
+      </TimelineItem>
+    ),
+    distributor: (
+      batch?.distributor?.map((distributor, index) => {
+        return (
           <TimelineItem>
             <TimelineOppositeContent
               sx={{ m: "auto 0" }}
@@ -149,7 +97,7 @@ export const BatchProgress = ({ batchId }: { batchId?: any }) => {
               variant="body2"
               color="text.secondary"
             >
-              <DropDown options={sample.distributor.distroTransactions} />
+              <DropDown options={distributor?.distroTransactions} />
             </TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineConnector />
@@ -167,15 +115,97 @@ export const BatchProgress = ({ batchId }: { batchId?: any }) => {
                 Distributor
               </Typography>
               <br />
-              {/* <QRCode
-              size={50}
-              value={`https://sepolia.etherscan.io/tx/${batches.transactions[i]}`}
-            /> */}
             </TimelineContent>
           </TimelineItem>
-        ) : null}
+        )
+      }
+      )
+    ),
+    pharmacy: (
+      batch?.distributor[index].pharmacy?.map((pharmacy, index) => {
+        return (
+          <TimelineItem>
+            <TimelineOppositeContent
+              sx={{ m: "auto 0" }}
+              align="right"
+              variant="body2"
+              color="text.secondary"
+            >
+              <DropDown options={pharmacy?.pharmaTransactions} />
+            </TimelineOppositeContent>
+            <TimelineSeparator>
+              <TimelineConnector />
+              <TimelineDot>
+                <FactoryRounded fontSize="large" />
+              </TimelineDot>
+              <TimelineConnector />
+            </TimelineSeparator>
+            <TimelineContent sx={{ py: "12px", px: 2 }}>
+              <Typography
+                variant="h6"
+                component="span"
+                color={ctx.mode === "light" ? "black" : "white"}
+              >
+                Pharmacy
+              </Typography>
+              <br />
+            </TimelineContent>
+          </TimelineItem>
+        )
+      }
+      )
+    ),
+  }
 
-        {batch?.distributor[0].pharmacy.pharmaTransactions && (
+  return (
+    <>
+      <Timeline
+        position="alternate"
+        nonce={undefined}
+        onResize={undefined}
+        onResizeCapture={undefined}
+      >
+
+        {
+          batch ?
+            <div>
+              {batch?.transactions.length != 0 && dispatches['manufacturer']}
+              {batch?.distributor.length != 0 && dispatches['distributor']}
+              {batch?.distributor.length != 0 && batch?.distributor[index].pharmacy[index].pharmaTransactions.length != 0 && dispatches['pharmacy']}
+            </div>
+            : null
+        }
+        {/* {batch?.distributor.length != 0 ? (
+          <TimelineItem>
+            <TimelineOppositeContent
+              sx={{ m: "auto 0" }}
+              align="right"
+              variant="body2"
+              color="text.secondary"
+            >
+                <DropDown options={sample.distributor.distroTransactions} />
+            </TimelineOppositeContent>
+            <TimelineSeparator>
+              <TimelineConnector />
+              <TimelineDot>
+                <FactoryRounded fontSize="large" />
+              </TimelineDot>
+              <TimelineConnector />
+            </TimelineSeparator>
+            <TimelineContent sx={{ py: "12px", px: 2 }}>
+              <Typography
+                variant="h6"
+                component="span"
+                color={ctx.mode === "light" ? "black" : "white"}
+              >
+                Distributor
+              </Typography>
+              <br />
+            </TimelineContent>
+          </TimelineItem>
+        ) : null} */}
+
+        {/* {batch?.distributor[0].pharmacy.pharmaTransactions && (
           <TimelineItem>
             <TimelineOppositeContent
               sx={{ m: "auto 0" }}
@@ -201,13 +231,9 @@ export const BatchProgress = ({ batchId }: { batchId?: any }) => {
                 Pharmacy
               </Typography>
               <br />
-              {/* <QRCode
-              size={50}
-              value={`https://sepolia.etherscan.io/tx/${batches.transactions[i]}`}
-            /> */}
             </TimelineContent>
           </TimelineItem>
-        )}
+        )} */}
         {/* {sample.customerTransaction && (
           <TimelineItem>
             <TimelineOppositeContent

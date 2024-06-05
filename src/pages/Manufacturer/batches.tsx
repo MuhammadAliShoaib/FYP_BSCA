@@ -11,7 +11,7 @@ export default function Batches() {
         <Grid container>
           <Grid item md={12}>
             {/* <BatchTable /> */}
-            <BatchProgress batchId="PANADOL-1715022700102"/>
+            <BatchProgress batchId="HYDRA-1715957095100" />
           </Grid>
         </Grid>
       </Container>

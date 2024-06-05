@@ -18,10 +18,10 @@ interface Props {
 export default function DropDown({ options }: Props) {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLDivElement>(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
 
     const handleClick = () => {
-        console.info(`You clicked ${options[selectedIndex]}`);
+        console.info(`You clicked ${selectedIndex}`);
     };
 
     const handleMenuItemClick = (
