@@ -86,6 +86,7 @@ router.post("/updateDispatch", async (req, res) => {
           });
           if (!pharmacyExists) {
             distro.pharmacy.push({
+              pharmaName: updateDispatch.pharmaName,
               pharmaAddress: updateDispatch.pharmaAddress,
               deliveredAmount: updateDispatch.quantity,
               medicineSold: 0,

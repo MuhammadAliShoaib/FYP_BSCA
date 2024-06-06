@@ -150,7 +150,12 @@ export default function PharmaOrder() {
     (async () => {
       if (isSuccess) {
         try {
+          updateDispatch.pharmaName =
+            pharmacies.find(
+              (pharma) => pharma.address === updateDispatch.pharmaAddress
+            )?.name || "Pharma";
           let txnHash = result;
+          console.log(updateDispatch.pharmaName);
           console.log("TxnHash: ", txnHash?.hash);
           const response = await axios.post("/api/distributor/updateDispatch", {
             updateDispatch,

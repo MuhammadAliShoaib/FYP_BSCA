@@ -8,15 +8,38 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { BatchProgress } from "./batchProgress";
+import axios from "axios";
 
 export default function Hero() {
   const inputRef = useRef("");
   const [batchId, setBatchId] = useState("");
+  const [batch, setBatch] = useState();
+  const [index, setIndex] = useState(0);
+
+  const getBatchProgress = async () => {
+    if (batchId !== null) {
+      try {
+        const response = await axios.get("/api/getBatchProgress", {
+          params: { batchId },
+        });
+        console.log("<============Batch Progress========>");
+        console.log(JSON.stringify(response.data, null, 4));
+        setBatch(response.data);
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+    }
+  };
+
+  // useEffect(() => {
+  //   getBatchProgress();
+  // }, []);
 
   const handleClick = () => {
     const searchValue = inputRef.current.value;
     setBatchId(searchValue);
     console.log(batchId);
+    getBatchProgress();
   };
 
   return (
@@ -135,10 +158,13 @@ export default function Hero() {
           display={"flex"}
           justifyContent={"center"}
           alignItems={"center"}
+          overflow={"visible"}
+          pt={"15px"}
           sx={(theme) => ({
             mt: { xs: 8, sm: 10 },
             alignSelf: "center",
-            height: { xs: 200, sm: 700 },
+            minHeight: { xs: 200, sm: 700 },
+            height: "auto",
             width: "100%",
             backgroundImage:
               theme.palette.mode === "light"
@@ -157,7 +183,7 @@ export default function Hero() {
                 : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
           })}
         >
-          <BatchProgress batchId={batchId} />
+          <BatchProgress batch={batch} index={index} setIndex={setIndex} />
         </Box>
       </Container>
     </Box>
