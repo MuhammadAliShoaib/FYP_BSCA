@@ -145,7 +145,7 @@ export const BatchProgress: FC<BatchProgressProps> = ({
               }}
             >
               <QRCode
-                size={200}
+                size={150}
                 value={`https://sepolia.etherscan.io/tx/${manufacturerTXN}`}
               />
             </div>
@@ -277,7 +277,7 @@ export const BatchProgress: FC<BatchProgressProps> = ({
               }}
             >
               <QRCode
-                size={200}
+                size={150}
                 value={`https://sepolia.etherscan.io/tx/${distroTXN}`}
               />
             </div>
@@ -413,7 +413,7 @@ export const BatchProgress: FC<BatchProgressProps> = ({
               }}
             >
               <QRCode
-                size={200}
+                size={150}
                 value={`https://sepolia.etherscan.io/tx/${pharmaTXN}`}
               />
             </div>

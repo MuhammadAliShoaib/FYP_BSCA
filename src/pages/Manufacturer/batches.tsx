@@ -37,9 +37,9 @@ export default function Batches() {
   // }, []);
 
   const handleClick = () => {
-    const searchValue = inputRef.current.value;
-    setBatchId(searchValue);
-    console.log(batchId);
+    // const searchValue = inputRef.current.value;
+    // setBatchId(searchValue);
+    // console.log(batchId);
     getBatchProgress();
   };
 
@@ -70,6 +70,7 @@ export default function Batches() {
             variant="outlined"
             aria-label="Input Batch Id"
             placeholder="Input Batch Id"
+            onChange={(event) => setBatchId(event.target.value)}
             inputProps={{
               autocomplete: "off",
               ariaLabel: "Input Batch Id",
