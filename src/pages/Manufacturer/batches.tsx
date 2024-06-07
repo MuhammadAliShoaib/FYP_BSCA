@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import { BatchProgress } from "../../components/batchProgress";
 import axios from "axios";
 import Header from "../../components/Header";
+import { toast } from "react-toastify";
 
 export default function Batches() {
   const inputRef = useRef("");
@@ -26,8 +27,20 @@ export default function Batches() {
         console.log("<============Batch Progress========>");
         console.log(JSON.stringify(response.data, null, 4));
         setBatch(response.data);
-      } catch (error) {
+      } catch (error: any) {
         console.log("Error: ", error);
+        if (error.response && error.response.status === 404) {
+          toast.error(`${error.response.data.message}`, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
       }
     }
   };

@@ -55,7 +55,11 @@ interface iDeliverTo {
   address: string;
 }
 
-export default function NotificationTable() {
+interface Props {
+  PharmaTable?: boolean;
+}
+
+export default function NotificationTable({ PharmaTable }: Props) {
   const { auth } = useAppSelector((state) => state.auth);
   const [notifications, setNotification] = React.useState([
     {
@@ -303,7 +307,11 @@ export default function NotificationTable() {
                   >
                     Batch ID: {row.batchId}, Delivered To: {row.deliverTo.name},
                     Supply:{" "}
-                    {row.dispatchDetails?.distributor?.distributorSupply}
+                    {PharmaTable ||
+                    row.dispatchDetails.distributor.status ==
+                      "Delivered to Pharmacy"
+                      ? row.dispatchDetails?.quantity
+                      : row.dispatchDetails?.distributor?.distributorSupply}
                   </TableCell>
                   {auth.role != "manufacturer" && (
                     <TableCell

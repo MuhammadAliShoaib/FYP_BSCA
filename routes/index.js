@@ -133,8 +133,7 @@ router.get("/getBatchProgress", async (req, res) => {
   try {
     const batch = await db.Dispatch.findOne({ batchId });
 
-    if (!batch)
-      return res.status(404).json({ message: "Batch does not Exist" });
+    if (!batch) return res.status(404).json({ message: "No Dispatches Yet." });
 
     res.status(200).json(batch);
   } catch (error) {

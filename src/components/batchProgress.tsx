@@ -362,17 +362,19 @@ export const BatchProgress: FC<BatchProgressProps> = ({
                 >
                   <option label={"<None>"} />
                 </MenuItem>
-                {filteredPharma?.pharmaTransactions?.map(
-                  (txn: string, index: number) => (
-                    <MenuItem
-                      key={index}
-                      value={txn}
-                      sx={{ background: { paper: "white" } }}
-                    >
-                      <option label={"TXN:" + txn} />
-                    </MenuItem>
-                  )
-                )}
+                {filteredPharma
+                  ? filteredPharma?.pharmaTransactions?.map(
+                      (txn: string, index: number) => (
+                        <MenuItem
+                          key={index}
+                          value={txn}
+                          sx={{ background: { paper: "white" } }}
+                        >
+                          <option label={"TXN:" + txn} />
+                        </MenuItem>
+                      )
+                    )
+                  : null}
                 {/* ${manufacturerTXN} */}
               </TextField>
             </>
@@ -436,7 +438,7 @@ export const BatchProgress: FC<BatchProgressProps> = ({
             {batch?.transactions.length != 0 && dispatches["manufacturer"]}
             {batch?.distributor.length != 0 && dispatches["distributor"]}
             {batch?.distributor.length != 0 &&
-              batch?.distributor[index].pharmacy[index].pharmaTransactions
+              batch?.distributor[index].pharmacy[index]?.pharmaTransactions
                 .length != 0 &&
               dispatches["pharmacy"]}
           </div>
